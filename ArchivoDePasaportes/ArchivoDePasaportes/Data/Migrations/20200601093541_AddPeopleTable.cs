@@ -27,7 +27,7 @@ namespace ArchivoDePasaportes.Data.Migrations
                         column: x => x.SourceId,
                         principalTable: "Sources",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
