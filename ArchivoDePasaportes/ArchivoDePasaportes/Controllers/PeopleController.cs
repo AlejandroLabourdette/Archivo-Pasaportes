@@ -17,8 +17,8 @@ namespace ArchivoDePasaportes.Controllers
         {
             _context = context;
         }
-
-
+        
+        
         public IActionResult Index(string sortOrder, string keepOrder, string searchString, int pageIndex)
         {
             if (String.IsNullOrEmpty(sortOrder))
@@ -26,21 +26,21 @@ namespace ArchivoDePasaportes.Controllers
                 sortOrder = "id";
                 keepOrder = "True";
             }
-
+        
             ViewBag.IdSortParm = sortOrder == "id" && keepOrder != "True" ? "id_desc" : "id";
             ViewBag.NameSortParm = sortOrder == "name" && keepOrder != "True" ? "name_desc" : "name";
             ViewBag.AddressSortParm = sortOrder == "address" && keepOrder != "True" ? "address_desc" : "address";
             ViewBag.SearchString = searchString;
-
+        
             var people = from p in _context.People select p;
-
+        
             if (!String.IsNullOrEmpty(searchString))
                 people = people.Where(p => 
                     p.LastName.Contains(searchString)||
                     p.FirstName.Contains(searchString)||
                     p.Id.Contains(searchString)||
                     p.Address.Contains(searchString));
-
+        
             switch (sortOrder)
             {
                 case "id":
@@ -61,13 +61,13 @@ namespace ArchivoDePasaportes.Controllers
                 case "address_desc":
                     people = people.OrderByDescending(p => p.Address);
                     break;
-
-
+        
+        
                 default:
                     people = people.OrderBy(p => p.Id);
                     break;
             }
-
+        
             var people_list = people.Include(p => p.Source).ToList();
             pageIndex = pageIndex < 0 ? 0 : pageIndex;
             pageIndex = pageIndex > (people_list.Count / 5) ? (people_list.Count / 5) : pageIndex;
@@ -77,26 +77,26 @@ namespace ArchivoDePasaportes.Controllers
             int count = Math.Min(people_list.Count - start_index, 5);
             if (start_index != -1)
                 people_list = people_list.GetRange(start_index, count);
-
+        
             return View("ListPeople", people_list);
         }
-
+        
         public IActionResult Details(string id)
         {
             var personInDb = _context.People.SingleOrDefault(p => p.Id == id);
             if (personInDb == null)
                 return NotFound();
-
+        
             personInDb.Source = _context.Sources.Single(s => s.Id == personInDb.SourceId);
             return View(personInDb);
         }
-
+        
         public IActionResult Edit(string id)
         {
             var personInDb = _context.People.SingleOrDefault(p => p.Id == id);
             if (personInDb == null)
                 return NotFound();
-
+        
             var viewModel = new PersonFormViewModel()
             {
                 Person = personInDb,
@@ -114,7 +114,7 @@ namespace ArchivoDePasaportes.Controllers
             };
             return View("PersonForm", viewModel);
         }
-
+        
         [HttpPost]
         public IActionResult Save(PersonFormViewModel viewModel)
         {
@@ -123,7 +123,7 @@ namespace ArchivoDePasaportes.Controllers
                 viewModel.Sources = _context.Sources.ToList();
                 return View("PersonForm", viewModel);
             }
-
+        
             if (viewModel.OldId == null || viewModel.OldId != viewModel.Person.Id)
             {
                 var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Person.Id);
@@ -151,9 +151,9 @@ namespace ArchivoDePasaportes.Controllers
                     _context.People.Remove(oldPerson);
                 }
             }
-
+        
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-    }
-}
+    }   
+}       

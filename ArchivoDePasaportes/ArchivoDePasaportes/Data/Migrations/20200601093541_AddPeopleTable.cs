@@ -15,12 +15,25 @@ namespace ArchivoDePasaportes.Data.Migrations
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: true),
-                    BirthDay = table.Column<DateTime>(nullable: false)
+                    BirthDay = table.Column<DateTime>(nullable: false),
+                    SourceId = table.Column<int>(nullable: false),
+                    Ocupation = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_People", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_People_Sources_SourceId",
+                        column: x => x.SourceId,
+                        principalTable: "Sources",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_People_SourceId",
+                table: "People",
+                column: "SourceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

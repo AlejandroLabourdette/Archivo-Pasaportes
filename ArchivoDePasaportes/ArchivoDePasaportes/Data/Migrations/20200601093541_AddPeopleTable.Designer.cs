@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200522054548_AddSourceAndOcuptionToPeople")]
-    partial class AddSourceAndOcuptionToPeople
+    [Migration("20200601093541_AddPeopleTable")]
+    partial class AddPeopleTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

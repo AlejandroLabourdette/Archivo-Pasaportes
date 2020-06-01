@@ -18,8 +18,8 @@ namespace ArchivoDePasaportes.Controllers.Api
         {
             _context = context;
         }
-
-
+    
+    
         [HttpGet]
         public IActionResult GetPeople()
         {
@@ -27,7 +27,7 @@ namespace ArchivoDePasaportes.Controllers.Api
                 _context.People.ToList()
                 );
         }
-
+    
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetPerson(string id)
@@ -37,7 +37,7 @@ namespace ArchivoDePasaportes.Controllers.Api
                 return NotFound();
             return Ok(personInDb);
         }
-
+    
         [HttpDelete]
         [Route("{Id}")]
         public IActionResult DeletePerson(string id)
@@ -45,11 +45,11 @@ namespace ArchivoDePasaportes.Controllers.Api
             Person personInDb = _context.People.Single(p => p.Id == id);
             if (personInDb == null)
                 return NotFound();
-
+    
             _context.People.Remove(personInDb);
             _context.SaveChanges();
-
+    
             return Ok();
         }
     }
-}
+}   
