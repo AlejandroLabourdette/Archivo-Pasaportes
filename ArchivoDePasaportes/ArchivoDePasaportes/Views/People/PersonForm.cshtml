@@ -1,0 +1,67 @@
+﻿@model ArchivoDePasaportes.ViewModels.PersonFormViewModel
+@{
+    ViewData["Title"] = "PersonForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>PersonForm</h1>
+
+<form asp-action="Save">
+    <div class="form-group">
+        <label asp-for="Person.Id" class="control-label"></label>
+        <input asp-for="Person.Id" class="form-control" />
+        <span asp-validation-for="Person.Id" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.FirstName" class="control-label"></label>
+        <input asp-for="Person.FirstName" class="form-control" />
+        <span asp-validation-for="Person.FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.LastName" class="control-label"></label>
+        <input asp-for="Person.LastName" class="form-control" />
+        <span asp-validation-for="Person.LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.Address" class="control-label"></label>
+        <input asp-for="Person.Address" class="form-control" />
+        <span asp-validation-for="Person.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.BirthDay" class="control-label"></label>
+        <input asp-for="Person.BirthDay" class="form-control" />
+        <span asp-validation-for="Person.BirthDay" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.Source" class="control-label"></label>
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.Person.SourceId, new SelectList(Model.Sources, "Id", "Name"),"Elija un centro...", new { @class = "form-control" })
+            <div class="input-group-append">
+                @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success"})
+            </div>
+        </div>
+        <span asp-validation-for="Person.Source" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Person.Ocupation" class="control-label"></label>
+        <input asp-for="Person.Ocupation" class="form-control" />
+        <span asp-validation-for="Person.Ocupation" class="text-danger"></span>
+    </div>
+
+    @Html.HiddenFor(m => m.OldId)
+    @Html.HiddenFor(m => m.ExistOtherInDb)
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {  
+            var existOtherInDb = '@Model.ExistOtherInDb' === '@true'
+            if (existOtherInDb) {
+                bootbox.alert("Ya existe una persona en la base de datos con este Carnet de Identidad");
+            }
+        });
+    </script>
+
+}

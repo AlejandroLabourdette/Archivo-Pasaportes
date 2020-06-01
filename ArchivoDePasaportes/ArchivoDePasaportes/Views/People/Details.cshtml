@@ -1,0 +1,24 @@
+﻿@model ArchivoDePasaportes.Models.Person
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalles</h1>
+
+<p>
+    @Html.ActionLink("Editar", "Edit", "People", new { id = Model.Id}, new { @class = "btn btn-primary" })
+</p>
+
+<ul>
+    <li>Carnet de Identidad : @Model.Id</li>
+    <li>Nombre Completo : @Model.FullName()</li>
+    <li>Dirección : @Model.Address</li>
+    <li>Fecha de Nacimiento : @Model.BirthDay.Value.Day/@Model.BirthDay.Value.Month/@Model.BirthDay.Value.Year</li>
+    <li>Centro de Prosedencia : @Model.Source.Name</li>
+    <li>Ocupación : @Model.Ocupation</li>
+</ul>
+
+<p>
+    @Html.ActionLink("Atrás", "Index", "People", null, new { @class = "btn btn-light" })
+</p>

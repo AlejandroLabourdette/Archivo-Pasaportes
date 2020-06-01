@@ -1,0 +1,20 @@
+﻿@model ArchivoDePasaportes.Models.Source
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<p>
+    @Html.ActionLink("Editar","Edit", "Sources", new { id = Model.Id}, new { @class = "btn btn-primary" })
+</p>
+
+<ul>
+    <li>Nombre : @Model.Name</li>
+    <li>Descripción : @Model.Description</li>
+</ul>
+
+<p>
+    @Html.ActionLink("Atras", "Index", "People", null , new { @class = "btn btn-light" })
+</p>
