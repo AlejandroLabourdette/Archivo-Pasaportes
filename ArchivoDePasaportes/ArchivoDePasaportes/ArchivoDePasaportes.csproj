@@ -24,6 +24,8 @@
     <Compile Remove="Data\Migrations\20200601093503_AddPeopleTable.Designer.cs" />
     <Compile Remove="Data\Migrations\20200601100252_AddPassportsTable.cs" />
     <Compile Remove="Data\Migrations\20200601100252_AddPassportsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200601125900_a.cs" />
+    <Compile Remove="Data\Migrations\20200601125900_a.Designer.cs" />
   </ItemGroup>
 
 

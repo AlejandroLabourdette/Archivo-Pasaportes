@@ -21,6 +21,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
         public IActionResult Seed()
         {
             SeedPeople();
+            SeedPassports();
             return Ok("Seed finish succefully.");
         }
 
@@ -83,6 +84,80 @@ namespace ArchivoDePasaportes.Controllers.Seed
             var personInDb = _context.People.SingleOrDefault(p => p.Id == person.Id);
             if (personInDb == null)
                 _context.People.Add(person);
+        }
+
+        private void SeedPassports()
+        {
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 2,
+                Id = "A879546",
+                OwnerId = "85071623648",
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2018, 8, 5),
+                ExpirationDate = new DateTime(2025, 4, 14)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 1,
+                Id = "A621549",
+                OwnerId = "79081937689",
+                SourceId = 2,
+                ExpeditionDate = new DateTime(1992, 7, 27),
+                ExpirationDate = new DateTime(2004, 6, 15)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 2,
+                Id = "A681672",
+                OwnerId = "79081937689",
+                SourceId = 2,
+                ExpeditionDate = new DateTime(2005, 1, 17),
+                ExpirationDate = new DateTime(2013, 9, 15)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 1,
+                Id = "A784568",
+                OwnerId = "79081937689",
+                SourceId = 2,
+                ExpeditionDate = new DateTime(2015, 7, 1),
+                ExpirationDate = new DateTime(2022, 2, 14)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 2,
+                Id = "A164827",
+                OwnerId = "01012487672",
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2017, 4, 4),
+                ExpirationDate = new DateTime(2025, 9, 3)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 1,
+                Id = "A791528",
+                OwnerId = "76091928768",
+                SourceId = 1,
+                ExpeditionDate = new DateTime(1999, 2, 28),
+                ExpirationDate = new DateTime(2007, 6, 8)
+            });
+            AddPassport(new Passport()
+            {
+                PassportTypeId = 2,
+                Id = "A365284",
+                OwnerId = "76091928768",
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2009, 12, 10),
+                ExpirationDate = new DateTime(2007, 11, 8)
+            });
+            _context.SaveChanges();
+        }
+        private void AddPassport(Passport passport)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == passport.Id);
+            if (passportInDb == null)
+                _context.Passports.Add(passport);
         }
     }
 }

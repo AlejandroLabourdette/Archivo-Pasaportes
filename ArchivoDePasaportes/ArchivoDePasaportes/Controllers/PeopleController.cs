@@ -68,7 +68,9 @@ namespace ArchivoDePasaportes.Controllers
                     break;
             }
         
-            var people_list = people.Include(p => p.Source).ToList();
+            var people_list = people
+                .Include(p => p.Source)
+                .ToList();
             pageIndex = pageIndex < 0 ? 0 : pageIndex;
             pageIndex = pageIndex > (people_list.Count / 5) ? (people_list.Count / 5) : pageIndex;
             ViewBag.PageIndex = pageIndex;

@@ -24,12 +24,21 @@
 <table id="people" class="table">
     <thead>
         <tr>
-            <th>@Html.ActionLink("Carnet de Identidad", "Index", "People", 
-               new { sortOrder = ViewBag.IdSortParm, searchString = ViewBag.SearchString })</th>
-            <th>@Html.ActionLink("Nombre", "Index", "People", 
-               new { sortOrder = ViewBag.NameSortParm, searchString = ViewBag.SearchString })</th>
-            <th>@Html.ActionLink("Dirección", "Index", "People", 
-               new { sortOrder = ViewBag.AddressSortParm, searchString = ViewBag.SearchString })</th>
+            <th>
+                @Html.ActionLink("Carnet de Identidad", "Index", "People", new { 
+                    sortOrder = ViewBag.IdSortParm, 
+                    searchString = ViewBag.SearchString })
+            </th>
+            <th>
+                @Html.ActionLink("Nombre", "Index", "People", new { 
+                    sortOrder = ViewBag.NameSortParm, 
+                    searchString = ViewBag.SearchString })
+            </th>
+            <th>
+                @Html.ActionLink("Dirección", "Index", "People", new { 
+                    sortOrder = ViewBag.AddressSortParm, 
+                    searchString = ViewBag.SearchString })
+            </th>
             <th>Prosedencia</th>
             <th></th>
         </tr>
@@ -72,18 +81,9 @@
                             url: "/api/People/" + button.attr("data-person-id"),
                             method: "DELETE",
                             success: function () {
-                                button.parents("tr").remove();
+                                location.reload();
                             }
                         })
-                    }
-                })
-            });
-            $('#people').on("click", ".js-order-by", function () {
-                var field = $(this)
-                $.ajax({
-                    url: "/People/New",
-                    success: function () {
-                        
                     }
                 })
             });
