@@ -24,6 +24,7 @@ namespace ArchivoDePasaportes.Controllers
                 keepOrder = "True";
             }
 
+            ViewBag.ActualSortOrder = sortOrder;
             ViewBag.IdSortParm = sortOrder == "id" && keepOrder != "True" ? "id_desc" : "id";
             ViewBag.OwnerIdSortParm = sortOrder == "ownerId" && keepOrder != "True" ? "ownerId_desc" : "ownerId";
             ViewBag.OwnerNameSortParm = sortOrder == "ownerName" && keepOrder != "True" ? "ownerName_desc" : "ownerName";
