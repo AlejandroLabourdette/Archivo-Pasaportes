@@ -96,5 +96,18 @@ namespace ArchivoDePasaportes.Controllers
 
             return View("ListPassports", passports_list);
         }
+    
+        public IActionResult Details(string id)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+
+            passportInDb.Owner = _context.People.Single(p => p.Id == passportInDb.OwnerId);
+            passportInDb.Source = _context.Sources.Single(s => s.Id == passportInDb.SourceId);
+            passportInDb.PassportType = _context.PassportTypes.Single(pt => pt.Id == passportInDb.PassportTypeId);
+            return View(passportInDb);
+        }
+
     }
 }

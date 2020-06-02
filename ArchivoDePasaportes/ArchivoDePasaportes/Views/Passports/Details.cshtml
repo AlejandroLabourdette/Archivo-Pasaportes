@@ -1,0 +1,25 @@
+﻿@model Passport
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalles</h1>
+
+<p>
+    @Html.ActionLink("Editar", "Edit", "Passports", new { id = Model.Id }, new { @class = "btn btn-primary" })
+</p>
+
+<ul>
+    <li>Número de Pasaporte: @Model.Id</li>
+    <li>Tipo: @Model.PassportType.Name</li>
+    <li>Nombre del Propietario: @Model.Owner.FullName()</li>
+    <li>Carnet de Identidad: @Model.OwnerId</li>
+    <li>Centro que tramitó el Pasaporte: @Model.Source.Name</li>
+    <li>Expedición: @Model.ExpeditionDate.Day/@Model.ExpeditionDate.Month/@Model.ExpeditionDate.Year</li>
+    <li>Expiración: @Model.ExpirationDate.Day/@Model.ExpirationDate.Month/@Model.ExpirationDate.Year</li>
+</ul>
+
+<p>
+    @Html.ActionLink("Atrás", "Index", "Passports", null, new { @class = "btn btn-light" })
+</p>
