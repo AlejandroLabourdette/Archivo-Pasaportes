@@ -25,6 +25,7 @@
 <table id="passports" class="table">
     <thead>
         <tr>
+            <th>Archivado</th>
             <th>Tipo</th>
             <th>
                 @Html.ActionLink("Número de Pasaporte", "Index", "Passports", new
@@ -62,12 +63,14 @@
                 })
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (Passport passport in Model)
         {
             <tr>
+                <td>@passport.IsPassportArchived</td>
                 <td>@passport.PassportType.Name</td>
                 <td>@Html.ActionLink(passport.Id, "Details", new { id = passport.Id })</td>
                 <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
@@ -75,7 +78,10 @@
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>
-                    <button class="btn-danger btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
+                    @Html.ActionLink("Retirar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-warning" })
+                </td>
+                <td>
+                    <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
                 </td>
             </tr>
         }

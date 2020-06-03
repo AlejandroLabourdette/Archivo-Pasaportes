@@ -1,0 +1,33 @@
+﻿@model ArchivoDePasaportes.ViewModels.DropPassportViewModel
+@{
+    ViewData["Title"] = "Drop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Retirar Pasaporte @Model.DroppedPassport.Id</h1>
+
+<form asp-action="Drop">
+    <div class="form-group">
+        <label asp-for="@Model.DroppedPassport.DropCause" class="control-label"></label>
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.DroppedPassport.DropCauseId, new SelectList(Model.DropCauses, "Id", "Name"), "Elija una causa de retiro...", new { @class = "form-control" })
+            <div class="input-group-append">
+                @Html.ActionLink("Agregar Otra", "New", "DropCause", null, new { @class = "btn btn-success" })
+            </div>
+        </div>
+        <span asp-validation-for="DroppedPassport.DropCause" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DroppedPassport.Details" class="control-label"></label>
+        <input asp-for="DroppedPassport.Details" class="form-control" />
+        <span asp-validation-for="DroppedPassport.Details" class="text-danger"></span>
+    </div>
+    @Html.HiddenFor(m => m.DroppedPassport.Id)
+    @Html.HiddenFor(m => m.DroppedPassport.ExpeditionDate)
+    @Html.HiddenFor(m => m.DroppedPassport.ExpirationDate)
+    @Html.HiddenFor(m => m.DroppedPassport.OwnerId)
+    @Html.HiddenFor(m => m.DroppedPassport.PassportTypeId)
+    @Html.HiddenFor(m => m.DroppedPassport.SourceId)
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

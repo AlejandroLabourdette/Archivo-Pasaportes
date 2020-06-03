@@ -190,5 +190,49 @@ namespace ArchivoDePasaportes.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public IActionResult Drop(string id)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+            var viewModel = new DropPassportViewModel()
+            {
+                DroppedPassport = new DroppedPassport()
+                {
+                    Id = passportInDb.Id,
+                    OwnerId = passportInDb.OwnerId,
+                    PassportTypeId = passportInDb.PassportTypeId,
+                    SourceId = passportInDb.SourceId,
+                    ExpeditionDate = passportInDb.ExpeditionDate,
+                    ExpirationDate = passportInDb.ExpirationDate
+                },
+                DropCauses = _context.DropCauses.ToList()
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult Drop(DropPassportViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.DropCauses = _context.DropCauses.ToList();
+                return View(viewModel);
+            }
+
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.DroppedPassport.Id);
+            if (passportInDb == null)
+                return BadRequest();
+
+            var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(dp => dp.Id == viewModel.DroppedPassport.Id);
+            if (droppedPassportInDb != null)
+                return BadRequest();
+
+            _context.Passports.Remove(passportInDb);
+            _context.DroppedPassports.Add(viewModel.DroppedPassport);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
