@@ -43,5 +43,8 @@ namespace ArchivoDePasaportes.Models
         [Display(Name = "Fecha de Vencimiento")]
         [DataType(DataType.Date)]
         public DateTime? ExpirationDate { get; set; }
+
+        [Display(Name = "Pasaporte Archivado")]
+        public bool IsPassportArchived { get; set; }
     }
 }
