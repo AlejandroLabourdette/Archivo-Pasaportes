@@ -16,20 +16,20 @@ namespace ArchivoDePasaportes.Models
         public string Id { get; set; }
 
 
-        [PersonIdValidation]
         [Required(ErrorMessage = "Por favor ingrese el propietario del pasaporte")]
+        [Display(Name = "Carnet de Identidad del Propietario")]
         public string OwnerId { get; set; }
         public Person Owner { get; set; }
 
         
         [Required(ErrorMessage = "Por favor seleccione el tipo de este pasaporte")]
-        [Display(Name = "Tipo de Pasaportes")]
         public byte PassportTypeId { get; set; }
+        [Display(Name = "Tipo de Pasaporte")]
         public PassportType PassportType { get; set; }
 
         
-        [Display(Name = "Centro Tramitador")]
         public int? SourceId { get; set; }
+        [Display(Name = "Centro Tramitador")]
         public Source Source { get; set; }
         
         

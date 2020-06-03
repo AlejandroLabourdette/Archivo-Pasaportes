@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
+using ArchivoDePasaportes.Models;
+using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -110,5 +112,83 @@ namespace ArchivoDePasaportes.Controllers
             return View(passportInDb);
         }
 
+        public IActionResult New()
+        {
+            var viewModel = new PassportFormViewModel()
+            {
+                PassportTypes = _context.PassportTypes.ToList(),
+                Sources = _context.Sources.ToList()
+            };
+            return View("PassportForm", viewModel);
+        }
+
+        public IActionResult Edit(string id)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+
+            var viewModel = new PassportFormViewModel()
+            {
+                Passport = passportInDb,
+                OldId = passportInDb.Id,
+                PassportTypes = _context.PassportTypes.ToList(),
+                Sources = _context.Sources.ToList()
+            };
+            return View("PassportForm", viewModel);
+        }
+
+        public IActionResult Save(PassportFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Sources = _context.Sources.ToList();
+                viewModel.PassportTypes = _context.PassportTypes.ToList();
+                return View("PassportForm", viewModel);
+            }
+
+            if (viewModel.OldId == null || viewModel.OldId != viewModel.Passport.Id)
+            {
+                var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
+                if (passportInDb != null)
+                {
+                    viewModel.ExistOtherInDb = true;
+                    viewModel.Sources = _context.Sources.ToList();
+                    viewModel.PassportTypes = _context.PassportTypes.ToList();
+                    return View("PassportForm", viewModel);
+                }
+                var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Passport.OwnerId);
+                if (personInDb == null)
+                {
+                    viewModel.NotExistThisPersonInDb = true; ;
+                    viewModel.Sources = _context.Sources.ToList();
+                    viewModel.PassportTypes = _context.PassportTypes.ToList();
+                    return View("PassportForm", viewModel);
+                }
+            }
+
+            if (viewModel.OldId == viewModel.Passport.Id)
+            {
+                var passportInDb = _context.Passports.Single(p => p.Id == viewModel.OldId);
+
+                passportInDb.OwnerId = viewModel.Passport.OwnerId;
+                passportInDb.PassportTypeId = viewModel.Passport.PassportTypeId;
+                passportInDb.SourceId = viewModel.Passport.SourceId;
+                passportInDb.ExpeditionDate = viewModel.Passport.ExpeditionDate;
+                passportInDb.ExpirationDate = viewModel.Passport.ExpirationDate;
+            }
+            else
+            {
+                _context.Passports.Add(viewModel.Passport);
+                if (viewModel.OldId != null)
+                {
+                    var oldPassport = _context.Passports.Single(p => p.Id == viewModel.OldId);
+                    _context.Passports.Remove(oldPassport);
+                }
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
