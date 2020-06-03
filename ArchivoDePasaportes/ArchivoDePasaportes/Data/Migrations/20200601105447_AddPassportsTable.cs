@@ -32,7 +32,7 @@ namespace ArchivoDePasaportes.Data.Migrations
                         column: x => x.PassportTypeId,
                         principalTable: "PassportTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Passports_Sources_SourceId",
                         column: x => x.SourceId,
