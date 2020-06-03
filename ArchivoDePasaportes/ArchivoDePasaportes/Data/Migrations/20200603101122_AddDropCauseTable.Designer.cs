@@ -4,14 +4,16 @@ using ArchivoDePasaportes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200603101122_AddDropCauseTable")]
+    partial class AddDropCauseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,59 +35,15 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.ToTable("DropCauses");
                 });
 
-            modelBuilder.Entity("ArchivoDePasaportes.Models.DroppedPassport", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("DropCauseId")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("ExpeditionDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ExpirationDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<byte>("PassportTypeId")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int?>("SourceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DropCauseId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("PassportTypeId");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("DroppedPassports");
-                });
-
             modelBuilder.Entity("ArchivoDePasaportes.Models.Passport", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("ExpeditionDate")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpeditionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ExpirationDate")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerId")
@@ -373,31 +331,6 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ArchivoDePasaportes.Models.DroppedPassport", b =>
-                {
-                    b.HasOne("ArchivoDePasaportes.Models.DropCause", "DropCause")
-                        .WithMany()
-                        .HasForeignKey("DropCauseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ArchivoDePasaportes.Models.Person", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ArchivoDePasaportes.Models.PassportType", "PassportType")
-                        .WithMany()
-                        .HasForeignKey("PassportTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ArchivoDePasaportes.Models.Source", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId");
                 });
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Passport", b =>

@@ -13,7 +13,6 @@ namespace ArchivoDePasaportes.Models
         [PersonIdValidation]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Carnet de Identidad")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Id { get; set; }
 
 

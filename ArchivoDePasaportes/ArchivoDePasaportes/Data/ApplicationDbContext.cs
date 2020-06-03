@@ -13,6 +13,8 @@ namespace ArchivoDePasaportes.Data
         public DbSet<Person> People { get; set; }
         public DbSet<PassportType> PassportTypes { get; set; }
         public DbSet<Passport> Passports { get; set; }
+        public DbSet<DropCause> DropCauses { get; set; }
+        public DbSet<DroppedPassport> DroppedPassports { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

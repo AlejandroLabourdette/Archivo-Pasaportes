@@ -72,8 +72,8 @@
                 <td>@Html.ActionLink(passport.Id, "Details", new { id = passport.Id })</td>
                 <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
                 <td>@passport.Owner.FullName()</td>
-                <td>@passport.ExpeditionDate.Day/@passport.ExpeditionDate.Month/@passport.ExpeditionDate.Year</td>
-                <td>@passport.ExpirationDate.Day/@passport.ExpirationDate.Month/@passport.ExpirationDate.Year</td>
+                <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
+                <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>
                     <button class="btn-danger btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
                 </td>
