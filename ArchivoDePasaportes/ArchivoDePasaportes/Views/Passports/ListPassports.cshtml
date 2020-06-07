@@ -64,13 +64,23 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (Passport passport in Model)
         {
             <tr>
-                <td>@passport.IsPassportArchived</td>
+                <td>
+                    @if (passport.IsPassportArchived)
+                    {
+                        <text>Si</text>
+                    }
+                    else
+                    {
+                        <text>No</text>
+                    }
+                </td>
                 <td>@passport.PassportType.Name</td>
                 <td>@Html.ActionLink(passport.Id, "Details", new { id = passport.Id })</td>
                 <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
@@ -78,7 +88,20 @@
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>
-                    @Html.ActionLink("Retirar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-warning" })
+                    @if (!passport.IsPassportArchived)
+                    {
+                        <button class="btn btn-success btn-sm js-archive" 
+                                data-passport-type="@passport.PassportType.Name"
+                                data-passport-id="@passport.Id"
+                                data-passport-owner-id="@passport.OwnerId"
+                                data-passport-owner-name="@passport.Owner.FullName()"
+                                data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
+                                data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year"
+                                >Recibir</button>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Retirar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
                 </td>
                 <td>
                     <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
@@ -110,7 +133,7 @@
             $("#passports").on("click", ".js-delete", function () {
                 var button = $(this)
 
-                bootbox.confirm("Esta seguro que desea eliminar este pasaporte del registro", function (result) {
+                bootbox.confirm("¿Está seguro que desea eliminar este pasaporte del registro?. Esta operación será irreversible y se perderán los datos asociados", function (result) {
                     if (result) {
                         $.ajax({
                             url: "/api/Passports/" + button.attr("data-passport-id"),
@@ -123,6 +146,32 @@
                     }
                 })
             });
+            $("#passports").on("click", ".js-archive", function () {
+                var button = $(this)
+
+                bootbox.confirm("Se recibirá este pasaporte en el archivo", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Passports/" + button.attr("data-passport-id"),
+                            method: "PUT",
+                            success: function () {
+                                var row = '<tr>' +
+                                    '<td>Si</td>' +
+                                    '<td>' + button.attr("data-passport-type") + '</td>' +
+                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-id")+ '</a></td>' +
+                                    '<td><a href="/People/Details/' + button.attr("data-passport-owner-id") + '">' + button.attr("data-passport-owner-id") + '</a></td>' +
+                                    '<td>' + button.attr("data-passport-owner-name") + '</td>' +
+                                    '<td>' + button.attr("data-passport-expedition") + '</td>' +
+                                    '<td>' + button.attr("data-passport-expiration") + '</td>' +
+                                    '<td></td>' +
+                                    '<td><a class="btn btn-secondary btn-sm" href="/Passports/Drop/' + button.attr("data-passport-id") + '">Retirar</a></td>' +
+                                    '<td><button class="btn-danger btn btn-sm js-delete" data-passport-id='+button.attr("data-passport-id")+'>Eliminar</button></td>'
+                                button.parents("tr").replaceWith(row);
+                            }
+                        })
+                    }
+                })
+            })
         });
     </script>
 }

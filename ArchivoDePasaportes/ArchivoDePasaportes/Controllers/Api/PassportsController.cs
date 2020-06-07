@@ -21,13 +21,27 @@ namespace ArchivoDePasaportes.Controllers.Api
 
         [HttpDelete]
         [Route("{Id}")]
-        public IActionResult DeletePerson(string id)
+        public IActionResult DeletePassport(string id)
         {
             Passport passportInDb = _context.Passports.Single(p => p.Id == id);
             if (passportInDb == null)
                 return NotFound();
 
             _context.Passports.Remove(passportInDb);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("{Id}")]
+        public IActionResult ArchivePassport(string id)
+        {
+            Passport passportInDb = _context.Passports.Single(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+
+            passportInDb.IsPassportArchived = true;
             _context.SaveChanges();
 
             return Ok();
