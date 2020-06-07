@@ -165,7 +165,8 @@
                                     '<td>' + button.attr("data-passport-expiration") + '</td>' +
                                     '<td></td>' +
                                     '<td><a class="btn btn-secondary btn-sm" href="/Passports/Drop/' + button.attr("data-passport-id") + '">Retirar</a></td>' +
-                                    '<td><button class="btn-danger btn btn-sm js-delete" data-passport-id='+button.attr("data-passport-id")+'>Eliminar</button></td>'
+                                    '<td><button class="btn-danger btn btn-sm js-delete" data-passport-id=' + button.attr("data-passport-id") + '>Eliminar</button></td>' +
+                                    '</tr>'
                                 button.parents("tr").replaceWith(row);
                             }
                         })
