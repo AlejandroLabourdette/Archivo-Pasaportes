@@ -150,13 +150,15 @@ namespace ArchivoDePasaportes.Controllers
             if (viewModel.OldId == null || viewModel.OldId != viewModel.Passport.Id)
             {
                 var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
-                if (passportInDb != null)
+                var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
+                if (passportInDb != null || droppedPassportInDb != null)
                 {
                     viewModel.ExistOtherInDb = true;
                     viewModel.Sources = _context.Sources.ToList();
                     viewModel.PassportTypes = _context.PassportTypes.ToList();
                     return View("PassportForm", viewModel);
                 }
+
                 var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Passport.OwnerId);
                 if (personInDb == null)
                 {
