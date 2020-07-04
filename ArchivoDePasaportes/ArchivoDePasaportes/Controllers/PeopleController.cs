@@ -19,18 +19,12 @@ namespace ArchivoDePasaportes.Controllers
         }
         
         
-        public IActionResult Index(string sortOrder, string keepOrder, string searchString, int pageIndex)
+        public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
         {
-            if (String.IsNullOrEmpty(sortOrder))
-            {
-                sortOrder = "id";
-                keepOrder = "True";
-            }
-
             ViewBag.ActualSortOrder = sortOrder;
-            ViewBag.IdSortParm = sortOrder == "id" && keepOrder != "True" ? "id_desc" : "id";
-            ViewBag.NameSortParm = sortOrder == "name" && keepOrder != "True" ? "name_desc" : "name";
-            ViewBag.AddressSortParm = sortOrder == "address" && keepOrder != "True" ? "address_desc" : "address";
+            ViewBag.IdSortParm = sortOrder == "id" && !keepOrder ? "id_desc" : "id";
+            ViewBag.NameSortParm = sortOrder == "name" && !keepOrder ? "name_desc" : "name";
+            ViewBag.AddressSortParm = sortOrder == "address" && !keepOrder ? "address_desc" : "address";
             ViewBag.SearchString = searchString;
         
             var people = from p in _context.People select p;
@@ -63,7 +57,6 @@ namespace ArchivoDePasaportes.Controllers
                     people = people.OrderByDescending(p => p.Address);
                     break;
         
-        
                 default:
                     people = people.OrderBy(p => p.Id);
                     break;
@@ -74,7 +67,7 @@ namespace ArchivoDePasaportes.Controllers
                 .ToList();
 
             var pageSize = 5;
-            int maxPageIndex = people_list.Count / pageSize + 1;
+            int maxPageIndex = (people_list.Count % pageSize) == 0 ? people_list.Count / pageSize : people_list.Count / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;

@@ -18,20 +18,14 @@ namespace ArchivoDePasaportes.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string sortOrder, string keepOrder, string searchString, int pageIndex)
+        public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
         {
-            if (String.IsNullOrEmpty(sortOrder))
-            {
-                sortOrder = "id";
-                keepOrder = "True";
-            }
-
             ViewBag.ActualSortOrder = sortOrder;
-            ViewBag.IdSortParm = sortOrder == "id" && keepOrder != "True" ? "id_desc" : "id";
-            ViewBag.OwnerIdSortParm = sortOrder == "ownerId" && keepOrder != "True" ? "ownerId_desc" : "ownerId";
-            ViewBag.OwnerNameSortParm = sortOrder == "ownerName" && keepOrder != "True" ? "ownerName_desc" : "ownerName";
-            ViewBag.ExpeditionSortParm = sortOrder == "expedition" && keepOrder != "True" ? "expedition_desc" : "expedition";
-            ViewBag.ExpirationSortParm = sortOrder == "expiration" && keepOrder != "True" ? "expiration_desc" : "expiration";
+            ViewBag.IdSortParm = sortOrder == "id" && !keepOrder ? "id_desc" : "id";
+            ViewBag.OwnerIdSortParm = sortOrder == "ownerId" && !keepOrder ? "ownerId_desc" : "ownerId";
+            ViewBag.OwnerNameSortParm = sortOrder == "ownerName" && !keepOrder ? "ownerName_desc" : "ownerName";
+            ViewBag.ExpeditionSortParm = sortOrder == "expedition" && !keepOrder ? "expedition_desc" : "expedition";
+            ViewBag.ExpirationSortParm = sortOrder == "expiration" && !keepOrder ? "expiration_desc" : "expiration";
             ViewBag.SearchString = searchString;
 
             var passports = (from p in _context.Passports select p);
@@ -88,7 +82,7 @@ namespace ArchivoDePasaportes.Controllers
                 .ToList();
             
             var pageSize = 5;
-            int maxPageIndex = passports_list.Count / pageSize + 1;
+            int maxPageIndex = (passports_list.Count % pageSize) == 0 ? passports_list.Count / pageSize : passports_list.Count / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;

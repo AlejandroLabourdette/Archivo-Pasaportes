@@ -114,13 +114,13 @@
 <p>
     @Html.ActionLink("Anterior", "Index", new { 
         sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = "True", 
+        keepOrder = true, 
         searchString = ViewBag.SearchString, 
         pageIndex = ViewBag.PageIndex - 1 })
     @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
     @Html.ActionLink("Siguiente", "Index", new { 
         sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = "True", 
+        keepOrder = true, 
         searchString = ViewBag.SearchString, 
         pageIndex = ViewBag.PageIndex + 1 })
 </p>

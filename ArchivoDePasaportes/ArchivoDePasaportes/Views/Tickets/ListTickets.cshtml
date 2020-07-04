@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Ticket>
+@{
+    ViewData["Title"] = "ListTickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ListTickets</h1>
+
+<table id="people" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Fecha de viaje", "Index", "Tickets", new
+                {
+                    sortOrder = ViewBag.DateSortParm,
+                    searchDay = ViewBag.SearchDay,
+                    searchMonth = ViewBag.SearchMonth,
+                    searchYear = ViewBag.SearchYear,
+                    searchOrigin = ViewBag.SearchOrigin,
+                    searchDestiny = ViewBag.SearchDestiny
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Origen", "Index", "Tickets", new
+                {
+                    sortOrder = ViewBag.OriginSortParm,
+                    searchDay = ViewBag.SearchDay,
+                    searchMonth = ViewBag.SearchMonth,
+                    searchYear = ViewBag.SearchYear,
+                    searchOrigin = ViewBag.SearchOrigin,
+                    searchDestiny = ViewBag.SearchDestiny
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Destino", "Index", "Tickets", new
+                {
+                    sortOrder = ViewBag.DestinySortParm,
+                    searchDay = ViewBag.SearchDay,
+                    searchMonth = ViewBag.SearchMonth,
+                    searchYear = ViewBag.SearchYear,
+                    searchOrigin = ViewBag.SearchOrigin,
+                    searchDestiny = ViewBag.SearchDestiny
+                })
+            </th>
+            <th></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model)
+        {
+            <tr>
+                <td>@ticket.DepartureDate.Day/@ticket.DepartureDate.Month/@ticket.DepartureDate.Year</td>
+                <td>@ticket.OriginCountry.Name</td>
+                <td>@ticket.DestinyCountry.Name</td>
+                
+                <td>
+                    @Html.ActionLink("Editar", "Edit", "Tickets", null, new { @class="btn btn-secondary btn-sm" })
+                    <button class="btn btn-danger btn-sm js-delete" data-ticket-id=@ticket.Id>Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    @Html.ActionLink("Anterior", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex - 1
+    })
+    @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
+    @Html.ActionLink("Siguiente", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex + 1
+    })
+</p>
