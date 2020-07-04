@@ -61,21 +61,18 @@ namespace ArchivoDePasaportes.Controllers
                     people = people.OrderBy(p => p.Id);
                     break;
             }
-        
-            var people_list = people
-                .Include(p => p.Source)
-                .ToList();
 
             var pageSize = 5;
-            int maxPageIndex = (people_list.Count % pageSize) == 0 ? people_list.Count / pageSize : people_list.Count / pageSize + 1;
+            int maxPageIndex = people.Count() % pageSize == 0 && people.Count() > 0 ? people.Count() / pageSize : people.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;
             ViewBag.MaxPageIndex = maxPageIndex;
             
-            people_list = people_list
+            var people_list = people
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
+                .Include(p => p.Source)
                 .ToList();
 
             return View("ListPeople", people_list);

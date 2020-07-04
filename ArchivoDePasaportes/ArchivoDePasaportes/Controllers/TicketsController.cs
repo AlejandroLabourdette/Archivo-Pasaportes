@@ -71,7 +71,7 @@ namespace ArchivoDePasaportes.Controllers
             }
 
             var pageSize = 5;
-            int maxPageIndex = (tickets.Count() % pageSize) == 0 && tickets.Count() > 0 ? tickets.Count() / pageSize : tickets.Count() / pageSize + 1;
+            int maxPageIndex = tickets.Count() % pageSize == 0 && tickets.Count() > 0 ? tickets.Count() / pageSize : tickets.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;

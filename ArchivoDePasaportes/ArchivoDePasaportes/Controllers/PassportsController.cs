@@ -74,23 +74,20 @@ namespace ArchivoDePasaportes.Controllers
                     passports = passports.OrderBy(p => p.Id);
                     break;
             }
-
-            var passports_list = passports
-                .Include(p => p.Owner)
-                .Include(p=>p.PassportType)
-                .Include(p=>p.Source)
-                .ToList();
             
             var pageSize = 5;
-            int maxPageIndex = (passports_list.Count % pageSize) == 0 ? passports_list.Count / pageSize : passports_list.Count / pageSize + 1;
+            int maxPageIndex = passports.Count() % pageSize == 0 && passports.Count() > 0 ? passports.Count() / pageSize : passports.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;
             ViewBag.MaxPageIndex = maxPageIndex;
 
-            passports_list = passports_list
+            var passports_list = passports
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
+                .Include(p => p.Owner)
+                .Include(p => p.PassportType)
+                .Include(p => p.Source)
                 .ToList();
 
             return View("ListPassports", passports_list);
