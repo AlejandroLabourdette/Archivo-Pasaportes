@@ -16,6 +16,7 @@ namespace ArchivoDePasaportes.Data
         public DbSet<DropCause> DropCauses { get; set; }
         public DbSet<DroppedPassport> DroppedPassports { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
