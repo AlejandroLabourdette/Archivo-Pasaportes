@@ -72,15 +72,19 @@ namespace ArchivoDePasaportes.Controllers
             var people_list = people
                 .Include(p => p.Source)
                 .ToList();
-            pageIndex = pageIndex < 0 ? 0 : pageIndex;
-            pageIndex = pageIndex > (people_list.Count / 5) ? (people_list.Count / 5) : pageIndex;
+
+            var pageSize = 5;
+            int maxPageIndex = people_list.Count / pageSize + 1;
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+            pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;
-            ViewBag.MaxPageIndex = (int) people_list.Count / 5;
-            int start_index = Math.Min(people_list.Count - 1, pageIndex * 5);
-            int count = Math.Min(people_list.Count - start_index, 5);
-            if (start_index != -1)
-                people_list = people_list.GetRange(start_index, count);
-        
+            ViewBag.MaxPageIndex = maxPageIndex;
+            
+            people_list = people_list
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             return View("ListPeople", people_list);
         }
         

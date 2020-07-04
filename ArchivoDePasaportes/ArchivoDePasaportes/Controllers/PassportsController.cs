@@ -43,59 +43,61 @@ namespace ArchivoDePasaportes.Controllers
                     (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString)||
                     p.OwnerId.Contains(searchString));           
             
+            switch (sortOrder)
+            {
+                case "id":
+                    passports = passports.OrderBy(p => p.Id);
+                    break;
+                case "id_desc":
+                    passports = passports.OrderByDescending(p => p.Id);
+                    break;
+                case "ownerId":
+                    passports = passports.OrderBy(p => p.OwnerId);
+                    break;
+                case "ownerId_desc":
+                    passports = passports.OrderByDescending(p => p.OwnerId);
+                    break;
+                case "ownerName":
+                    passports = passports.OrderBy(p => p.Owner.FullName());
+                    break;
+                case "ownerName_desc":
+                    passports = passports.OrderByDescending(p => p.Owner.FullName());
+                    break;
+                case "expedition":
+                    passports = passports.OrderBy(p => p.ExpeditionDate);
+                    break;
+                case "expedition_desc":
+                    passports = passports.OrderByDescending(p => p.ExpeditionDate);
+                    break;
+                case "expiration":
+                    passports = passports.OrderBy(p => p.ExpirationDate);
+                    break;
+                case "expiration_desc":
+                    passports = passports.OrderByDescending(p => p.ExpirationDate);
+                    break;
+
+                default:
+                    passports = passports.OrderBy(p => p.Id);
+                    break;
+            }
+
             var passports_list = passports
                 .Include(p => p.Owner)
                 .Include(p=>p.PassportType)
                 .Include(p=>p.Source)
                 .ToList();
-
-            switch (sortOrder)
-            {
-                case "id":
-                    passports_list = passports_list.OrderBy(p => p.Id).ToList();
-                    break;
-                case "id_desc":
-                    passports_list = passports_list.OrderByDescending(p => p.Id).ToList();
-                    break;
-                case "ownerId":
-                    passports_list = passports_list.OrderBy(p => p.OwnerId).ToList();
-                    break;
-                case "ownerId_desc":
-                    passports_list = passports_list.OrderByDescending(p => p.OwnerId).ToList();
-                    break;
-                case "ownerName":
-                    passports_list = passports_list.OrderBy(p => p.Owner.FullName()).ToList();
-                    break;
-                case "ownerName_desc":
-                    passports_list = passports_list.OrderByDescending(p => p.Owner.FullName()).ToList();
-                    break;
-                case "expedition":
-                    passports_list = passports_list.OrderBy(p => p.ExpeditionDate).ToList();
-                    break;
-                case "expedition_desc":
-                    passports_list = passports_list.OrderByDescending(p => p.ExpeditionDate).ToList();
-                    break;
-                case "expiration":
-                    passports_list = passports_list.OrderBy(p => p.ExpirationDate).ToList();
-                    break;
-                case "expiration_desc":
-                    passports_list = passports_list.OrderByDescending(p => p.ExpirationDate).ToList();
-                    break;
-
-                default:
-                    passports_list = passports_list.OrderBy(p => p.Id).ToList();
-                    break;
-            }
-
-
-            pageIndex = pageIndex < 0 ? 0 : pageIndex;
-            pageIndex = pageIndex > (passports_list.Count / 5) ? (passports_list.Count / 5) : pageIndex;
+            
+            var pageSize = 5;
+            int maxPageIndex = passports_list.Count / pageSize + 1;
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+            pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;
-            ViewBag.MaxPageIndex = (int)passports_list.Count / 5;
-            int start_index = Math.Min(passports_list.Count - 1, pageIndex * 5);
-            int count = Math.Min(passports_list.Count - start_index, 5);
-            if (start_index != -1)
-                passports_list = passports_list.GetRange(start_index, count);
+            ViewBag.MaxPageIndex = maxPageIndex;
+
+            passports_list = passports_list
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             return View("ListPassports", passports_list);
         }

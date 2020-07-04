@@ -18,3 +18,26 @@ namespace ArchivoDePasaportes.Models
         public string Description { get; set; }
     }
 }
+
+/*
+Genius
+Love, Death & Robots
+Fleabag
+Black Sails
+Dr. House
+Vis a Vis (temp 3 y 4)
+Dark
+House of Cards
+Sharp Objects
+Lucifer
+Big Little Lies
+Sherlock
+The Crown
+True Detective
+Fargo
+When they See Us (Asi nos ven)
+Mindhunter
+*/
+
+
+
