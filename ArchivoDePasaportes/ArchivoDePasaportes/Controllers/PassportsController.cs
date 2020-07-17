@@ -39,9 +39,6 @@ namespace ArchivoDePasaportes.Controllers
             
             switch (sortOrder)
             {
-                case "id":
-                    passports = passports.OrderBy(p => p.Id);
-                    break;
                 case "id_desc":
                     passports = passports.OrderByDescending(p => p.Id);
                     break;

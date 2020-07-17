@@ -4,9 +4,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ListTickets</h1>
+<h1>Boletos</h1>
 
-<table id="people" class="table">
+<form asp-action="Index">
+    <div class="row">
+        <div class="input-group">
+            @Html.TextBox("SearchDay", null, new { @class = "form-control", placeholder = "Día" })
+            @Html.TextBox("SearchMonth", null, new { @class = "form-control", placeholder = "Mes" })
+            @Html.TextBox("SearchYear", null, new { @class = "form-control", placeholder = "Año" })
+        </div>
+        <div class="input-group">
+            @Html.TextBox("SearchOrigin", null, new { @class = "form-control", placeholder = "Origen" })
+            @Html.TextBox("SearchDestiny", null, new { @class = "form-control", placeholder = "Destino" })
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">Buscar</button>
+        </div>
+    </div>
+</form>
+<p></p>
+
+<table id="tickets" class="table">
     <thead>
         <tr>
             <th>
@@ -43,7 +61,7 @@
                 })
             </th>
             <th></th>
-            
+
         </tr>
     </thead>
     <tbody>
@@ -53,9 +71,9 @@
                 <td>@ticket.DepartureDate.Day/@ticket.DepartureDate.Month/@ticket.DepartureDate.Year</td>
                 <td>@ticket.OriginCountry.Name</td>
                 <td>@ticket.DestinyCountry.Name</td>
-                
+
                 <td>
-                    @Html.ActionLink("Editar", "Edit", "Tickets", null, new { @class="btn btn-secondary btn-sm" })
+                    @Html.ActionLink("Editar", "Edit", "Tickets", null, new { @class = "btn btn-secondary btn-sm" })
                     <button class="btn btn-danger btn-sm js-delete" data-ticket-id=@ticket.Id>Eliminar</button>
                 </td>
             </tr>
@@ -80,3 +98,26 @@
         pageIndex = ViewBag.PageIndex + 1
     })
 </p>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#tickets").on("click", ".js-delete", function () {
+                var button = $(this)
+
+                bootbox.confirm("Esta seguro que desea eliminar a este Boleto del registro", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Tickets/" + button.attr("data-ticket-id"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        })
+                    }
+                })
+            });
+        });
+    </script>
+}

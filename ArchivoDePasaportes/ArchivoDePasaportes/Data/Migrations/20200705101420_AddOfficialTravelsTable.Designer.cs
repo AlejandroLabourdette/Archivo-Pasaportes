@@ -4,14 +4,16 @@ using ArchivoDePasaportes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200705101420_AddOfficialTravelsTable")]
+    partial class AddOfficialTravelsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,34 +194,6 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PassportTypes");
-                });
-
-            modelBuilder.Entity("ArchivoDePasaportes.Models.PermanentTravel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("OccupationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PassportId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("TicketId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OccupationId");
-
-                    b.HasIndex("PassportId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("PermanentTravels");
                 });
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>
@@ -562,27 +536,6 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.HasOne("ArchivoDePasaportes.Models.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId");
-                });
-
-            modelBuilder.Entity("ArchivoDePasaportes.Models.PermanentTravel", b =>
-                {
-                    b.HasOne("ArchivoDePasaportes.Models.Occupation", "Occupation")
-                        .WithMany()
-                        .HasForeignKey("OccupationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ArchivoDePasaportes.Models.Passport", "Passport")
-                        .WithMany()
-                        .HasForeignKey("PassportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ArchivoDePasaportes.Models.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>
