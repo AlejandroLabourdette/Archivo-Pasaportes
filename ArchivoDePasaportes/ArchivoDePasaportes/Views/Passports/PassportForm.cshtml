@@ -8,9 +8,9 @@
 
 <form asp-action="Save">
     <div class="form-group">
-        <label asp-for="Passport.Id" class="control-label"></label>
-        <input asp-for="Passport.Id" class="form-control" />
-        <span asp-validation-for="Passport.Id" class="text-danger"></span>
+        <label asp-for="Passport.PassportNo" class="control-label"></label>
+        <input asp-for="Passport.PassportNo" class="form-control" />
+        <span asp-validation-for="Passport.PassportNo" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Passport.PassportType" class="control-label"></label>
@@ -48,6 +48,7 @@
         <span asp-validation-for="Passport.ExpirationDate" class="text-danger"></span>
     </div>
 
+    @Html.HiddenFor(m => m.Passport.Id)
     @Html.HiddenFor(m => m.OldId)
     @Html.HiddenFor(m => m.ExistOtherInDb)
     @Html.HiddenFor(m => m.NotExistThisPersonInDb)

@@ -21,7 +21,7 @@ namespace ArchivoDePasaportes.Controllers.Api
 
         [HttpDelete]
         [Route("{Id}")]
-        public IActionResult DeletePassport(string id)
+        public IActionResult DeletePassport(long id)
         {
             Passport passportInDb = _context.Passports.Single(p => p.Id == id);
             if (passportInDb == null)
@@ -35,7 +35,7 @@ namespace ArchivoDePasaportes.Controllers.Api
 
         [HttpPut]
         [Route("{Id}")]
-        public IActionResult ArchivePassport(string id)
+        public IActionResult ArchivePassport(long id)
         {
             Passport passportInDb = _context.Passports.Single(p => p.Id == id);
             if (passportInDb == null)

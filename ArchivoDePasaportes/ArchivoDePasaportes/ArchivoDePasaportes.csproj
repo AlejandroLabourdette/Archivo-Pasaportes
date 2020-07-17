@@ -26,6 +26,10 @@
     <Compile Remove="Data\Migrations\20200601100252_AddPassportsTable.Designer.cs" />
     <Compile Remove="Data\Migrations\20200601125900_a.cs" />
     <Compile Remove="Data\Migrations\20200601125900_a.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717101547_PassportNumberIsNotID.cs" />
+    <Compile Remove="Data\Migrations\20200717101547_PassportNumberIsNotID.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717102934_PassportNumberIsNotID.cs" />
+    <Compile Remove="Data\Migrations\20200717102934_PassportNumberIsNotID.Designer.cs" />
   </ItemGroup>
 
 

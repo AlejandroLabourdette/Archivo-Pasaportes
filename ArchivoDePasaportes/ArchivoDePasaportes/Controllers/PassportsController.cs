@@ -33,14 +33,14 @@ namespace ArchivoDePasaportes.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
                 passports = passports.Where(p =>
-                    p.Id.Contains(searchString)||
+                    p.PassportNo.Contains(searchString)||
                     (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString)||
                     p.OwnerId.Contains(searchString));           
             
             switch (sortOrder)
             {
                 case "id_desc":
-                    passports = passports.OrderByDescending(p => p.Id);
+                    passports = passports.OrderByDescending(p => p.PassportNo);
                     break;
                 case "ownerId":
                     passports = passports.OrderBy(p => p.OwnerId);
@@ -68,7 +68,7 @@ namespace ArchivoDePasaportes.Controllers
                     break;
 
                 default:
-                    passports = passports.OrderBy(p => p.Id);
+                    passports = passports.OrderBy(p => p.PassportNo);
                     break;
             }
             
@@ -90,7 +90,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("ListPassports", passports_list);
         }
     
-        public IActionResult Details(string id)
+        public IActionResult Details(long id)
         {
             var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
             if (passportInDb == null)
@@ -112,7 +112,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("PassportForm", viewModel);
         }
 
-        public IActionResult Edit(string id)
+        public IActionResult Edit(long id)
         {
             var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
             if (passportInDb == null)
@@ -121,7 +121,6 @@ namespace ArchivoDePasaportes.Controllers
             var viewModel = new PassportFormViewModel()
             {
                 Passport = passportInDb,
-                OldId = passportInDb.Id,
                 PassportTypes = _context.PassportTypes.ToList(),
                 Sources = _context.Sources.ToList()
             };
@@ -137,11 +136,24 @@ namespace ArchivoDePasaportes.Controllers
                 return View("PassportForm", viewModel);
             }
 
-            if (viewModel.OldId == null || viewModel.OldId != viewModel.Passport.Id)
+            var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Passport.OwnerId);
+            if (personInDb == null)
             {
-                var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
-                var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
-                if (passportInDb != null || droppedPassportInDb != null)
+                viewModel.NotExistThisPersonInDb = true;
+                viewModel.Sources = _context.Sources.ToList();
+                viewModel.PassportTypes = _context.PassportTypes.ToList();
+                return View("PassportForm", viewModel);
+            }
+
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
+            var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(p => p.Id == viewModel.Passport.Id);
+            if (passportInDb!=null || droppedPassportInDb!=null)
+            {
+                bool passportExists = _context.Passports.SingleOrDefault(p => p.PassportNo == viewModel.Passport.PassportNo) != null ||
+                              _context.DroppedPassports.SingleOrDefault(p => p.PassportNo == viewModel.Passport.PassportNo) != null;
+                bool isModifiedPassNoInPassDB = passportInDb.PassportNo != viewModel.Passport.PassportNo;
+                bool isModifiedPassNoInDropPassDB = droppedPassportInDb.PassportNo != viewModel.Passport.PassportNo;
+                if ((isModifiedPassNoInPassDB || isModifiedPassNoInDropPassDB) && passportExists)
                 {
                     viewModel.ExistOtherInDb = true;
                     viewModel.Sources = _context.Sources.ToList();
@@ -149,41 +161,34 @@ namespace ArchivoDePasaportes.Controllers
                     return View("PassportForm", viewModel);
                 }
 
-                var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Passport.OwnerId);
-                if (personInDb == null)
+                if (passportInDb != null)
+                {        
+                    passportInDb.PassportNo = viewModel.Passport.PassportNo;
+                    passportInDb.OwnerId = viewModel.Passport.OwnerId;
+                    passportInDb.PassportTypeId = viewModel.Passport.PassportTypeId;
+                    passportInDb.SourceId = viewModel.Passport.SourceId;
+                    passportInDb.ExpeditionDate = viewModel.Passport.ExpeditionDate;
+                    passportInDb.ExpirationDate = viewModel.Passport.ExpirationDate;
+                }
+                else
                 {
-                    viewModel.NotExistThisPersonInDb = true; ;
-                    viewModel.Sources = _context.Sources.ToList();
-                    viewModel.PassportTypes = _context.PassportTypes.ToList();
-                    return View("PassportForm", viewModel);
+                    droppedPassportInDb.PassportNo = viewModel.Passport.PassportNo;
+                    droppedPassportInDb.OwnerId = viewModel.Passport.OwnerId;
+                    droppedPassportInDb.PassportTypeId = viewModel.Passport.PassportTypeId;
+                    droppedPassportInDb.SourceId = viewModel.Passport.SourceId;
+                    droppedPassportInDb.ExpeditionDate = viewModel.Passport.ExpeditionDate;
+                    droppedPassportInDb.ExpirationDate = viewModel.Passport.ExpirationDate;
                 }
             }
 
-            if (viewModel.OldId == viewModel.Passport.Id)
-            {
-                var passportInDb = _context.Passports.Single(p => p.Id == viewModel.OldId);
-
-                passportInDb.OwnerId = viewModel.Passport.OwnerId;
-                passportInDb.PassportTypeId = viewModel.Passport.PassportTypeId;
-                passportInDb.SourceId = viewModel.Passport.SourceId;
-                passportInDb.ExpeditionDate = viewModel.Passport.ExpeditionDate;
-                passportInDb.ExpirationDate = viewModel.Passport.ExpirationDate;
-            }
             else
-            {
                 _context.Passports.Add(viewModel.Passport);
-                if (viewModel.OldId != null)
-                {
-                    var oldPassport = _context.Passports.Single(p => p.Id == viewModel.OldId);
-                    _context.Passports.Remove(oldPassport);
-                }
-            }
 
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        public IActionResult Drop(string id)
+        public IActionResult Drop(long id)
         {
             var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
             if (passportInDb == null)
@@ -192,7 +197,7 @@ namespace ArchivoDePasaportes.Controllers
             {
                 DroppedPassport = new DroppedPassport()
                 {
-                    Id = passportInDb.Id,
+                    PassportNo = passportInDb.PassportNo,
                     OwnerId = passportInDb.OwnerId,
                     PassportTypeId = passportInDb.PassportTypeId,
                     SourceId = passportInDb.SourceId,
@@ -213,11 +218,11 @@ namespace ArchivoDePasaportes.Controllers
                 return View(viewModel);
             }
 
-            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == viewModel.DroppedPassport.Id);
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.PassportNo == viewModel.DroppedPassport.PassportNo);
             if (passportInDb == null)
                 return BadRequest();
 
-            var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(dp => dp.Id == viewModel.DroppedPassport.Id);
+            var droppedPassportInDb = _context.DroppedPassports.SingleOrDefault(dp => dp.PassportNo == viewModel.DroppedPassport.PassportNo);
             if (droppedPassportInDb != null)
                 return BadRequest();
 

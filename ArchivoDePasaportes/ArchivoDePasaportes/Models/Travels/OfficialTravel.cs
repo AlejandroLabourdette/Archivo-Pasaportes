@@ -15,7 +15,7 @@ namespace ArchivoDePasaportes.Models
         public Ticket Ticket { get; set; }
 
         [Required]
-        public string PassportId { get; set; }
+        public long PassportId { get; set; }
         public Passport Passport { get; set; }
 
         [Required]

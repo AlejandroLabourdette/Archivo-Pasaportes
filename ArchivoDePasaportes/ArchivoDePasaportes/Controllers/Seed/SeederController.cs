@@ -91,7 +91,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 2,
-                Id = "A879546",
+                PassportNo = "A879546",
                 OwnerId = "85071623648",
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2018, 8, 5),
@@ -100,7 +100,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 1,
-                Id = "A621549",
+                PassportNo = "A621549",
                 OwnerId = "79081937689",
                 SourceId = 2,
                 ExpeditionDate = new DateTime(1992, 7, 27),
@@ -109,7 +109,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 2,
-                Id = "A681672",
+                PassportNo = "A681672",
                 OwnerId = "79081937689",
                 SourceId = 2,
                 ExpeditionDate = new DateTime(2005, 1, 17),
@@ -118,7 +118,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 1,
-                Id = "A784568",
+                PassportNo = "A784568",
                 OwnerId = "79081937689",
                 SourceId = 2,
                 ExpeditionDate = new DateTime(2015, 7, 1),
@@ -127,7 +127,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 2,
-                Id = "A164827",
+                PassportNo = "A164827",
                 OwnerId = "01012487672",
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2017, 4, 4),
@@ -136,7 +136,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 1,
-                Id = "A791528",
+                PassportNo = "A791528",
                 OwnerId = "76091928768",
                 SourceId = 1,
                 ExpeditionDate = new DateTime(1999, 2, 28),
@@ -145,7 +145,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             AddPassport(new Passport()
             {
                 PassportTypeId = 2,
-                Id = "A365284",
+                PassportNo = "A365284",
                 OwnerId = "76091928768",
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2009, 12, 10),
@@ -155,7 +155,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
         }
         private void AddPassport(Passport passport)
         {
-            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == passport.Id);
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.PassportNo == passport.PassportNo);
             if (passportInDb == null)
                 _context.Passports.Add(passport);
         }

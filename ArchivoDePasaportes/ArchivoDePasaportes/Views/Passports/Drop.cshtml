@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Retirar Pasaporte @Model.DroppedPassport.Id</h1>
+<h1>Retirar Pasaporte @Model.DroppedPassport.PassportNo</h1>
 
 <form asp-action="Drop">
     <div class="form-group">
@@ -23,6 +23,7 @@
         <span asp-validation-for="DroppedPassport.Details" class="text-danger"></span>
     </div>
     @Html.HiddenFor(m => m.DroppedPassport.Id)
+    @Html.HiddenFor(m => m.DroppedPassport.PassportNo)
     @Html.HiddenFor(m => m.DroppedPassport.ExpeditionDate)
     @Html.HiddenFor(m => m.DroppedPassport.ExpirationDate)
     @Html.HiddenFor(m => m.DroppedPassport.OwnerId)

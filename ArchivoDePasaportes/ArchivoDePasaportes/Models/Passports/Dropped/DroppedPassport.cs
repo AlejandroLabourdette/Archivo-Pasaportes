@@ -9,10 +9,12 @@ namespace ArchivoDePasaportes.Models
 {
     public class DroppedPassport
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public long Id { get; set; }
+
+
         [Display(Name = "Número de Pasaporte")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Por favor ingrese el Número del Pasaporte")]
-        public string Id { get; set; }
+        public string PassportNo { get; set; }
 
 
         [Required(ErrorMessage = "Por favor ingrese el propietario del pasaporte")]

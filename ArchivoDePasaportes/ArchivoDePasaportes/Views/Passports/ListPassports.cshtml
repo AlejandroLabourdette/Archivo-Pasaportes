@@ -82,7 +82,7 @@
                     }
                 </td>
                 <td>@passport.PassportType.Name</td>
-                <td>@Html.ActionLink(passport.Id, "Details", new { id = passport.Id })</td>
+                <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
                 <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
                 <td>@passport.Owner.FullName()</td>
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
