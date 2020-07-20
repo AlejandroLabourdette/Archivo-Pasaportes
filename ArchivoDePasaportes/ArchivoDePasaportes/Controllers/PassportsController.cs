@@ -33,9 +33,9 @@ namespace ArchivoDePasaportes.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
                 passports = passports.Where(p =>
-                    p.PassportNo.Contains(searchString)||
-                    (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString)||
-                    p.OwnerId.Contains(searchString));           
+                    p.PassportNo.Contains(searchString) ||
+                    p.OwnerId.Contains(searchString) ||
+                    _context.People.Single(per => per.Id == p.OwnerId).FullName().Contains(searchString));
             
             switch (sortOrder)
             {
@@ -49,10 +49,10 @@ namespace ArchivoDePasaportes.Controllers
                     passports = passports.OrderByDescending(p => p.OwnerId);
                     break;
                 case "ownerName":
-                    passports = passports.OrderBy(p => p.Owner.FullName());
+                    passports = passports.OrderBy(p => p.Owner.NameWithComa());
                     break;
                 case "ownerName_desc":
-                    passports = passports.OrderByDescending(p => p.Owner.FullName());
+                    passports = passports.OrderByDescending(p => p.Owner.NameWithComa());
                     break;
                 case "expedition":
                     passports = passports.OrderBy(p => p.ExpeditionDate);

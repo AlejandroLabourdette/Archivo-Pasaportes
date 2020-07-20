@@ -10,10 +10,12 @@ namespace ArchivoDePasaportes.Models
 {
     public class Person
     {
+        public long Id { get; set; }
+
+        [Required]
         [PersonIdValidation]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Carnet de Identidad")]
-        public string Id { get; set; }
+        public string CI { get; set; }
 
 
         [Required(ErrorMessage ="Por favor ingrese Nombre")]
@@ -43,7 +45,11 @@ namespace ArchivoDePasaportes.Models
 
         public string FullName()
         {
-            return LastName+", "+FirstName;
+            return FirstName + " " + LastName;
+        }
+        public string NameWithComa()
+        {
+            return LastName + ", " + FirstName;
         }
     }
 }

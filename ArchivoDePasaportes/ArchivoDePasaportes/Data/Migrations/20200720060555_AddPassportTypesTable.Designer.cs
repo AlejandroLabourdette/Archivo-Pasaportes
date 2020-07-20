@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200601094027_PopulatePassportTypesTable")]
-    partial class PopulatePassportTypesTable
+    [Migration("20200720060555_AddPassportTypesTable")]
+    partial class AddPassportTypesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,8 +37,10 @@ namespace ArchivoDePasaportes.Data.Migrations
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -46,6 +48,10 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.Property<DateTime?>("BirthDay")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

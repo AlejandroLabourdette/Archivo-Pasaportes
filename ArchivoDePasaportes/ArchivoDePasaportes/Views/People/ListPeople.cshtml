@@ -48,7 +48,7 @@
         {
             <tr>
                 <td>@person.Id</td>
-                <td>@Html.ActionLink(person.FullName(),"Details", new { id = person.Id })</td>
+                <td>@Html.ActionLink(person.NameWithComa(),"Details", new { id = person.Id })</td>
                 <td>@person.Address</td>
                 <td>@Html.ActionLink(person.Source.Name, "Details", "Sources", new { id = person.Source.Id })</td>
                 <td>

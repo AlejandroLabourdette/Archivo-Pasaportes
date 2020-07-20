@@ -2,7 +2,7 @@
 
 namespace ArchivoDePasaportes.Data.Migrations
 {
-    public partial class PopulatePassportTypesTable : Migration
+    public partial class PopulatePassportTypes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

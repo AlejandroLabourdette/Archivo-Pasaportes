@@ -1,38 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ArchivoDePasaportes.Data.Migrations
 {
-    public partial class AddPermanentTravelsTable : Migration
+    public partial class AddOfficialTravelsTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PermanentTravels",
+                name: "OfficialTravels",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TicketId = table.Column<long>(nullable: false),
-                    PassportId = table.Column<string>(nullable: false),
-                    OccupationId = table.Column<int>(nullable: false)
+                    PassportId = table.Column<long>(nullable: false),
+                    OccupationId = table.Column<int>(nullable: false),
+                    ReturnDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermanentTravels", x => x.Id);
+                    table.PrimaryKey("PK_OfficialTravels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PermanentTravels_Occupations_OccupationId",
+                        name: "FK_OfficialTravels_Occupations_OccupationId",
                         column: x => x.OccupationId,
                         principalTable: "Occupations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PermanentTravels_Passports_PassportId",
+                        name: "FK_OfficialTravels_Passports_PassportId",
                         column: x => x.PassportId,
                         principalTable: "Passports",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PermanentTravels_Tickets_TicketId",
+                        name: "FK_OfficialTravels_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
@@ -40,25 +42,25 @@ namespace ArchivoDePasaportes.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermanentTravels_OccupationId",
-                table: "PermanentTravels",
+                name: "IX_OfficialTravels_OccupationId",
+                table: "OfficialTravels",
                 column: "OccupationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermanentTravels_PassportId",
-                table: "PermanentTravels",
+                name: "IX_OfficialTravels_PassportId",
+                table: "OfficialTravels",
                 column: "PassportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermanentTravels_TicketId",
-                table: "PermanentTravels",
+                name: "IX_OfficialTravels_TicketId",
+                table: "OfficialTravels",
                 column: "TicketId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PermanentTravels");
+                name: "OfficialTravels");
         }
     }
 }

@@ -11,8 +11,10 @@ namespace ArchivoDePasaportes.Data.Migrations
                 name: "DroppedPassports",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    OwnerId = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PassportNo = table.Column<string>(nullable: false),
+                    OwnerId = table.Column<long>(nullable: false),
                     PassportTypeId = table.Column<byte>(nullable: false),
                     SourceId = table.Column<int>(nullable: true),
                     ExpeditionDate = table.Column<DateTime>(nullable: false),
@@ -28,7 +30,7 @@ namespace ArchivoDePasaportes.Data.Migrations
                         column: x => x.DropCauseId,
                         principalTable: "DropCauses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DroppedPassports_People_OwnerId",
                         column: x => x.OwnerId,
@@ -40,13 +42,13 @@ namespace ArchivoDePasaportes.Data.Migrations
                         column: x => x.PassportTypeId,
                         principalTable: "PassportTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DroppedPassports_Sources_SourceId",
                         column: x => x.SourceId,
                         principalTable: "Sources",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

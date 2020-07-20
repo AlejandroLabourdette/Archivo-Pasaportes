@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200705101420_AddOfficialTravelsTable")]
-    partial class AddOfficialTravelsTable
+    [Migration("20200720062923_PopulatePassportTypes")]
+    partial class PopulatePassportTypes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,8 +55,10 @@ namespace ArchivoDePasaportes.Data.Migrations
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.DroppedPassport", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
@@ -72,9 +74,12 @@ namespace ArchivoDePasaportes.Data.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PassportNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("PassportTypeId")
                         .HasColumnType("tinyint");
@@ -124,9 +129,8 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.Property<int>("OccupationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PassportId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("PassportId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
@@ -147,8 +151,10 @@ namespace ArchivoDePasaportes.Data.Migrations
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Passport", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("ExpeditionDate")
                         .IsRequired()
@@ -161,9 +167,12 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.Property<bool>("IsPassportArchived")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PassportNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("PassportTypeId")
                         .HasColumnType("tinyint");
@@ -196,10 +205,39 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.ToTable("PassportTypes");
                 });
 
+            modelBuilder.Entity("ArchivoDePasaportes.Models.PermanentTravel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OccupationId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("PassportId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TicketId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccupationId");
+
+                    b.HasIndex("PassportId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("PermanentTravels");
+                });
+
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -207,6 +245,10 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.Property<DateTime?>("BirthDay")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -536,6 +578,27 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.HasOne("ArchivoDePasaportes.Models.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId");
+                });
+
+            modelBuilder.Entity("ArchivoDePasaportes.Models.PermanentTravel", b =>
+                {
+                    b.HasOne("ArchivoDePasaportes.Models.Occupation", "Occupation")
+                        .WithMany()
+                        .HasForeignKey("OccupationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchivoDePasaportes.Models.Passport", "Passport")
+                        .WithMany()
+                        .HasForeignKey("PassportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ArchivoDePasaportes.Models.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>

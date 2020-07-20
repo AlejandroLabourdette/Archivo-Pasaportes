@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArchivoDePasaportes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200603101745_PopulateDropCauseTable")]
-    partial class PopulateDropCauseTable
+    [Migration("20200720061135_AddDropCausesTable")]
+    partial class AddDropCausesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,18 +37,28 @@ namespace ArchivoDePasaportes.Data.Migrations
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Passport", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ExpeditionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OwnerId")
+                    b.Property<DateTime?>("ExpeditionDate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPassportArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PassportNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("PassportTypeId")
                         .HasColumnType("tinyint");
@@ -83,8 +93,10 @@ namespace ArchivoDePasaportes.Data.Migrations
 
             modelBuilder.Entity("ArchivoDePasaportes.Models.Person", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -92,6 +104,10 @@ namespace ArchivoDePasaportes.Data.Migrations
                     b.Property<DateTime?>("BirthDay")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

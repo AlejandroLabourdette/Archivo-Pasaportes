@@ -84,7 +84,7 @@
                 <td>@passport.PassportType.Name</td>
                 <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
                 <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
-                <td>@passport.Owner.FullName()</td>
+                <td>@passport.Owner.NameWithComa()</td>
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>
@@ -94,7 +94,7 @@
                                 data-passport-type="@passport.PassportType.Name"
                                 data-passport-id="@passport.Id"
                                 data-passport-owner-id="@passport.OwnerId"
-                                data-passport-owner-name="@passport.Owner.FullName()"
+                                data-passport-owner-name="@passport.Owner.NameWithComa()"
                                 data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
                                 data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year"
                                 >Recibir</button>

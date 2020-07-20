@@ -19,7 +19,7 @@ namespace ArchivoDePasaportes.Models
 
         [Required(ErrorMessage = "Por favor ingrese el propietario del pasaporte")]
         [Display(Name = "Carnet de Identidad del Propietario")]
-        public string OwnerId { get; set; }
+        public long OwnerId { get; set; }
         public Person Owner { get; set; }
 
         

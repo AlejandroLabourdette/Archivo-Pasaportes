@@ -2,29 +2,27 @@
 
 namespace ArchivoDePasaportes.Data.Migrations
 {
-    public partial class AddOccupationTable : Migration
+    public partial class AddDropCausesTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Occupations",
+                name: "DropCauses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Id = table.Column<byte>(nullable: false),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Occupations", x => x.Id);
+                    table.PrimaryKey("PK_DropCauses", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Occupations");
+                name: "DropCauses");
         }
     }
 }
