@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArchivoDePasaportes.Dto;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace ArchivoDePasaportes.Models.CustomValidation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var person = (Person)validationContext.ObjectInstance;
+            var person = (PersonDto)validationContext.ObjectInstance;
+            if (person.CI == null || person.CI == "")
+                return new ValidationResult("Por favor ingrese el CI");
+
             if (person.CI.Length != 11)
                 return new ValidationResult("El CI debe contener 11 números");
 

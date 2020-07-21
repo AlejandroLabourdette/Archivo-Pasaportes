@@ -2,24 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArchivoDePasaportes.Models
+namespace ArchivoDePasaportes.Dto
 {
-    public class Person
+    public class PersonDto
     {
-        public long Id { get; set; }
-
-        //[DisplayFormat(ConvertEmptyStringToNull = false)]
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "Por favor ingrese el CI")]
-        //[PersonIdValidation]
+        [PersonIdValidation]
         [Display(Name = "Carnet de Identidad")]
         public string CI { get; set; }
 
 
-        [Required(ErrorMessage ="Por favor ingrese Nombre")]
+        [Required(ErrorMessage = "Por favor ingrese Nombre")]
         [Display(Name = "Nombre")]
         public string FirstName { get; set; }
 
@@ -37,20 +32,10 @@ namespace ArchivoDePasaportes.Models
         [DataType(DataType.Date)]
         public DateTime? BirthDay { get; set; }
 
+
+        [Display(Name = "Centro de Origen")]
         public int SourceId { get; set; }
-        public Source Source { get; set; }
 
         public string Ocupation { get; set; }
-
-
-
-        public string FullName()
-        {
-            return FirstName + " " + LastName;
-        }
-        public string NameWithComa()
-        {
-            return LastName + ", " + FirstName;
-        }
     }
 }

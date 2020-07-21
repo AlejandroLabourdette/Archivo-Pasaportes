@@ -30,7 +30,7 @@ namespace ArchivoDePasaportes.Controllers.Api
     
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetPerson(string id)
+        public IActionResult GetPerson(long id)
         {
             Person personInDb = _context.People.Single(p => p.Id == id);
             if (personInDb == null)
@@ -40,7 +40,7 @@ namespace ArchivoDePasaportes.Controllers.Api
     
         [HttpDelete]
         [Route("{Id}")]
-        public IActionResult DeletePerson(string id)
+        public IActionResult DeletePerson(long id)
         {
             Person personInDb = _context.People.Single(p => p.Id == id);
             if (personInDb == null)

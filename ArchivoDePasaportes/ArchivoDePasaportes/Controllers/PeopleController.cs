@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
+using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace ArchivoDePasaportes.Controllers
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
         {
             ViewBag.ActualSortOrder = sortOrder;
-            ViewBag.IdSortParm = sortOrder == "id" && !keepOrder ? "id_desc" : "id";
+            ViewBag.CISortParm = sortOrder == "ci" && !keepOrder ? "ci_desc" : "ci";
             ViewBag.NameSortParm = sortOrder == "name" && !keepOrder ? "name_desc" : "name";
             ViewBag.AddressSortParm = sortOrder == "address" && !keepOrder ? "address_desc" : "address";
             ViewBag.SearchString = searchString;
@@ -33,13 +34,13 @@ namespace ArchivoDePasaportes.Controllers
                 people = people.Where(p => 
                     p.LastName.Contains(searchString)||
                     p.FirstName.Contains(searchString)||
-                    p.Id.Contains(searchString)||
+                    p.CI.Contains(searchString)||
                     p.Address.Contains(searchString));
         
             switch (sortOrder)
             {
-                case "id_desc":
-                    people = people.OrderByDescending(p => p.Id);
+                case "ci_desc":
+                    people = people.OrderByDescending(p => p.CI);
                     break;
                 case "name":
                     people = people.OrderBy(p => p.LastName);
@@ -55,7 +56,7 @@ namespace ArchivoDePasaportes.Controllers
                     break;
         
                 default:
-                    people = people.OrderBy(p => p.Id);
+                    people = people.OrderBy(p => p.CI);
                     break;
             }
 
@@ -75,7 +76,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("ListPeople", people_list);
         }
         
-        public IActionResult Details(string id)
+        public IActionResult Details(long id)
         {
             var personInDb = _context.People.SingleOrDefault(p => p.Id == id);
             if (personInDb == null)
@@ -85,18 +86,19 @@ namespace ArchivoDePasaportes.Controllers
             return View(personInDb);
         }
         
-        public IActionResult Edit(string id)
+        public IActionResult Edit(long id)
         {
             var personInDb = _context.People.SingleOrDefault(p => p.Id == id);
             if (personInDb == null)
                 return NotFound();
-        
+
             var viewModel = new PersonFormViewModel()
             {
-                Person = personInDb,
-                OldId = personInDb.Id,
+                PersonDto = new PersonDto(),
+                OldCI = personInDb.CI,
                 Sources = _context.Sources.ToList()
             };
+            TransferData.Transfer(personInDb, viewModel.PersonDto, _context);
             return View("PersonForm", viewModel);
         }
         
@@ -117,35 +119,33 @@ namespace ArchivoDePasaportes.Controllers
                 viewModel.Sources = _context.Sources.ToList();
                 return View("PersonForm", viewModel);
             }
-        
-            if (viewModel.OldId == null || viewModel.OldId != viewModel.Person.Id)
+
+            var personInDb = _context.People.SingleOrDefault(p => p.CI == viewModel.OldCI);
+            bool newPersonExists = _context.People.SingleOrDefault(p => p.CI == viewModel.PersonDto.CI) != null;
+            if (personInDb != null)
             {
-                var personInDb = _context.People.SingleOrDefault(p => p.Id == viewModel.Person.Id);
-                if (personInDb != null)
+                bool isModifiedCI = viewModel.OldCI != viewModel.PersonDto.CI;
+                if (isModifiedCI && newPersonExists)
                 {
                     viewModel.ExistOtherInDb = true;
                     viewModel.Sources = _context.Sources.ToList();
                     return View("PersonForm", viewModel);
                 }
+                TransferData.Transfer(viewModel.PersonDto, personInDb, _context);
             }
-            if (viewModel.OldId == viewModel.Person.Id)
+            else if (newPersonExists)
             {
-                var personInDb = _context.People.Single(p => p.Id == viewModel.OldId);
-                personInDb.FirstName = viewModel.Person.FirstName;
-                personInDb.LastName = viewModel.Person.LastName;
-                personInDb.BirthDay = viewModel.Person.BirthDay;
-                personInDb.Address = viewModel.Person.Address;
+                viewModel.ExistOtherInDb = true;
+                viewModel.Sources = _context.Sources.ToList();
+                return View("PersonForm", viewModel);
             }
             else
             {
-                _context.People.Add(viewModel.Person);
-                if (viewModel.OldId != null)
-                {
-                    var oldPerson = _context.People.Single(p => p.Id == viewModel.OldId);
-                    _context.People.Remove(oldPerson);
-                }
+                var newPerson = new Person();
+                TransferData.Transfer(viewModel.PersonDto, newPerson, _context);
+                _context.People.Add(newPerson);
             }
-        
+            
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

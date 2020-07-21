@@ -30,14 +30,14 @@
             <th>
                 @Html.ActionLink("Número de Pasaporte", "Index", "Passports", new
                 {
-                    sortOrder = ViewBag.IdSortParm,
+                    sortOrder = ViewBag.PassNoSortParm,
                     searchString = ViewBag.SearchString
                 })
             </th>
             <th>
                 @Html.ActionLink("Carnet del Propietario", "Index", "Passports", new
                 {
-                    sortOrder = ViewBag.OwnerIdSortParm,
+                    sortOrder = ViewBag.OwnerCISortParm,
                     searchString = ViewBag.SearchString
                 })
             </th>
@@ -83,7 +83,7 @@
                 </td>
                 <td>@passport.PassportType.Name</td>
                 <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
-                <td>@Html.ActionLink(passport.OwnerId, "Details", "People", new { id = passport.OwnerId })</td>
+                <td>@Html.ActionLink(passport.Owner.CI, "Details", "People", new { id = passport.OwnerId })</td>
                 <td>@passport.Owner.NameWithComa()</td>
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
@@ -93,7 +93,7 @@
                         <button class="btn btn-success btn-sm js-archive" 
                                 data-passport-type="@passport.PassportType.Name"
                                 data-passport-id="@passport.Id"
-                                data-passport-owner-id="@passport.OwnerId"
+                                data-passport-owner-id="@passport.Owner.CI"
                                 data-passport-owner-name="@passport.Owner.NameWithComa()"
                                 data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
                                 data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year"

@@ -8,48 +8,46 @@
 
 <form asp-action="Save">
     <div class="form-group">
-        <label asp-for="Passport.PassportNo" class="control-label"></label>
-        <input asp-for="Passport.PassportNo" class="form-control" />
-        <span asp-validation-for="Passport.PassportNo" class="text-danger"></span>
+        <label asp-for="PassportDto.PassportNo" class="control-label"></label>
+        <input asp-for="PassportDto.PassportNo" class="form-control" />
+        <span asp-validation-for="PassportDto.PassportNo" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Passport.PassportType" class="control-label"></label>
+        <label asp-for="PassportDto.PassportTypeId" class="control-label"></label>
         <div class="input-group">
-            @Html.DropDownListFor(m => m.Passport.PassportTypeId, new SelectList(Model.PassportTypes, "Id", "Name"), "Elija un tipo de pasaporte...", new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.PassportDto.PassportTypeId, new SelectList(Model.PassportTypes, "Id", "Name"), "Elija un tipo de pasaporte...", new { @class = "form-control" })
             <div class="input-group-append">
                 @Html.ActionLink("Agregar Otro", "New", "PassportTypes", null, new { @class = "btn btn-success" })
             </div>
         </div>
-        <span asp-validation-for="Passport.PassportType" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Passport.OwnerId" class="control-label"></label>
-        <input asp-for="Passport.OwnerId" class="form-control" />
-        <span asp-validation-for="Passport.OwnerId" class="text-danger"></span>
+        <label asp-for="PassportDto.OwnerCI" class="control-label"></label>
+        <input asp-for="PassportDto.OwnerCI" class="form-control" />
+        <span asp-validation-for="PassportDto.OwnerCI" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Passport.Source" class="control-label"></label>
+        <label asp-for="PassportDto.SourceId" class="control-label"></label>
         <div class="input-group">
-            @Html.DropDownListFor(m => m.Passport.SourceId, new SelectList(Model.Sources, "Id", "Name"), "Elija un centro...", new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.PassportDto.SourceId, new SelectList(Model.Sources, "Id", "Name"), "Elija un centro...", new { @class = "form-control" })
             <div class="input-group-append">
                 @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success" })
             </div>
         </div>
-        <span asp-validation-for="Passport.Source" class="text-danger"></span>
+        <span asp-validation-for="PassportDto.SourceId" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Passport.ExpeditionDate" class="control-label"></label>
-        <input asp-for="Passport.ExpeditionDate" class="form-control" />
-        <span asp-validation-for="Passport.ExpeditionDate" class="text-danger"></span>
+        <label asp-for="PassportDto.ExpeditionDate" class="control-label"></label>
+        <input asp-for="PassportDto.ExpeditionDate" class="form-control" />
+        <span asp-validation-for="PassportDto.ExpeditionDate" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Passport.ExpirationDate" class="control-label"></label>
-        <input asp-for="Passport.ExpirationDate" class="form-control" />
-        <span asp-validation-for="Passport.ExpirationDate" class="text-danger"></span>
+        <label asp-for="PassportDto.ExpirationDate" class="control-label"></label>
+        <input asp-for="PassportDto.ExpirationDate" class="form-control" />
+        <span asp-validation-for="PassportDto.ExpirationDate" class="text-danger"></span>
     </div>
 
-    @Html.HiddenFor(m => m.Passport.Id)
-    @Html.HiddenFor(m => m.OldId)
+    @Html.HiddenFor(m => m.OldPassportNo)
     @Html.HiddenFor(m => m.ExistOtherInDb)
     @Html.HiddenFor(m => m.NotExistThisPersonInDb)
 

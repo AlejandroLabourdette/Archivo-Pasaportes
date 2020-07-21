@@ -26,7 +26,7 @@
         <tr>
             <th>
                 @Html.ActionLink("Carnet de Identidad", "Index", "People", new { 
-                    sortOrder = ViewBag.IdSortParm, 
+                    sortOrder = ViewBag.CISortParm, 
                     searchString = ViewBag.SearchString })
             </th>
             <th>
@@ -39,7 +39,7 @@
                     sortOrder = ViewBag.AddressSortParm, 
                     searchString = ViewBag.SearchString })
             </th>
-            <th>procedencia</th>
+            <th>Procedencia</th>
             <th></th>
         </tr>
     </thead>
@@ -47,7 +47,7 @@
         @foreach(Person person in Model)
         {
             <tr>
-                <td>@person.Id</td>
+                <td>@person.CI</td>
                 <td>@Html.ActionLink(person.NameWithComa(),"Details", new { id = person.Id })</td>
                 <td>@person.Address</td>
                 <td>@Html.ActionLink(person.Source.Name, "Details", "Sources", new { id = person.Source.Id })</td>

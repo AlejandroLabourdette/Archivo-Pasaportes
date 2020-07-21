@@ -8,47 +8,47 @@
 
 <form asp-action="Save">
     <div class="form-group">
-        <label asp-for="Person.Id" class="control-label"></label>
-        <input asp-for="Person.Id" class="form-control" />
-        <span asp-validation-for="Person.Id" class="text-danger"></span>
+        <label asp-for="PersonDto.CI" class="control-label"></label>
+        <input asp-for="PersonDto.CI" class="form-control" />
+        <span asp-validation-for="PersonDto.CI" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.FirstName" class="control-label"></label>
-        <input asp-for="Person.FirstName" class="form-control" />
-        <span asp-validation-for="Person.FirstName" class="text-danger"></span>
+        <label asp-for="PersonDto.FirstName" class="control-label"></label>
+        <input asp-for="PersonDto.FirstName" class="form-control" />
+        <span asp-validation-for="PersonDto.FirstName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.LastName" class="control-label"></label>
-        <input asp-for="Person.LastName" class="form-control" />
-        <span asp-validation-for="Person.LastName" class="text-danger"></span>
+        <label asp-for="PersonDto.LastName" class="control-label"></label>
+        <input asp-for="PersonDto.LastName" class="form-control" />
+        <span asp-validation-for="PersonDto.LastName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.Address" class="control-label"></label>
-        <input asp-for="Person.Address" class="form-control" />
-        <span asp-validation-for="Person.Address" class="text-danger"></span>
+        <label asp-for="PersonDto.Address" class="control-label"></label>
+        <input asp-for="PersonDto.Address" class="form-control" />
+        <span asp-validation-for="PersonDto.Address" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.BirthDay" class="control-label"></label>
-        <input asp-for="Person.BirthDay" class="form-control" />
-        <span asp-validation-for="Person.BirthDay" class="text-danger"></span>
+        <label asp-for="PersonDto.BirthDay" class="control-label"></label>
+        <input asp-for="PersonDto.BirthDay" class="form-control" />
+        <span asp-validation-for="PersonDto.BirthDay" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.Source" class="control-label"></label>
+        <label asp-for="PersonDto.SourceId" class="control-label"></label>
         <div class="input-group">
-            @Html.DropDownListFor(m => m.Person.SourceId, new SelectList(Model.Sources, "Id", "Name"),"Elija un centro...", new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.PersonDto.SourceId, new SelectList(Model.Sources, "Id", "Name"),"Elija un centro...", new { @class = "form-control" })
             <div class="input-group-append">
                 @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success"})
             </div>
         </div>
-        <span asp-validation-for="Person.Source" class="text-danger"></span>
+        <span asp-validation-for="PersonDto.SourceId" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Person.Ocupation" class="control-label"></label>
-        <input asp-for="Person.Ocupation" class="form-control" />
-        <span asp-validation-for="Person.Ocupation" class="text-danger"></span>
+        <label asp-for="PersonDto.Ocupation" class="control-label"></label>
+        <input asp-for="PersonDto.Ocupation" class="form-control" />
+        <span asp-validation-for="PersonDto.Ocupation" class="text-danger"></span>
     </div>
 
-    @Html.HiddenFor(m => m.OldId)
+    @Html.HiddenFor(m => m.OldCI)
     @Html.HiddenFor(m => m.ExistOtherInDb)
 
     <button type="submit" class="btn btn-primary">Guardar</button>
