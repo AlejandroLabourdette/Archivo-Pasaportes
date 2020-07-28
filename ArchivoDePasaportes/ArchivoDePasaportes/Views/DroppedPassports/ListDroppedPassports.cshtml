@@ -1,0 +1,121 @@
+﻿@model IEnumerable<DroppedPassport>
+@{
+    ViewData["Title"] = "ListDroppedPassports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Pasaportes Vencidos</h1>
+
+<form asp-action="Index">
+    <p>
+        <div class="input-group">
+            @Html.TextBox("SearchString", null, new { @class = "form-control" })
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+            </div>
+        </div>
+    </p>
+</form>
+
+
+<table id="droppedPassports" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Número de Pasaporte", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.PassNoSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Nombre del Propietario", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.OwnerNameSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>Tipo</th>
+            <th>Causa de Desecho</th>
+            <th>
+                @Html.ActionLink("Expedición", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.ExpeditionSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Vencimiento", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.ExpirationSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DroppedPassport dp in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(dp.PassportNo, "Details", new { id = dp.Id }) </td>
+                <td>@Html.ActionLink(dp.Owner.NameWithComa(), "Details", "People", new { id = dp.OwnerId })</td>
+                <td>@dp.PassportType.Name</td>
+                <td>@dp.DropCause.Name</td>
+
+                <td>@dp.ExpeditionDate.Value.Day/@dp.ExpeditionDate.Value.Month/@dp.ExpeditionDate.Value.Year</td>
+                <td>@dp.ExpirationDate.Value.Day/@dp.ExpirationDate.Value.Month/@dp.ExpirationDate.Value.Year</td>
+
+                <td>
+                    <button class="btn-danger btn btn-sm js-delete" data-passport-id=@dp.Id>Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    @Html.ActionLink("Anterior", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex - 1
+    })
+    @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
+    @Html.ActionLink("Siguiente", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex + 1
+    })
+</p>
+
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#droppedPassports").on("click", ".js-delete", function () {
+                var button = $(this)
+
+                bootbox.confirm("¿Está seguro que desea eliminar este pasaporte del registro?. Esta operación será irreversible y se perderán los datos asociados", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/DroppedPassports/" + button.attr("data-passport-id"),
+                            method: "DELETE",
+                            success: function () {
+
+                                location.reload();
+                            }
+                        })
+                    }
+                })
+            });
+        });
+    </script>
+}

@@ -1,0 +1,69 @@
+﻿@model ArchivoDePasaportes.ViewModels.DroppedPassportFormViewModel
+@{
+    ViewData["Title"] = "DroppedPassportForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Formulario de Pasaporte Desechado</h1>
+
+@*<form asp-action="Save">
+    <div class="form-group">
+        <label asp-for="DpDto.PassportNo" class="control-label"></label>
+        <input asp-for="DpDto.PassportNo" class="form-control" />
+        <span asp-validation-for="DpDto.PassportNo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.OwnerCI" class="control-label"></label>
+        <input asp-for="DpDto.OwnerCI" class="form-control" />
+        <span asp-validation-for="DpDto.OwnerCI" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.PassportTypeId" class="control-label"></label>
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.DpDto.PassportTypeId, new SelectList(Model.PassportTypes, "Id", "Name"), "Elija un tipo de pasaporte...", new { @class = "form-control" })
+            <div class="input-group-append">
+                @Html.ActionLink("Agregar Otro", "New", "PassportTypes", null, new { @class = "btn btn-success" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.SourceId" class="control-label"></label>
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.DpDto.SourceId, new SelectList(Model.Sources, "Id", "Name"), "Elija un centro...", new { @class = "form-control" })
+            <div class="input-group-append">
+                @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success" })
+            </div>
+        </div>
+        <span asp-validation-for="DpDto.SourceId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.DropCauseId" class="control-label"></label>
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.DpDto.DropCauseId, new SelectList(Model.DropCauses, "Id", "Name"), "Elija la causa de desecho...", new { @class = "form-control" })
+            <div class="input-group-append">
+                @Html.ActionLink("Agregar Otro", "New", "DropCauses", null, new { @class = "btn btn-success" })
+            </div>
+        </div>
+        <span asp-validation-for="DpDto.DropCauseId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.ExpeditionDate" class="control-label"></label>
+        <input asp-for="DpDto.ExpeditionDate" class="form-control" />
+        <span asp-validation-for="DpDto.ExpeditionDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.ExpirationDate" class="control-label"></label>
+        <input asp-for="DpDto.ExpirationDate" class="form-control" />
+        <span asp-validation-for="DpDto.ExpirationDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DpDto.Details" class="control-label"></label>
+        <input asp-for="DpDto.Details" class="form-control" />
+        <span asp-validation-for="DpDto.Details" class="text-danger"></span>
+    </div>
+    @Html.HiddenFor(m => m.OldPassportNo)
+    @Html.HiddenFor(m => m.ExistOtherInDb)
+    @Html.HiddenFor(m => m.NotExistThisPersonInDb)
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>*@

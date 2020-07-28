@@ -23,6 +23,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             SeedSources();
             SeedPeople();
             SeedPassports();
+            SeedDroppedPassports();
 
             return Ok("Seed finish succefully.");
         }
@@ -183,5 +184,67 @@ namespace ArchivoDePasaportes.Controllers.Seed
             if (passportInDb == null)
                 _context.Passports.Add(passport);
         }
+
+
+        private void SeedDroppedPassports()
+        {
+            AddDroppedPassport(new DroppedPassport()
+            {
+                PassportNo = "A123456",
+                OwnerId = _context.People.Single(p => p.CI == "76091928768").Id,
+                PassportTypeId = 2,
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2009, 12, 10),
+                ExpirationDate = new DateTime(2007, 11, 8),
+                DropCauseId = 3,
+                Details = "Perdido"
+            });
+
+            AddDroppedPassport(new DroppedPassport()
+            {
+                PassportNo = "A111111",
+                OwnerId = _context.People.Single(p => p.CI == "85071623648").Id,
+                PassportTypeId = 1,
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2011, 12, 10),
+                ExpirationDate = new DateTime(2020, 11, 8),
+                DropCauseId = 2,
+                Details = "Perdido"
+            });
+
+            AddDroppedPassport(new DroppedPassport()
+            {
+                PassportNo = "A384950",
+                OwnerId = _context.People.Single(p => p.CI == "85071623648").Id,
+                PassportTypeId = 2,
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2009, 12, 10),
+                ExpirationDate = new DateTime(2007, 11, 8),
+                DropCauseId = 3,
+                Details = "Perdido"
+            });
+
+            AddDroppedPassport(new DroppedPassport()
+            {
+                PassportNo = "A748293",
+                OwnerId = _context.People.Single(p => p.CI == "01012487672").Id,
+                PassportTypeId = 2,
+                SourceId = 1,
+                ExpeditionDate = new DateTime(2000, 12, 10),
+                ExpirationDate = new DateTime(2017, 11, 8),
+                DropCauseId = 1,
+                Details = "Malo"
+            });
+
+            _context.SaveChanges();
+
+        }
+        private void AddDroppedPassport(DroppedPassport dropped_passport)
+        {
+            var dpInDb = _context.DroppedPassports.SingleOrDefault(dp => dp.PassportNo == dropped_passport.PassportNo);
+            if (dpInDb == null)
+                _context.DroppedPassports.Add(dropped_passport);
+        }
+
     }
 }

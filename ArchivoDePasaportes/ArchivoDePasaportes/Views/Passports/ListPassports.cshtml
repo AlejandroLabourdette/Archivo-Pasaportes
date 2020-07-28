@@ -25,8 +25,6 @@
 <table id="passports" class="table">
     <thead>
         <tr>
-            <th>Archivado</th>
-            <th>Tipo</th>
             <th>
                 @Html.ActionLink("Número de Pasaporte", "Index", "Passports", new
                 {
@@ -48,6 +46,8 @@
                     searchString = ViewBag.SearchString
                 })
             </th>
+            <th>Tipo</th>
+            <th>Archivado</th>
             <th>
                 @Html.ActionLink("Expedición", "Index", "Passports", new
                 {
@@ -71,6 +71,10 @@
         @foreach (Passport passport in Model)
         {
             <tr>
+                <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
+                <td>@Html.ActionLink(passport.Owner.CI, "Details", "People", new { id = passport.OwnerId })</td>
+                <td>@passport.Owner.NameWithComa()</td>
+                <td>@passport.PassportType.Name</td>
                 <td>
                     @if (passport.IsPassportArchived)
                     {
@@ -81,10 +85,6 @@
                         <text>No</text>
                     }
                 </td>
-                <td>@passport.PassportType.Name</td>
-                <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
-                <td>@Html.ActionLink(passport.Owner.CI, "Details", "People", new { id = passport.OwnerId })</td>
-                <td>@passport.Owner.NameWithComa()</td>
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>

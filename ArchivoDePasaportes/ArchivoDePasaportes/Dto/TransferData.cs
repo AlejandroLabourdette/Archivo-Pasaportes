@@ -52,5 +52,30 @@ namespace ArchivoDePasaportes.Dto
             destiny.SourceId = origin.SourceId;
         }
 
+        public static void Transfer(DroppedPassportDto origin, DroppedPassport destiny, ApplicationDbContext context)
+        {
+            destiny.PassportNo = origin.PassportNo;
+            destiny.OwnerId = context.People.SingleOrDefault(per => per.CI == origin.OwnerCI).Id;
+            destiny.PassportTypeId = origin.PassportTypeId;
+            destiny.SourceId = origin.SourceId;
+            destiny.ExpeditionDate = origin.ExpeditionDate;
+            destiny.ExpirationDate = origin.ExpirationDate;
+            destiny.DropCauseId = origin.DropCauseId;
+            destiny.Details = origin.Details;
+
+        }
+
+        public static void Transfer(DroppedPassport origin, DroppedPassportDto destiny, ApplicationDbContext context)
+        {
+            destiny.PassportNo = origin.PassportNo;
+            destiny.OwnerCI = context.People.SingleOrDefault(per => per.Id == origin.OwnerId).CI;
+            destiny.PassportTypeId = origin.PassportTypeId;
+            destiny.SourceId = origin.SourceId;
+            destiny.ExpeditionDate = origin.ExpeditionDate;
+            destiny.ExpirationDate = origin.ExpirationDate;
+            destiny.DropCauseId = origin.DropCauseId;
+            destiny.Details = origin.Details;
+
+        }
     }
 }

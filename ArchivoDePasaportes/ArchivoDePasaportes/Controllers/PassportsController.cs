@@ -17,9 +17,7 @@ namespace ArchivoDePasaportes.Controllers
         public PassportsController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        
+        }       
 
 
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)

@@ -32,6 +32,8 @@
     <Compile Remove="Data\Migrations\20200717102934_PassportNumberIsNotID.Designer.cs" />
     <Compile Remove="Data\Migrations\20200721031658_FirstMigration.cs" />
     <Compile Remove="Data\Migrations\20200721031658_FirstMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.cs" />
+    <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
