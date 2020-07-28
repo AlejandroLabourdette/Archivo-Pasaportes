@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArchivoDePasaportes.Models
+namespace ArchivoDePasaportes.Dto
 {
-    public class DroppedPassport
+    public class DroppedPassportDto
     {
-        public long Id { get; set; }
-
         [Display(Name = "Número de Pasaporte")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Por favor ingrese el Número del Pasaporte")]
         public string PassportNo { get; set; }
@@ -18,19 +16,16 @@ namespace ArchivoDePasaportes.Models
 
         [Required(ErrorMessage = "Por favor ingrese el propietario del pasaporte")]
         [Display(Name = "Carnet de Identidad del Propietario")]
-        public long OwnerId { get; set; }
-        public Person Owner { get; set; }
+        public string OwnerCI { get; set; }
 
 
         [Required(ErrorMessage = "Por favor seleccione el tipo de este pasaporte")]
-        public byte PassportTypeId { get; set; }
         [Display(Name = "Tipo de Pasaporte")]
-        public PassportType PassportType { get; set; }
+        public byte PassportTypeId { get; set; }
 
 
-        public int? SourceId { get; set; }
         [Display(Name = "Centro Tramitador")]
-        public Source Source { get; set; }
+        public int? SourceId { get; set; }
 
 
         [Required(ErrorMessage = "Por favor ingrese una Fecha de Expedición")]
@@ -46,12 +41,12 @@ namespace ArchivoDePasaportes.Models
 
 
         [Required(ErrorMessage = "Por favor seleccione una Causa de Deshecho")]
-        public byte DropCauseId { get; set; }
         [Display(Name = "Causa de Deshecho")]
-        public DropCause DropCause { get; set; }
+        public byte DropCauseId { get; set; }
 
 
         [Display(Name = "Detalles")]
         public string Details { get; set; }
+
     }
 }

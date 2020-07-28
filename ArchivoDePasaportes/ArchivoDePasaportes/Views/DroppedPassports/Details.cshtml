@@ -1,4 +1,4 @@
-﻿@model Passport
+﻿@model DroppedPassport
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,15 +7,17 @@
 <h1>Detalles</h1>
 
 <p>
-    @Html.ActionLink("Editar", "Edit", "Passports", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Editar", "Edit", "DroppedPassports", new { id = Model.Id }, new { @class = "btn btn-primary" })
 </p>
 
 <ul>
     <li>Número de Pasaporte: @Model.PassportNo</li>
-    <li>Tipo: @Model.PassportType.Name</li>
     <li>Nombre del Propietario: @Model.Owner.FullName()</li>
     <li>Carnet de Identidad: @Model.Owner.CI</li>
+    <li>Tipo: @Model.PassportType.Name</li>
     <li>Centro que tramitó el Pasaporte: @Model.Source.Name</li>
+    <li>Motivo de Expiración: @Model.Source.Name</li>
+    <li>Detalles: @Model.Details</li>
     <li>Expedición: @Model.ExpeditionDate.Value.Day/@Model.ExpeditionDate.Value.Month/@Model.ExpeditionDate.Value.Year</li>
     <li>Expiración: @Model.ExpirationDate.Value.Day/@Model.ExpirationDate.Value.Month/@Model.ExpirationDate.Value.Year</li>
 </ul>
