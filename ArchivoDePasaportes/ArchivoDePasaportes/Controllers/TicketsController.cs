@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
+using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -86,6 +87,27 @@ namespace ArchivoDePasaportes.Controllers
             
 
             return View("ListTickets", tickets_list);
+        }
+
+        public IActionResult New()
+        {
+            return View("New");
+        }
+
+        [HttpPost]
+        public IActionResult Save(FlightFormViewModel viewModel)
+        {
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult CreateTravel()
+        {
+            var viewModel = new FlightFormViewModel()
+            {
+                Countries = _context.Countries.ToList(),
+                Occupations = _context.Occupations.ToList()
+            };
+            return View("FlightForm", viewModel);
         }
     }
 }

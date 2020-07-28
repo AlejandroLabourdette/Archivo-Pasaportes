@@ -19,6 +19,7 @@ namespace ArchivoDePasaportes.Models
         public Country DestinyCountry { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DepartureDate { get; set; }
     }
 }

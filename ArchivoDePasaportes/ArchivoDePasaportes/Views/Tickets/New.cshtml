@@ -1,0 +1,38 @@
+﻿@model IList<string>
+
+
+@{
+    ViewData["Title"] = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>New</h1>
+
+<form asp-action="Save">
+    <div class="elements">
+
+    </div>
+    <button type="button" class="add-field">Add Field</button>
+
+    <div>
+        <button type="submit">AAAA</button>
+    </div>
+</form>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var i = 0;
+            var addButton = $('.add-field');
+            var elements = $('.elements');
+
+            $(addButton).on('click', function () {
+                var fieldHTML = '<div>  <input class="text-box single-line" id="z' + i + '_" name="[' + i + ']" type="text" value="">   </div>';
+                i++;
+                elements.append(fieldHTML);
+            })
+        });
+    </script>
+
+}

@@ -23,6 +23,7 @@ namespace ArchivoDePasaportes.Controllers.Seed
             SeedSources();
             SeedPeople();
             SeedPassports();
+            SeedOccupations();
 
             return Ok("Seed finish succefully.");
         }
@@ -182,6 +183,28 @@ namespace ArchivoDePasaportes.Controllers.Seed
             var passportInDb = _context.Passports.SingleOrDefault(p => p.PassportNo == passport.PassportNo);
             if (passportInDb == null)
                 _context.Passports.Add(passport);
+        }
+
+        private void SeedOccupations()
+        {
+            AddOccupation(new Occupation()
+            {
+                Name = "Embajador",
+                Description = "Será el embajador de la República en el país"
+            });
+            AddOccupation(new Occupation()
+            {
+                Name = "Seguridad",
+                Description = "Servirá tanto en la escolta de los funcionarios como en los servicios de protección al inmueble"
+            });
+
+            _context.SaveChanges();
+        }
+        private void AddOccupation(Occupation occupation)
+        {
+            var occupationInDb = _context.Occupations.SingleOrDefault(o => o.Name == occupation.Name);
+            if (occupationInDb == null)
+                _context.Occupations.Add(occupation);
         }
     }
 }

@@ -1,0 +1,79 @@
+﻿@model ArchivoDePasaportes.ViewModels.FlightFormViewModel
+@{
+    ViewData["Title"] = "FlightForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>FlightForm</h1>
+
+<form asp-action="Save">
+    <div class="row">
+        <div class="form-group">
+            <label asp-for="Ticket.OriginCountryId" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Ticket.OriginCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label asp-for="Ticket.DestinyCountryId" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Ticket.DestinyCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label asp-for="Ticket.DepartureDate" class="control-label"></label>
+            <input asp-for="Ticket.DepartureDate" class="form-control" />
+            <span asp-validation-for="Ticket.DepartureDate" class="text-danger"></span>
+        </div>
+    </div>
+    <p>asdasd</p>
+    <div class="row">
+        <label asp-for="HasReturnDate" class="control-label">¿Se tiene fecha de regreso?</label>
+        <input asp-for="HasReturnDate" name="HasReturnDate" class="form-control" />
+        <input asp-for="ReturnDate" name="ReturnDate" class="form-control" />
+    </div>    
+
+    <div class="passports-aboard">
+        @Html.DropDownListFor(m => m.PassportsToTravelDto[0].OcupationId, new SelectList(Model.Occupations, "Id", "Name"), "Elija país de origen", new { @class = "form-control" })
+
+    </div>
+    <button type="button" class="btn btn-secondary add-passport">Añadir otro pasaporte</button>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+
+
+
+@section scripts{ 
+    @{
+        string optionsCS = "<option value=\"\">Elija la ocupación ...</option> \n";
+        foreach (var item in Model.Occupations)
+        {
+            optionsCS += "<option value=\"" + item.Id + "\">" + item.Name + "</option> \n";
+        }
+    }
+    <script>
+        $(document).ready(function () {
+
+            var options = '<option value="">Elija la ocupación ...</option>';
+            $('input[name="ReturnDate"]').hide();
+            var amountPassports = 0;
+            var addPassport = $('.add-passport');
+            var passports = $('.passports-aboard');
+
+            $('input[name="HasReturnDate"]').on('click', function () {
+                if ($(this).prop('checked')) {
+                    $('input[name="ReturnDate"]').fadeIn();
+                }
+                else {
+                    $('input[name="ReturnDate"]').hide();
+                }
+            })
+
+            $(addPassport).on('click', function () {
+                var selectHead = '<select class="form-control" data-val="true" data-val-required="The OcupationId field is required." id="PassportsToTravelDto_' + amountPassports + '__OcupationId" name="PassportsToTravelDto[' + amountPassports + '].OcupationId">';
+                var passportNoInput = '<input class="form-control" type="text" id="PassportsToTravelDto_' + amountPassports + '__PassportNo" name="PassportsToTravelDto[' + amountPassports + '].PassportNo" value="">';
+                var fieldHTML = '<div class="row">' + passportNoInput + selectHead + options + '</select> </div>';
+                amountPassports++;
+                passports.append(fieldHTML);
+            })
+        })
+    </script>
+}
