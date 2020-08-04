@@ -73,3 +73,24 @@ body {
 .input-validation-error{
     border: 2px solid red;
 }
+
+
+.ap-small-margin-right {
+    margin-right: 10px;
+}
+.ap-margin-right{
+    margin-right: 30px;
+}
+.ap-big-margin-right {
+    margin-right: 100px;
+}
+
+.ap-small-margin-top {
+    margin-top: 10px;
+}
+.ap-margin-top{
+    margin-top: 20px;
+}
+.ap-big-margin-top {
+    margin-top: 50px;
+}

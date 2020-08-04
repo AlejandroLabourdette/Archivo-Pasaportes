@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
+using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -102,10 +103,13 @@ namespace ArchivoDePasaportes.Controllers
 
         public IActionResult CreateTravel()
         {
+            var passports = new List<PassportToTravelDto>();
+            passports.Add(new PassportToTravelDto() { OcupationId = 1, PassportNo = "1232154654" });
             var viewModel = new FlightFormViewModel()
             {
                 Countries = _context.Countries.ToList(),
-                Occupations = _context.Occupations.ToList()
+                Occupations = _context.Occupations.ToList(),
+                PassportsToTravelDto = passports
             };
             return View("FlightForm", viewModel);
         }
