@@ -8,12 +8,12 @@
 
 <form asp-action="Index">
     <div class="row">
-        <div class="input-group">
+        <div class="input-group ap-small-margin-right">
             @Html.TextBox("SearchDay", null, new { @class = "form-control", placeholder = "Día" })
             @Html.TextBox("SearchMonth", null, new { @class = "form-control", placeholder = "Mes" })
             @Html.TextBox("SearchYear", null, new { @class = "form-control", placeholder = "Año" })
         </div>
-        <div class="input-group">
+        <div class="input-group ap-small-margin-right">
             @Html.TextBox("SearchOrigin", null, new { @class = "form-control", placeholder = "Origen" })
             @Html.TextBox("SearchDestiny", null, new { @class = "form-control", placeholder = "Destino" })
         </div>
@@ -86,16 +86,24 @@
     {
         sortOrder = ViewBag.ActualSortOrder,
         keepOrder = true,
-        searchString = ViewBag.SearchString,
-        pageIndex = ViewBag.PageIndex - 1
+        pageIndex = ViewBag.PageIndex - 1,
+        searchDay = ViewBag.SearchDay,
+        searchMonth = ViewBag.SearchMonth,
+        searchYear = ViewBag.SearchYear,
+        searchOrigin = ViewBag.SearchOrigin,
+        searchDestiny = ViewBag.SearchDestiny
     })
     @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
     @Html.ActionLink("Siguiente", "Index", new
     {
         sortOrder = ViewBag.ActualSortOrder,
         keepOrder = true,
-        searchString = ViewBag.SearchString,
-        pageIndex = ViewBag.PageIndex + 1
+        pageIndex = ViewBag.PageIndex + 1,
+        searchDay = ViewBag.SearchDay,
+        searchMonth = ViewBag.SearchMonth,
+        searchYear = ViewBag.SearchYear,
+        searchOrigin = ViewBag.SearchOrigin,
+        searchDestiny = ViewBag.SearchDestiny
     })
 </p>
 
