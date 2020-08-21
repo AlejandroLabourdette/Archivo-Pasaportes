@@ -1,10 +1,11 @@
-﻿@model IEnumerable<OfficialTravel>
+﻿@model IEnumerable<PermanentTravel>
+
 @{
-    ViewData["Title"] = "ListOfficialTravels";
+    ViewData["Title"] = "ListPermanentTravels";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ListOfficialTravels</h1>
+<h1>ListPermanentTravels</h1>
 
 <form asp-action="ListOfficial">
     <div class="row ap-big-margin-top">
@@ -29,13 +30,6 @@
             </div>
         </div>
         <div class="col-lg-3 ap-margin-top">
-            <h6>Día de Regreso</h6>
-            <div class="input-group">
-                @Html.TextBox("SearchArrivalDay", null, new { @class = "form-control", placeholder = "Día" })
-                @Html.TextBox("SearchArrivalMonth", null, new { @class = "form-control", placeholder = "Mes" })
-                @Html.TextBox("SearchArrivalYear", null, new { @class = "form-control", placeholder = "Año" })
-
-            </div>
         </div>
         <div class="col-lg-3 ap-margin-top">
         </div>
@@ -49,15 +43,12 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Número de Pasaporte", "ListOfficial", "Travels", new
+                @Html.ActionLink("Número de Pasaporte", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.PassNoSortParm,
                     searchDepartureDay = ViewBag.SearchDepartureDay,
                     searchDepartureMonth = ViewBag.SearchDepartureMonth,
                     searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
                     searchOrigin = ViewBag.SearchOrigin,
                     searchDestiny = ViewBag.SearchDestiny,
                     searchCI = ViewBag.SearchCI,
@@ -65,47 +56,25 @@
                 })
             </th>
             <th>
-                @Html.ActionLink("Fecha de Salida", "ListOfficial", "Travels", new
+                @Html.ActionLink("Fecha de Salida", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.DepartureSortParm,
                     searchDepartureDay = ViewBag.SearchDepartureDay,
                     searchDepartureMonth = ViewBag.SearchDepartureMonth,
                     searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
                     searchOrigin = ViewBag.SearchOrigin,
                     searchDestiny = ViewBag.SearchDestiny,
                     searchCI = ViewBag.SearchCI,
                     searchPassportNo = ViewBag.SearchPassportNo
                 })
-            </th>
+            </th> 
             <th>
-                @Html.ActionLink("Fecha de Regreso", "ListOfficial", "Travels", new
-                {
-                    sortOrder = ViewBag.ArrivalSortParm,
-                    searchDepartureDay = ViewBag.SearchDepartureDay,
-                    searchDepartureMonth = ViewBag.SearchDepartureMonth,
-                    searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
-                    searchOrigin = ViewBag.SearchOrigin,
-                    searchDestiny = ViewBag.SearchDestiny,
-                    searchCI = ViewBag.SearchCI,
-                    searchPassportNo = ViewBag.SearchPassportNo
-                })
-            </th>
-            <th>
-                @Html.ActionLink("Origen", "ListOfficial", "Travels", new
+                @Html.ActionLink("Origen", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.OriginSortParm,
                     searchDepartureDay = ViewBag.SearchDepartureDay,
                     searchDepartureMonth = ViewBag.SearchDepartureMonth,
                     searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
                     searchOrigin = ViewBag.SearchOrigin,
                     searchDestiny = ViewBag.SearchDestiny,
                     searchCI = ViewBag.SearchCI,
@@ -113,15 +82,12 @@
                 })
             </th>
             <th>
-                @Html.ActionLink("Destino", "ListOfficial", "Travels", new
+                @Html.ActionLink("Destino", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.DestinySortParm,
                     searchDepartureDay = ViewBag.SearchDepartureDay,
                     searchDepartureMonth = ViewBag.SearchDepartureMonth,
                     searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
                     searchOrigin = ViewBag.SearchOrigin,
                     searchDestiny = ViewBag.SearchDestiny,
                     searchCI = ViewBag.SearchCI,
@@ -129,15 +95,12 @@
                 })
             </th>
             <th>
-                @Html.ActionLink("CI", "ListOfficial", "Travels", new
+                @Html.ActionLink("CI", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.CISortParm,
                     searchDepartureDay = ViewBag.SearchDepartureDay,
                     searchDepartureMonth = ViewBag.SearchDepartureMonth,
                     searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchArrivalDay = ViewBag.SearchArrivalDay,
-                    searchArrivalMonth = ViewBag.SearchArrivalMonth,
-                    searchArrivalYear = ViewBag.SearchArrivalYear,
                     searchOrigin = ViewBag.SearchOrigin,
                     searchDestiny = ViewBag.SearchDestiny,
                     searchCI = ViewBag.SearchCI,
@@ -148,12 +111,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(OfficialTravel travel in Model)
+        @foreach (PermanentTravel travel in Model)
         {
             <tr>
                 <td>@travel.Passport.PassportNo</td>
                 <td>@travel.Ticket.DepartureDate</td>
-                <td>@travel.ReturnDate</td>
                 <td>@travel.Ticket.OriginCountry.Name</td>
                 <td>@travel.Ticket.DestinyCountry.Name</td>
                 <td>@travel.Passport.Owner.CI</td>
@@ -173,9 +135,6 @@
         searchDepartureDay = ViewBag.SearchDepartureDay,
         searchDepartureMonth = ViewBag.SearchDepartureMonth,
         searchDepartureYear = ViewBag.SearchDepartureYear,
-        searchArrivalDay = ViewBag.SearchArrivalDay,
-        searchArrivalMonth = ViewBag.SearchArrivalMonth,
-        searchArrivalYear = ViewBag.SearchArrivalYear,
         searchOrigin = ViewBag.SearchOrigin,
         searchDestiny = ViewBag.SearchDestiny,
         searchCI = ViewBag.SearchCI,
@@ -190,9 +149,6 @@
         searchDepartureDay = ViewBag.SearchDepartureDay,
         searchDepartureMonth = ViewBag.SearchDepartureMonth,
         searchDepartureYear = ViewBag.SearchDepartureYear,
-        searchArrivalDay = ViewBag.SearchArrivalDay,
-        searchArrivalMonth = ViewBag.SearchArrivalMonth,
-        searchArrivalYear = ViewBag.SearchArrivalYear,
         searchOrigin = ViewBag.SearchOrigin,
         searchDestiny = ViewBag.SearchDestiny,
         searchCI = ViewBag.SearchCI,

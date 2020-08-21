@@ -12,11 +12,10 @@ namespace ArchivoDePasaportes.Controllers
     public class TravelsController : Controller
     {
         public ApplicationDbContext _context { get; set; }
-        public IActionResult Index()
+        public TravelsController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
         }
-
 
         public IActionResult ListOfficial(string sortOrder, bool keepOrder, int pageIndex,
             string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear, 
@@ -64,13 +63,15 @@ namespace ArchivoDePasaportes.Controllers
                 .Take(pageSize)
                 .Include(o => o.Occupation)
                 .Include(o => o.Ticket)
+                    .ThenInclude(t=>t.OriginCountry)
+                .Include(o => o.Ticket)
+                    .ThenInclude(t=>t.DestinyCountry)
                 .Include(o => o.Passport)
-                .ThenInclude(o => o.Owner)
+                    .ThenInclude(p => p.Owner)
                 .ToList();
 
             return View("ListOfficialTravels", officialTravelsList);
         }
-
         private IQueryable<OfficialTravel> FilterOfficialTravels(
             string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
             string searchArrivalDay, string searchArrivalMonth, string searchArrivalYear,
@@ -108,7 +109,6 @@ namespace ArchivoDePasaportes.Controllers
 
             return officialTravels;
         }
-
         private IOrderedQueryable<OfficialTravel> SortOfficialTravels(IQueryable<OfficialTravel> o, string sortOrder)
         {
             IOrderedQueryable<OfficialTravel> orderedTravels;
@@ -155,5 +155,120 @@ namespace ArchivoDePasaportes.Controllers
         }
 
 
+        public IActionResult ListPermanent(string sortOrder, bool keepOrder, int pageIndex,
+            string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
+            string searchOrigin, string searchDestiny,
+            string searchCI, string searchPassportNo)
+        {
+            //Sort
+            ViewBag.ActualSortOrder = sortOrder;
+            ViewBag.DepartureSortParm = sortOrder == "departure" && !keepOrder ? "departure_desc" : "departure";
+            ViewBag.OriginSortParm = sortOrder == "origin" && !keepOrder ? "origin_desc" : "origin";
+            ViewBag.DestinySortParm = sortOrder == "destiny" && !keepOrder ? "destiny_desc" : "destiny";
+            ViewBag.CISortParm = sortOrder == "ci" && !keepOrder ? "ci_desc" : "ci";
+            ViewBag.PassNoSortParm = sortOrder == "passNo" && !keepOrder ? "passNo_desc" : "passNo";
+
+            //Filter
+            ViewBag.SearchDepartureDay = searchDepartureDay;
+            ViewBag.SearchDepartureMonth = searchDepartureMonth;
+            ViewBag.SearchDepartureYear = searchDepartureYear;
+            ViewBag.SearchOrigin = searchOrigin;
+            ViewBag.SearchDestiny = searchDestiny;
+            ViewBag.SearchCI = searchCI;
+            ViewBag.SearchPassportNo = searchPassportNo;
+
+            var permanentTravels = FilterPermanentTravels(
+                searchDepartureDay, searchDepartureMonth, searchDepartureYear,
+                searchOrigin, searchDestiny, searchCI, searchPassportNo);
+
+            var permanentTravelsSorted = SortPermanentTravels(permanentTravels, sortOrder);
+
+            var pageSize = 5;
+            int maxPageIndex = permanentTravelsSorted.Count() % pageSize == 0 && permanentTravelsSorted.Count() > 0 ? permanentTravelsSorted.Count() / pageSize : permanentTravelsSorted.Count() / pageSize + 1;
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+            pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
+            ViewBag.PageIndex = pageIndex;
+            ViewBag.MaxPageIndex = maxPageIndex;
+
+            var permanentTravelsList = permanentTravelsSorted
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Include(p => p.Occupation)
+                .Include(p => p.Ticket)
+                    .ThenInclude(t => t.OriginCountry)
+                .Include(p => p.Ticket)
+                    .ThenInclude(t => t.DestinyCountry)
+                .Include(p => p.Passport)
+                    .ThenInclude(p => p.Owner)
+                .ToList();
+
+            return View("ListPermanentTravels", permanentTravelsList);
+        }
+        private IQueryable<PermanentTravel> FilterPermanentTravels(
+           string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
+           string searchOrigin, string searchDestiny,
+           string searchCI, string searchPassportNo)
+        {
+            var permanentTravels = from p in _context.PermanentTravels select p;
+
+            int departureDay;
+            if (!String.IsNullOrEmpty(searchDepartureDay) && int.TryParse(searchDepartureDay, out departureDay))
+                permanentTravels = permanentTravels.Where(p => p.Ticket.DepartureDate.Day == departureDay);
+            int departureMonth;
+            if (!String.IsNullOrEmpty(searchDepartureMonth) && int.TryParse(searchDepartureMonth, out departureMonth))
+                permanentTravels = permanentTravels.Where(p => p.Ticket.DepartureDate.Month == departureMonth);
+            int departureYear;
+            if (!String.IsNullOrEmpty(searchDepartureYear) && int.TryParse(searchDepartureYear, out departureYear))
+                permanentTravels = permanentTravels.Where(p => p.Ticket.DepartureDate.Year == departureYear);
+            if (!String.IsNullOrEmpty(searchOrigin))
+                permanentTravels = permanentTravels.Where(p => p.Ticket.OriginCountry.Name == searchOrigin);
+            if (!String.IsNullOrEmpty(searchDestiny))
+                permanentTravels = permanentTravels.Where(p => p.Ticket.DestinyCountry.Name == searchDestiny);
+            if (!String.IsNullOrEmpty(searchCI))
+                permanentTravels = permanentTravels.Where(p => p.Passport.Owner.CI == searchCI);
+            if (!String.IsNullOrEmpty(searchPassportNo))
+                permanentTravels = permanentTravels.Where(p => p.Passport.PassportNo == searchPassportNo);
+
+            return permanentTravels;
+        }
+        private IOrderedQueryable<PermanentTravel> SortPermanentTravels(IQueryable<PermanentTravel> p, string sortOrder)
+        {
+            IOrderedQueryable<PermanentTravel> orderedTravels;
+            switch (sortOrder)
+            {
+                case "passNo_desc":
+                    orderedTravels = p.OrderByDescending(o => o.Passport.PassportNo);
+                    break;
+                case "ci":
+                    orderedTravels = p.OrderBy(o => o.Passport.Owner.CI);
+                    break;
+                case "ci_desc":
+                    orderedTravels = p.OrderByDescending(o => o.Passport.Owner.CI);
+                    break;
+                case "departure":
+                    orderedTravels = p.OrderBy(o => o.Ticket.DepartureDate);
+                    break;
+                case "departure_desc":
+                    orderedTravels = p.OrderByDescending(o => o.Ticket.DepartureDate);
+                    break;
+                case "origin":
+                    orderedTravels = p.OrderBy(o => o.Ticket.OriginCountry.Name);
+                    break;
+                case "origin_desc":
+                    orderedTravels = p.OrderByDescending(o => o.Ticket.OriginCountry.Name);
+                    break;
+                case "destiny":
+                    orderedTravels = p.OrderBy(o => o.Ticket.DestinyCountry.Name);
+                    break;
+                case "destiny_desc":
+                    orderedTravels = p.OrderByDescending(o => o.Ticket.DestinyCountry.Name);
+                    break;
+                default:
+                    orderedTravels = p.OrderBy(o => o.Passport.PassportNo);
+                    break;
+            }
+            return orderedTravels;
+        }
     }
+
 }
