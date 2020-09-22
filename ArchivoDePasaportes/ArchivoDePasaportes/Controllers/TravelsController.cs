@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
+using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Models;
+using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -269,6 +271,205 @@ namespace ArchivoDePasaportes.Controllers
             }
             return orderedTravels;
         }
-    }
+    
+        
+        //public IActionResult EditFlight(long id)
+        //{
+        //   
+        //}
 
-}
+
+        public IActionResult NewFlight()
+        {
+            var viewModel = new FlightFormViewModel()
+            {
+                Countries = _context.Countries.ToList(),
+                Occupations = _context.Occupations.ToList(),
+                OfficialTravelsDto = new List<PassInfoOfficialTravelDto>()
+                {
+                    new PassInfoOfficialTravelDto()
+                    {
+                        OcupationId = 1,
+                        PassportNo = "A151",
+                        ReturnDate= new DateTime()
+                    }
+                }
+            };
+
+            
+            return View("FlightForm", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult SaveFlight(FlightFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Occupations = _context.Occupations.ToList();
+                viewModel.Countries = _context.Countries.ToList();
+                return View("FlightForm", viewModel);
+            }
+
+            //Comprobar q todos los pasaportes existan
+            //Comprobar q los Id de ocupacion existan
+            //Comprobar q no se dupliquen los pasaportes
+            for (int i = 0; i < (viewModel.OfficialTravelsDto?.Count ?? 0); i++)
+            {
+                var travelData = viewModel.OfficialTravelsDto[i];
+
+                if (travelData.PassportNo == "null")
+                    continue;
+
+                bool existPassport = _context.Passports.SingleOrDefault(p => p.PassportNo == travelData.PassportNo) != null;
+                if (!existPassport)
+                {
+                    viewModel.MissAnyPassport = true;
+                    viewModel.Occupations = _context.Occupations.ToList();
+                    viewModel.Countries = _context.Countries.ToList();
+                    return View("FlightForm", viewModel);
+                }
+
+                bool existOccupation = _context.Occupations.SingleOrDefault(o => o.Id == travelData.OcupationId) != null;
+                if (!existOccupation)
+                {
+                    return BadRequest();
+                }
+
+                bool returnDateCorrect = travelData.ReturnDate > viewModel.Ticket.DepartureDate;
+                if (!returnDateCorrect)
+                {
+                    viewModel.ReturnDateIncorrect = true;
+                    viewModel.Occupations = _context.Occupations.ToList();
+                    viewModel.Countries = _context.Countries.ToList();
+                    return View("FlightForm", viewModel);
+                }
+
+                for (int j = i+1; j < viewModel.OfficialTravelsDto.Count; j++)
+                {
+                    var toCompareData = viewModel.OfficialTravelsDto[j];
+                    if (travelData.PassportNo == toCompareData.PassportNo)
+                    {
+                        viewModel.RepetedPassport = true;
+                        viewModel.Occupations = _context.Occupations.ToList();
+                        viewModel.Countries = _context.Countries.ToList();
+                        return View("FlightForm", viewModel);
+                    }
+                }
+            }
+            for (int i = 0; i < (viewModel.PermanentTravelsDto?.Count ?? 0); i++)
+            {
+                var travelData = viewModel.PermanentTravelsDto[i];
+
+                if (travelData.PassportNo == "null")
+                    continue;
+
+                bool existPassport = _context.Passports.SingleOrDefault(p => p.PassportNo == travelData.PassportNo) != null;
+                if (!existPassport)
+                {
+                    viewModel.MissAnyPassport = true;
+                    viewModel.Occupations = _context.Occupations.ToList();
+                    viewModel.Countries = _context.Countries.ToList();
+                    return View("FlightForm", viewModel);
+                }
+
+                bool existOccupation = _context.Occupations.SingleOrDefault(o => o.Id == travelData.OcupationId) != null;
+                if (!existOccupation)
+                {
+                    return BadRequest();
+                }
+
+                for (int j = i + 1; j < viewModel.PermanentTravelsDto.Count; j++)
+                {
+                    var toCompareData = viewModel.PermanentTravelsDto[j];
+                    if (travelData.PassportNo == toCompareData.PassportNo)
+                    {
+                        viewModel.RepetedPassport = true;
+                        viewModel.Occupations = _context.Occupations.ToList();
+                        viewModel.Countries = _context.Countries.ToList();
+                        return View("FlightForm", viewModel);
+                    }
+                }
+            }
+
+            var ticketInDb = _context.Tickets.SingleOrDefault(t => t.Id == viewModel.OldTicketId);
+            bool newTicketExists = _context.Tickets.SingleOrDefault(p =>
+                p.OriginCountryId == viewModel.Ticket.OriginCountryId &&
+                p.DestinyCountryId == viewModel.Ticket.DestinyCountryId &&
+                p.DepartureDate == viewModel.Ticket.DepartureDate) != null;
+
+            if (ticketInDb != null)
+            {
+                bool isModifiedTicketInfo =
+                    ticketInDb.DepartureDate != viewModel.Ticket.DepartureDate ||
+                    ticketInDb.OriginCountryId != viewModel.Ticket.OriginCountryId ||
+                    ticketInDb.DestinyCountryId != viewModel.Ticket.DestinyCountryId;
+                if (isModifiedTicketInfo && newTicketExists)
+                {
+                    viewModel.ExistOtherTicketInDb = true;
+                    viewModel.Occupations = _context.Occupations.ToList();
+                    viewModel.Countries = _context.Countries.ToList();
+                    return View("FlightForm", viewModel);
+                }
+                //Delete all travels with old ticket
+                var officialTravels = from ot in _context.OfficialTravels where ot.TicketId == ticketInDb.Id select ot;
+                var permanentTravels = from pt in _context.PermanentTravels where pt.TicketId == ticketInDb.Id select pt;
+                _context.OfficialTravels.RemoveRange(officialTravels.ToList());
+                _context.PermanentTravels.RemoveRange(permanentTravels.ToList());
+                _context.SaveChanges();
+
+                ticketInDb.OriginCountryId = viewModel.Ticket.OriginCountryId;
+                ticketInDb.DestinyCountryId = viewModel.Ticket.DestinyCountryId;
+                ticketInDb.DepartureDate = viewModel.Ticket.DepartureDate;
+                AddTravelsToDb(viewModel, ticketInDb.Id);
+            }
+            else if (newTicketExists)
+            {
+                viewModel.ExistOtherTicketInDb = true;
+                viewModel.Occupations = _context.Occupations.ToList();
+                viewModel.Countries = _context.Countries.ToList();
+                return View("FlightForm", viewModel);
+            }
+            else
+            {
+                _context.Tickets.Add(viewModel.Ticket);
+                _context.SaveChanges();
+                AddTravelsToDb(viewModel, viewModel.Ticket.Id);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+        private void AddTravelsToDb(FlightFormViewModel viewModel, long ticketId)
+        {
+            if (viewModel.OfficialTravelsDto != null)
+                foreach (var officialtravelInfo in viewModel.OfficialTravelsDto)
+                {
+                    if (officialtravelInfo.PassportNo == "null")
+                        continue;
+
+                    var officialTravel = new OfficialTravel()
+                    {
+                        PassportId = _context.Passports.Single(p => p.PassportNo == officialtravelInfo.PassportNo).Id,
+                        OccupationId = officialtravelInfo.OcupationId,
+                        TicketId = ticketId,
+                        ReturnDate = officialtravelInfo.ReturnDate
+                    };
+                    _context.OfficialTravels.Add(officialTravel);
+                }
+            if (viewModel.PermanentTravelsDto != null)
+                foreach (var permanentTravelInfo in viewModel.PermanentTravelsDto)
+                {
+                    if (permanentTravelInfo.PassportNo == "null")
+                        continue;
+
+                    var permanentTravel = new PermanentTravel()
+                    {
+                        PassportId = _context.Passports.Single(p => p.PassportNo == permanentTravelInfo.PassportNo).Id,
+                        OccupationId = permanentTravelInfo.OcupationId,
+                        TicketId = ticketId
+                    };
+                    _context.PermanentTravels.Add(permanentTravel);
+                }
+        }
+    }
+}   

@@ -1,0 +1,169 @@
+﻿@model ArchivoDePasaportes.ViewModels.FlightFormViewModel
+@{
+    ViewData["Title"] = "FlightForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>FlightForm</h1>
+
+<form asp-action="SaveFlight">
+    <div class="row ap-margin-top">
+        <div class="form-group">
+            <label asp-for="Ticket.OriginCountryId" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Ticket.OriginCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control ap-margin-right" })
+        </div>
+        <div class="form-group">
+            <label asp-for="Ticket.DestinyCountryId" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Ticket.DestinyCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control ap-margin-right" })
+        </div>
+        <div class="form-group">
+            <label asp-for="Ticket.DepartureDate" class="control-label"></label>
+            <input asp-for="Ticket.DepartureDate" type="date" class="form-control" />
+            <span asp-validation-for="Ticket.DepartureDate" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="ap-big-margin-top">
+        <h3>Viajes oficiales</h3>
+        <div class="officials-aboard">
+            @if (Model.OfficialTravelsDto != null)
+            {
+                for (int i = 0; i < Model.OfficialTravelsDto.Count; i++)
+                {
+                    if (Model.OfficialTravelsDto[i].PassportNo == "null")
+                    {
+                        <div class="row" style="display:none">
+                            <input asp-for="OfficialTravelsDto[i].PassportNo" class="form-control ap-small-margin-right ap-small-margin-top" />
+                            @Html.DropDownListFor(m => m.OfficialTravelsDto[i].OcupationId, new SelectList(Model.Occupations, "Id", "Name"), "Elija la ocupación ...", new { @class = "form-control ap-small-margin-top ap-small-margin-right" })
+                            <input asp-for="OfficialTravelsDto[i].ReturnDate" type="date" class="form-control ap-small-margin-top" />
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <input asp-for="OfficialTravelsDto[i].PassportNo" class="form-control ap-small-margin-right ap-small-margin-top" />
+                            @Html.DropDownListFor(m => m.OfficialTravelsDto[i].OcupationId, new SelectList(Model.Occupations, "Id", "Name"), "Elija la ocupación ...", new { @class = "form-control ap-small-margin-top ap-small-margin-right" })
+                            <input asp-for="OfficialTravelsDto[i].ReturnDate" type="date" class="form-control ap-small-margin-top ap-small-margin-right" />
+                            <button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="@i">Eliminar</button>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <button type="button" class="btn btn-secondary add-official-passport ap-small-margin-top">Añadir otro pasaporte</button>
+    </div>
+    <div class="ap-big-margin-top">
+        <h3>Viajes permanentes</h3>
+        <div class="permanents-aboard">
+            @if (Model.PermanentTravelsDto != null)
+            {
+                for (int i = 0; i < Model.PermanentTravelsDto.Count; i++)
+                {
+                    if (Model.PermanentTravelsDto[i].PassportNo == "null")
+                    {
+                        <div class="row" style="display:none">
+                            <input asp-for="PermanentTravelsDto[i].PassportNo" class="form-control ap-small-margin-right ap-small-margin-top" />
+                            @Html.DropDownListFor(m => m.PermanentTravelsDto[i].OcupationId, new SelectList(Model.Occupations, "Id", "Name"), "Elija la ocupación ...", new { @class = "form-control ap-small-margin-top ap-small-margin-right" })
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <input asp-for="PermanentTravelsDto[i].PassportNo" class="form-control ap-small-margin-right ap-small-margin-top" />
+                            @Html.DropDownListFor(m => m.PermanentTravelsDto[i].OcupationId, new SelectList(Model.Occupations, "Id", "Name"), "Elija la ocupación ...", new { @class = "form-control ap-small-margin-top ap-small-margin-right" })
+                            <button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="@i">Eliminar</button>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <button type="button" class="btn btn-secondary add-permanent-passport ap-small-margin-top">Añadir otro pasaporte</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary ap-big-margin-top">Guardar</button>
+</form>
+
+
+
+
+@section scripts{ 
+    @{
+        string optionsCS = "<option value=\"0\">Elija la ocupación ...</option> \n";
+        foreach (var item in Model.Occupations)
+        {
+            optionsCS += "<option value=\"" + item.Id + "\">" + item.Name + "</option> \n";
+        }
+        int officialCount = Model.OfficialTravelsDto == null ? 0 : Model.OfficialTravelsDto.Count;
+        int permanentCount = Model.PermanentTravelsDto == null ? 0 : Model.PermanentTravelsDto.Count;
+    }
+
+    <script>
+        function htmlDecode(input) {
+            var e = document.createElement('div');
+            e.innerHTML = input;
+            return e.childNodes[0].nodeValue;
+        }
+        $(document).ready(function () {
+            var missAnyPassport = '@Model.MissAnyPassport' === '@true';
+            var repetedPassport = '@Model.RepetedPassport' === '@true';
+            var existOtherTicketInDb = '@Model.ExistOtherTicketInDb' === '@true';
+            var returnDateIncorrect = '@Model.ReturnDateIncorrect' === '@true';
+            if (missAnyPassport) {
+                bootbox.alert("Al menos uno de los pasaportes introducidos no existe en la Base de Datos.");
+            }
+            if (repetedPassport) {
+                bootbox.alert("Ha repetido al menos un pasaporte.");
+            }
+            if (existOtherTicketInDb) {
+                bootbox.alert("En la Base de Datos ya existe un voleto con estas características. Si desea añadir más viajes por favor edite dicho voleto.");
+            }
+            if (returnDateIncorrect) {
+                bootbox.alert("La fecha de regreso de al menos uno de los viajes oficiales es incorrecta");
+            }
+
+            var occuapationOptions = htmlDecode('@optionsCS');
+            var amountPermanentPass = @permanentCount;
+            var addPermanentPass = $('.add-permanent-passport');
+            var permanents = $('.permanents-aboard');
+            var amountOfficialPass = @officialCount;
+            var addOfficialPass = $('.add-official-passport');
+            var officials = $('.officials-aboard');
+
+
+            $(addPermanentPass).on('click', function () {
+                var passportNoInput = '<input class="form-control ap-small-margin-right ap-small-margin-top" type="text" id="PermanentTravelsDto_' + amountPermanentPass + '__PassportNo" name="PermanentTravelsDto[' + amountPermanentPass + '].PassportNo" value="" placeholder="Número de Pasaporte">';
+                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="The OcupationId field is required." id="PermanentTravelsDto_' + amountPermanentPass + '__OcupationId" name="PermanentTravelsDto[' + amountPermanentPass + '].OcupationId">';
+                var removeButton = '<button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="' + amountPermanentPass + '">Eliminar</button>';
+                var fieldHTML = '<div class="row">' + passportNoInput + selectHead + occuapationOptions + '</select>' + removeButton + '</div>';
+                amountPermanentPass++;
+                permanents.append(fieldHTML);
+            })
+            
+            $(addOfficialPass).on('click', function () {
+                var passportNoInput = '<input class="form-control ap-small-margin-right ap-small-margin-top" type="text" id="OfficialTravelsDto_' + amountOfficialPass + '__PassportNo" name="OfficialTravelsDto[' + amountOfficialPass + '].PassportNo" value="" placeholder="Número de Pasaporte">';
+                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="The OcupationId field is required." id="OfficialTravelsDto_' + amountOfficialPass + '__OcupationId" name="OfficialTravelsDto[' + amountOfficialPass + '].OcupationId">';
+                var returnDate = '<input class="form-control ap-small-margin-top ap-small-margin-right" type="date" data-val="true" data-val-required="The ReturnDate field is required." id="OfficialTravelsDto_' + amountOfficialPass + '__ReturnDate" name="OfficialTravelsDto[' + amountOfficialPass + '].ReturnDate" value="">'
+                var removeButton = '<button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="' + amountOfficialPass + '">Eliminar</button>';
+                var fieldHTML = '<div class="row">' + passportNoInput + selectHead + occuapationOptions + '</select>' + returnDate + removeButton + '</div>';
+                amountOfficialPass++;
+                officials.append(fieldHTML);
+            })
+            
+            $(permanents).on('click', '.remove-passport', function () {
+                var button = $(this);
+                var index = button.attr("list-index");
+                var hiddedPassport = '<input type="text" value="null" id="PermanentTravelsDto_' + index + '__PassportNo" name="PermanentTravelsDto[' + index + '].PassportNo" >';
+                button.parent('div').replaceWith('<div style="display: none;">' + hiddedPassport + '</div>');
+            })
+
+            $(officials).on('click', '.remove-passport', function () {
+                var button = $(this);
+                var index = button.attr("list-index");
+                var hiddedPassport = '<input type="text" value="null" id="OfficialTravelsDto_' + index + '__PassportNo" name="OfficialTravelsDto[' + index + '].PassportNo" >';
+                button.parent('div').replaceWith('<div style="display: none;">' + hiddedPassport + '</div>');
+            })
+        })
+    </script>
+}

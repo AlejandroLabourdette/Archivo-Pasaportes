@@ -94,3 +94,7 @@ body {
 .ap-big-margin-top {
     margin-top: 50px;
 }
+
+.ap-width{
+    width: auto;
+}

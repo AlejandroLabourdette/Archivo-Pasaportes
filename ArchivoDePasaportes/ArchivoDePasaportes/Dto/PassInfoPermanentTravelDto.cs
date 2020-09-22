@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ArchivoDePasaportes.Dto
 {
-    public class PassportToTravelDto
+    public class PassInfoPermanentTravelDto
     {
         public string PassportNo { get; set; }
         public int OcupationId { get; set; }

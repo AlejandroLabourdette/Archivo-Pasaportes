@@ -64,7 +64,6 @@ namespace ArchivoDePasaportes.Dto
             destiny.Details = origin.Details;
 
         }
-
         public static void Transfer(DroppedPassport origin, DroppedPassportDto destiny, ApplicationDbContext context)
         {
             destiny.PassportNo = origin.PassportNo;
@@ -77,5 +76,7 @@ namespace ArchivoDePasaportes.Dto
             destiny.Details = origin.Details;
 
         }
+    
+        
     }
 }

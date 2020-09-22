@@ -12,13 +12,17 @@ namespace ArchivoDePasaportes.ViewModels
     {
         public Ticket Ticket { get; set; }
 
-        public bool HasReturnDate { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime ReturnDate { get; set; }
-        public IList<PassportToTravelDto> PassportsToTravelDto { get; set; }
+        public IList<PassInfoPermanentTravelDto> PermanentTravelsDto { get; set; }
+        public IList<PassInfoOfficialTravelDto> OfficialTravelsDto { get; set; }
 
         public IEnumerable<Country> Countries{ get; set; }
         public IEnumerable<Occupation> Occupations { get; set; }
+
+        public bool MissAnyPassport { get; set; }
+        public bool RepetedPassport { get; set; }
+        public bool ExistOtherTicketInDb { get; set; }
+        public bool ReturnDateIncorrect { get; set; }
+
+        public long OldTicketId { get; set; }
     }
 }

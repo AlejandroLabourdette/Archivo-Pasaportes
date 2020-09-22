@@ -103,13 +103,13 @@ namespace ArchivoDePasaportes.Controllers
 
         public IActionResult CreateTravel()
         {
-            var passports = new List<PassportToTravelDto>();
-            passports.Add(new PassportToTravelDto() { OcupationId = 1, PassportNo = "1232154654" });
+            var passports = new List<PassInfoOfficialTravelDto>();
+            passports.Add(new PassInfoOfficialTravelDto() { OcupationId = 1, PassportNo = "1232154654" });
             var viewModel = new FlightFormViewModel()
             {
                 Countries = _context.Countries.ToList(),
                 Occupations = _context.Occupations.ToList(),
-                PassportsToTravelDto = passports
+                OfficialTravelsDto = passports
             };
             return View("FlightForm", viewModel);
         }
