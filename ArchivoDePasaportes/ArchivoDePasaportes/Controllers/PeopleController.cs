@@ -6,6 +6,7 @@ using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace ArchivoDePasaportes.Controllers
             _context = context;
         }
         
-        
+        [Authorize]
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
         {
             ViewBag.ActualSortOrder = sortOrder;
