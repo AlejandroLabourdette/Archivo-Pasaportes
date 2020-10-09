@@ -4,10 +4,11 @@ using System.Text;
 using ArchivoDePasaportes.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ArchivoDePasaportes.Areas.Identity.Data;
 
 namespace ArchivoDePasaportes.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Source> Sources { get; set; }
         public DbSet<Person> People { get; set; }
