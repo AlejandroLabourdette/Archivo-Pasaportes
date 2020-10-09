@@ -61,6 +61,15 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string Name { get; set; }
+            [Required]
+            public string LastName { get; set; }
+            [Required]
+            public string SecondLastName { get; set; }
+            [Required]
+            public string Occupation { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +84,10 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, 
+                    Name = Input.Name, LastName = Input.LastName, 
+                    SecondLastName = Input.SecondLastName, Occupation = Input.Occupation};
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
