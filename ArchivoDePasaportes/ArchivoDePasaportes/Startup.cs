@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ArchivoDePasaportes.Areas.Identity.Data;
+using static ArchivoDePasaportes.Extensions.RoleType;
+
 
 namespace ArchivoDePasaportes
 {
@@ -31,14 +33,14 @@ namespace ArchivoDePasaportes
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +68,24 @@ namespace ArchivoDePasaportes
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            CreateRolesAsync(serviceProvider).Wait();
+        }
+
+        private async Task CreateRolesAsync(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            string[] roles = { RoleTypeString.GetValueOrDefault(RoleTypes.Admin),
+                               RoleTypeString.GetValueOrDefault(RoleTypes.Manager),
+                               RoleTypeString.GetValueOrDefault(RoleTypes.User)};
+
+            foreach (var role in roles)
+            {
+                var roleExists = await roleManager.RoleExistsAsync(role);
+                if (!roleExists)
+                    await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
     }
 }
