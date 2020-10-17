@@ -20,7 +20,6 @@ namespace ArchivoDePasaportes.Controllers
             _context = context;
         }
         
-        [Authorize]
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
         {
             ViewBag.ActualSortOrder = sortOrder;

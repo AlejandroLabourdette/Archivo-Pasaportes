@@ -13,8 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ArchivoDePasaportes.Areas.Identity.Data;
-using static ArchivoDePasaportes.Extensions.RoleType;
-
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ArchivoDePasaportes
 {
@@ -34,6 +33,7 @@ namespace ArchivoDePasaportes
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -76,9 +76,7 @@ namespace ArchivoDePasaportes
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            string[] roles = { RoleTypeString.GetValueOrDefault(RoleTypes.Admin),
-                               RoleTypeString.GetValueOrDefault(RoleTypes.Manager),
-                               RoleTypeString.GetValueOrDefault(RoleTypes.User)};
+            string[] roles = { "Admin", "Manager", "User" };
 
             foreach (var role in roles)
             {

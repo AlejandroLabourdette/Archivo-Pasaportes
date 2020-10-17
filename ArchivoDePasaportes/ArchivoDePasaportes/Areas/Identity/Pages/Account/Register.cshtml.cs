@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using static ArchivoDePasaportes.Extensions.RoleType;
 
 
 namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
@@ -98,7 +97,7 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var assignRole = await _userManager.AddToRoleAsync(user, RoleTypeString.GetValueOrDefault(RoleTypes.Admin));
+                    var assignRole = await _userManager.AddToRoleAsync(user, "User");
                     if (!assignRole.Succeeded)
                         throw new Exception("Role not assigned");
 
