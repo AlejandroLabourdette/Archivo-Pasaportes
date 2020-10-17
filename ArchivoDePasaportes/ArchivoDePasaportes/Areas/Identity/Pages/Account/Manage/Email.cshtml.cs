@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -17,14 +17,17 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account.Manage
     public partial class EmailModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<ApplicationUser> userManager
-            /*SignInManager<ApplicationUser> signInManager*/)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
-          //  _signInManager = signInManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
         public string Username { get; set; }
@@ -91,15 +94,15 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account.Manage
             {
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                _ = Url.Page(
+                var callbackUrl = Url.Page(
                     "/Account/ConfirmEmailChange",
                     pageHandler: null,
-                    values: new { userId, email = Input.NewEmail, code },
+                    values: new { userId = userId, email = Input.NewEmail, code = code },
                     protocol: Request.Scheme);
-                //await _emailSender.SendEmailAsync(
-                //    Input.NewEmail,
-                //    "Confirm your email",
-                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await _emailSender.SendEmailAsync(
+                    Input.NewEmail,
+                    "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 StatusMessage = "Confirmation link to change email sent. Please check your email.";
                 return RedirectToPage();
@@ -124,18 +127,18 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account.Manage
             }
 
             var userId = await _userManager.GetUserIdAsync(user);
-            //var email = await _userManager.GetEmailAsync(user);
+            var email = await _userManager.GetEmailAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            _ = Url.Page(
+            var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
-                values: new { area = "Identity", userId, code },
+                values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
-            //await _emailSender.SendEmailAsync(
-            //    email,
-            //    "Confirm your email",
-            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            await _emailSender.SendEmailAsync(
+                email,
+                "Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();
