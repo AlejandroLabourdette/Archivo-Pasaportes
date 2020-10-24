@@ -284,25 +284,17 @@ namespace ArchivoDePasaportes.Controllers
             var viewModel = new FlightFormViewModel()
             {
                 Countries = _context.Countries.ToList(),
-                Occupations = _context.Occupations.ToList(),
-                OfficialTravelsDto = new List<PassInfoOfficialTravelDto>()
-                {
-                    new PassInfoOfficialTravelDto()
-                    {
-                        OcupationId = 1,
-                        PassportNo = "A151",
-                        ReturnDate= new DateTime()
-                    }
-                }
+                Occupations = _context.Occupations.ToList()
             };
-
-            
+      
             return View("FlightForm", viewModel);
         }
 
         [HttpPost]
         public IActionResult SaveFlight(FlightFormViewModel viewModel)
         {
+            DeleteNullPassportsFromLists(viewModel);
+            
             if (!ModelState.IsValid)
             {
                 viewModel.Occupations = _context.Occupations.ToList();
@@ -470,6 +462,26 @@ namespace ArchivoDePasaportes.Controllers
                     };
                     _context.PermanentTravels.Add(permanentTravel);
                 }
+        }
+        private void DeleteNullPassportsFromLists(FlightFormViewModel viewModel) 
+        {
+            Stack<int> toDelete = new Stack<int>();
+
+            for (int i = 0; i < (viewModel.OfficialTravelsDto?.Count ?? 0); i++)
+            {
+                if (viewModel.OfficialTravelsDto[i].PassportNo == "null")
+                    toDelete.Push(i);
+            }
+            while (toDelete.Count>0)
+                viewModel.OfficialTravelsDto.RemoveAt(toDelete.Pop());
+
+            for (int i = 0; i < (viewModel.PermanentTravelsDto?.Count ?? 0); i++)
+            {
+                if (viewModel.PermanentTravelsDto[i].PassportNo == "null")
+                    toDelete.Push(i);
+            }
+            while (toDelete.Count > 0)
+                viewModel.PermanentTravelsDto.RemoveAt(toDelete.Pop());
         }
     }
 }   
