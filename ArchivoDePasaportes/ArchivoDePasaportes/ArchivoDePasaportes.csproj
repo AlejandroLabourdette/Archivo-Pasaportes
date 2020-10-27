@@ -34,12 +34,9 @@
     <Compile Remove="Data\Migrations\20200721031658_FirstMigration.Designer.cs" />
     <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.cs" />
     <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20201025230450_UserRoles.cs" />
-    <Compile Remove="Data\Migrations\20201025230450_UserRoles.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
     <None Include="Views\Passports\Details.cshtml" />
@@ -69,13 +66,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Areas\ManageUser\Data\" />
-    <Folder Include="Areas\ManageUser\Models\" />
-    <Folder Include="Areas\ManageUser\Views\" />
   </ItemGroup>
 
 </Project>

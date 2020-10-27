@@ -67,11 +67,6 @@ namespace ArchivoDePasaportes
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapAreaControllerRoute(
-                    name: "ManageUser",
-                    areaName: "ManageUser",
-                    pattern: "{controller=UserRole}/{action=Index}"
-                    );
             });
 
             CreateRolesAsync(serviceProvider).Wait();

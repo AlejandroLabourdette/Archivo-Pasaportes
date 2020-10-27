@@ -13,7 +13,7 @@ namespace ArchivoDePasaportes.Controllers
 {
     public class PassportsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _context;
         public PassportsController(ApplicationDbContext context)
         {
             _context = context;
@@ -38,20 +38,42 @@ namespace ArchivoDePasaportes.Controllers
                     p.PassportNo.Contains(searchString) ||
                     p.Owner.CI.Contains(searchString) ||
                     (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString));
-
-            passports = sortOrder switch
+            
+            switch (sortOrder)
             {
-                "passNo_desc" => passports.OrderByDescending(p => p.PassportNo),
-                "ownerCI" => passports.OrderBy(p => p.Owner.CI),
-                "ownerCI_desc" => passports.OrderByDescending(p => p.Owner.CI),
-                "ownerName" => passports.OrderBy(p => p.Owner.LastName + ", " + p.Owner.FirstName),
-                "ownerName_desc" => passports.OrderByDescending(p => p.Owner.LastName + ", " + p.Owner.FirstName),
-                "expedition" => passports.OrderBy(p => p.ExpeditionDate),
-                "expedition_desc" => passports.OrderByDescending(p => p.ExpeditionDate),
-                "expiration" => passports.OrderBy(p => p.ExpirationDate),
-                "expiration_desc" => passports.OrderByDescending(p => p.ExpirationDate),
-                _ => passports.OrderBy(p => p.PassportNo),
-            };
+                case "passNo_desc":
+                    passports = passports.OrderByDescending(p => p.PassportNo);
+                    break;
+                case "ownerCI":
+                    passports = passports.OrderBy(p => p.Owner.CI);
+                    break;
+                case "ownerCI_desc":
+                    passports = passports.OrderByDescending(p => p.Owner.CI);
+                    break;
+                case "ownerName":
+                    passports = passports.OrderBy(p => p.Owner.LastName + ", " + p.Owner.FirstName);
+                    break;
+                case "ownerName_desc":
+                    passports = passports.OrderByDescending(p => p.Owner.LastName + ", " + p.Owner.FirstName);
+                    break;
+                case "expedition":
+                    passports = passports.OrderBy(p => p.ExpeditionDate);
+                    break;
+                case "expedition_desc":
+                    passports = passports.OrderByDescending(p => p.ExpeditionDate);
+                    break;
+                case "expiration":
+                    passports = passports.OrderBy(p => p.ExpirationDate);
+                    break;
+                case "expiration_desc":
+                    passports = passports.OrderByDescending(p => p.ExpirationDate);
+                    break;
+
+                default:
+                    passports = passports.OrderBy(p => p.PassportNo);
+                    break;
+            }
+            
             var pageSize = 5;
             int maxPageIndex = passports.Count() % pageSize == 0 && passports.Count() > 0 ? passports.Count() / pageSize : passports.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;

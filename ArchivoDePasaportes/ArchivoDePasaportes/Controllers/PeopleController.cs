@@ -14,7 +14,7 @@ namespace ArchivoDePasaportes.Controllers
 {
     public class PeopleController : Controller
     {
-        private readonly ApplicationDbContext _context; 
+        private ApplicationDbContext _context; 
         public PeopleController(ApplicationDbContext context)
         {
             _context = context;
@@ -36,16 +36,30 @@ namespace ArchivoDePasaportes.Controllers
                     p.FirstName.Contains(searchString)||
                     p.CI.Contains(searchString)||
                     p.Address.Contains(searchString));
-
-            people = sortOrder switch
+        
+            switch (sortOrder)
             {
-                "ci_desc" => people.OrderByDescending(p => p.CI),
-                "name" => people.OrderBy(p => p.LastName),
-                "name_desc" => people.OrderByDescending(p => p.LastName),
-                "address" => people.OrderBy(p => p.Address),
-                "address_desc" => people.OrderByDescending(p => p.Address),
-                _ => people.OrderBy(p => p.CI),
-            };
+                case "ci_desc":
+                    people = people.OrderByDescending(p => p.CI);
+                    break;
+                case "name":
+                    people = people.OrderBy(p => p.LastName);
+                    break;
+                case "name_desc":
+                    people = people.OrderByDescending(p => p.LastName);
+                    break;
+                case "address":
+                    people = people.OrderBy(p => p.Address);
+                    break;
+                case "address_desc":
+                    people = people.OrderByDescending(p => p.Address);
+                    break;
+        
+                default:
+                    people = people.OrderBy(p => p.CI);
+                    break;
+            }
+
             var pageSize = 5;
             int maxPageIndex = people.Count() % pageSize == 0 && people.Count() > 0 ? people.Count() / pageSize : people.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
