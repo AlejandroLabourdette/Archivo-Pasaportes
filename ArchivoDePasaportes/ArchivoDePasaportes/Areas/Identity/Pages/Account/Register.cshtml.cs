@@ -97,27 +97,28 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var assignRole = await _userManager.AddToRoleAsync(user, "User");
+                    var assignRole = await _userManager.AddToRoleAsync(user, "Admin");
                     if (!assignRole.Succeeded)
                         throw new Exception("Role not assigned");
 
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    _ = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code },
-                        protocol: Request.Scheme);
+                    _userManager.Options.SignIn.RequireConfirmedEmail = false;
+                    _userManager.Options.SignIn.RequireConfirmedAccount = false;
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //_ = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = user.Id, code },
+                    //    protocol: Request.Scheme);
 
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    _userManager.Options.SignIn.RequireConfirmedAccount = false;
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
+                       return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
                     }
                     else
                     {

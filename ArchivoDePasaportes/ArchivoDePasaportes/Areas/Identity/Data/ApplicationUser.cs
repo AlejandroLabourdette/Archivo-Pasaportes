@@ -12,5 +12,9 @@ namespace ArchivoDePasaportes.Areas.Identity.Data
         public string LastName { get; set; }
         public string SecondLastName { get; set; }
         public string Occupation { get; set; }
+        public string FullName()
+        {
+            return Name + " " + LastName + " " + SecondLastName;
+        }
     }
 }
