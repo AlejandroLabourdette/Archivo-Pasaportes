@@ -88,20 +88,27 @@
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
                 <td>
-                    @if (!passport.IsPassportArchived)
+                    @{
+                    if (!passport.IsPassportArchived)
                     {
-                        <button class="btn btn-success btn-sm js-archive" 
-                                data-passport-type="@passport.PassportType.Name"
-                                data-passport-id="@passport.Id"
-                                data-passport-owner-id="@passport.Owner.CI"
-                                data-passport-owner-name="@passport.Owner.NameWithComa()"
-                                data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
-                                data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year"
-                                >Recibir</button>
+                    <button class="btn btn-success btn-sm js-archive"
+                            data-passport-type="@passport.PassportType.Name"
+                            data-passport-id="@passport.Id"
+                            data-passport-owner-id="@passport.Owner.CI"
+                            data-passport-owner-name="@passport.Owner.NameWithComa()"
+                            data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
+                            data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year">
+                        Recibir
+                    </button>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Entregar", "Give", "Passports", new { id = passport.Id }, new { @class = "btn btn-sm btn-warning" })
+                    } 
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Retirar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
+                    @Html.ActionLink("Deshechar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
                 </td>
                 <td>
                     <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>

@@ -225,5 +225,40 @@ namespace ArchivoDePasaportes.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        public IActionResult Give(long id)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+            if (!passportInDb.IsPassportArchived)
+                return BadRequest();
+
+            var viewModel = new GivePassportDto()
+            {
+                PassportNo = passportInDb.PassportNo
+            };
+            
+            return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult Give(GivePassportDto viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var passport = _context.Passports.SingleOrDefault(p => p.PassportNo == viewModel.PassportNo);
+            if (passport == null || passport.IsPassportArchived)
+                return BadRequest();
+
+            var givePassport = new GivePassport();
+            TransferData.Transfer(viewModel, givePassport, _context);
+            passport.IsPassportArchived = false;
+            _context.GivePassports.Add(givePassport);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
