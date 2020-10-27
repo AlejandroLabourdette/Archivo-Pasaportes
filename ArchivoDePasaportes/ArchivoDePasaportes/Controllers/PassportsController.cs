@@ -255,6 +255,7 @@ namespace ArchivoDePasaportes.Controllers
             var givePassport = new GivePassport();
             TransferData.Transfer(viewModel, givePassport, _context);
             passport.IsPassportArchived = false;
+            givePassport.Active = true;
             _context.GivePassports.Add(givePassport);
             _context.SaveChanges();
 

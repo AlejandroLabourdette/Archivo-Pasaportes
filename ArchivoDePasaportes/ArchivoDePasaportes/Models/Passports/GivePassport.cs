@@ -16,5 +16,6 @@ namespace ArchivoDePasaportes.Models
         public DateTime GiveDate { get; set; }
         public DateTime? ExpectedReturn { get; set; }
         public string Description { get; set; }
+        public bool Active { get; set; }
     }
 }

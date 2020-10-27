@@ -37,11 +37,16 @@ namespace ArchivoDePasaportes.Controllers.Api
         [Route("{Id}")]
         public IActionResult ArchivePassport(long id)
         {
-            Passport passportInDb = _context.Passports.Single(p => p.Id == id);
+            Passport passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
             if (passportInDb == null)
                 return NotFound();
+            var givePassportsActive = from gp in _context.GivePassports where gp.Active select gp; 
+            var giveLog = givePassportsActive.SingleOrDefault(gp => gp.PassportId == passportInDb.Id);
+            if (giveLog == null)
+                return BadRequest();
 
             passportInDb.IsPassportArchived = true;
+            giveLog.Active = false;
             _context.SaveChanges();
 
             return Ok();
