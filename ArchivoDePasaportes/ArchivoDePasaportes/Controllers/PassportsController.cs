@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArchivoDePasaportes.Areas.Identity.Data;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
+using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +19,15 @@ namespace ArchivoDePasaportes.Controllers
     [Authorize]
     public class PassportsController : Controller
     {
-        private ApplicationDbContext _context;
-        public PassportsController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public PassportsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-        }       
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
 
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
@@ -68,17 +76,15 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.PageIndex = pageIndex;
             ViewBag.MaxPageIndex = maxPageIndex;
 
-            var viewModel = new PassportFormViewModel()
-            {
-                PassportList = passports
+            var viewModel = new PassportFormViewModel();
+            viewModel.PassportList = passports
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Include(p => p.Owner)
                 .Include(p => p.PassportType)
                 .Include(p => p.Source)
-                .ToList(),
-            };
-
+                .ToList();
+            viewModel.UserIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
             return View("ListPassports", viewModel);
         }

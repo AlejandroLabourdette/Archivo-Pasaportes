@@ -75,7 +75,7 @@ namespace ArchivoDePasaportes.Controllers
                 .Include(p => p.Source)
                 .ToList();
 
-            viewModel.IsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
+            viewModel.UserIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
             return View("ListPeople", viewModel);
         }

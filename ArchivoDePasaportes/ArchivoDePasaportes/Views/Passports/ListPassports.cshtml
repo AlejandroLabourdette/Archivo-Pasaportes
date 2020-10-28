@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Passport>
+﻿@model ArchivoDePasaportes.ViewModels.PassportFormViewModel
+
 @{
     ViewData["Title"] = "ListPassports";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -80,7 +81,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Passport passport in Model)
+        @foreach (Passport passport in Model.PassportList)
         {
             <tr>
                 <td>@Html.ActionLink(passport.PassportNo, "Details", new { id = passport.Id })</td>
@@ -99,42 +100,51 @@
                 </td>
                 <td>@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year</td>
                 <td>@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year</td>
-                <td>
-                    @if (!passport.IsPassportArchived)
-                    {
-                        <button class="btn btn-success btn-sm js-archive" 
-                                data-passport-type="@passport.PassportType.Name"
-                                data-passport-id="@passport.Id"
-                                data-passport-owner-id="@passport.Owner.CI"
-                                data-passport-owner-name="@passport.Owner.NameWithComa()"
-                                data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
-                                data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year"
-                                >Recibir</button>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Cancelar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
-                </td>
-                <td>
-                    <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
-                </td>
-            </tr>
-        }
+
+                @if (Model.UserIsAdmin)
+                {
+                    <td>
+                        @if (!passport.IsPassportArchived)
+                        {
+                            <button class="btn btn-success btn-sm js-archive"
+                                    data-passport-type="@passport.PassportType.Name"
+                                    data-passport-id="@passport.Id"
+                                    data-passport-owner-id="@passport.Owner.CI"
+                                    data-passport-owner-name="@passport.Owner.NameWithComa()"
+                                    data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
+                                    data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year">
+                                Recibir
+                            </button>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Cancelar", "Drop", "Passports", new { id = passport.Id }, new { @class = "btn btn-sm btn-secondary" })
+                    </td>
+                    <td>
+                        <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
+                    </td>
+                }
+                </tr>
+            }
     </tbody>
 </table>
 
 <p>
-    @Html.ActionLink("Anterior", "Index", new { 
-        sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = true, 
-        searchString = ViewBag.SearchString, 
-        pageIndex = ViewBag.PageIndex - 1 })
+    @Html.ActionLink("Anterior", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex - 1
+    })
     @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
-    @Html.ActionLink("Siguiente", "Index", new { 
-        sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = true, 
-        searchString = ViewBag.SearchString, 
-        pageIndex = ViewBag.PageIndex + 1 })
+    @Html.ActionLink("Siguiente", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex + 1
+    })
 </p>
 
 
@@ -151,7 +161,7 @@
                             url: "/api/Passports/" + button.attr("data-passport-id"),
                             method: "DELETE",
                             success: function () {
-                                
+
                                 location.reload();
                             }
                         })
@@ -170,7 +180,7 @@
                                 var row = '<tr>' +
                                     '<td>Si</td>' +
                                     '<td>' + button.attr("data-passport-type") + '</td>' +
-                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-id")+ '</a></td>' +
+                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-id") + '</a></td>' +
                                     '<td><a href="/People/Details/' + button.attr("data-passport-owner-id") + '">' + button.attr("data-passport-owner-id") + '</a></td>' +
                                     '<td>' + button.attr("data-passport-owner-name") + '</td>' +
                                     '<td>' + button.attr("data-passport-expedition") + '</td>' +

@@ -12,7 +12,7 @@ namespace ArchivoDePasaportes.ViewModels
         public bool ExistOtherInDb { get; set; }
         public bool NotExistThisPersonInDb { get; set; }
         public bool ValidDates { get; set; }
-        public bool userIsAdmin { get; set; }
+        public bool UserIsAdmin { get; set; }
         public string OldPassportNo { get; set; }
         public PassportDto PassportDto { get; set; }
         public IEnumerable<Source> Sources { get; set; }
