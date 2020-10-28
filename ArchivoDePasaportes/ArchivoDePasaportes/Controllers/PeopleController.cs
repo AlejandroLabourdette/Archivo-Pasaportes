@@ -60,7 +60,7 @@ namespace ArchivoDePasaportes.Controllers
                 "source_desc" => people.OrderByDescending(p => p.Source),
                 _ => people.OrderBy(p => p.CI),
             };
-            var pageSize = 5;
+            var pageSize = Utils.PageSize;
             int maxPageIndex = people.Count() % pageSize == 0 && people.Count() > 0 ? people.Count() / pageSize : people.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;

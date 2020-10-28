@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
+using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,30 +50,16 @@ namespace ArchivoDePasaportes.Controllers
             if (!String.IsNullOrEmpty(searchYear) && int.TryParse(searchYear, out year))
                 tickets = tickets.Where(t => t.DepartureDate.Year == year);
 
-            switch (sortOrder)
+            tickets = sortOrder switch
             {
-                case "date_desc":
-                    tickets = tickets.OrderByDescending(t => t.DepartureDate);
-                    break;
-                case "origin":
-                    tickets = tickets.OrderBy(t => t.OriginCountry.Name);
-                    break;
-                case "origin_desc":
-                    tickets = tickets.OrderByDescending(t => t.OriginCountry.Name);
-                    break;
-                case "destiny":
-                    tickets = tickets.OrderBy(t => t.DestinyCountry.Name);
-                    break;
-                case "destiny_desc":
-                    tickets = tickets.OrderByDescending(t => t.DestinyCountry.Name);
-                    break;
-
-                default:
-                    tickets = tickets.OrderBy(t => t.DepartureDate);
-                    break;
-            }
-
-            var pageSize = 5;
+                "date_desc" => tickets.OrderByDescending(t => t.DepartureDate),
+                "origin" => tickets.OrderBy(t => t.OriginCountry.Name),
+                "origin_desc" => tickets.OrderByDescending(t => t.OriginCountry.Name),
+                "destiny" => tickets.OrderBy(t => t.DestinyCountry.Name),
+                "destiny_desc" => tickets.OrderByDescending(t => t.DestinyCountry.Name),
+                _ => tickets.OrderBy(t => t.DepartureDate),
+            };
+            var pageSize = Utils.PageSize;
             int maxPageIndex = tickets.Count() % pageSize == 0 && tickets.Count() > 0 ? tickets.Count() / pageSize : tickets.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;

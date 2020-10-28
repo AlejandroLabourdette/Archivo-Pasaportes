@@ -2,21 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArchivoDePasaportes.Areas.Identity.Data;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
+using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize]
     public class DroppedPassportsController : Controller
     {
-        private ApplicationDbContext _context;
-        public DroppedPassportsController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public DroppedPassportsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
@@ -27,6 +37,8 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.OwnerNameSortParm = sortOrder == "ownerName" && !keepOrder ? "ownerName_desc" : "ownerName";
             ViewBag.ExpeditionSortParm = sortOrder == "expedition" && !keepOrder ? "expedition_desc" : "expedition";
             ViewBag.ExpirationSortParm = sortOrder == "expiration" && !keepOrder ? "expiration_desc" : "expiration";
+            ViewBag.TypeSortParm = sortOrder == "type" && !keepOrder ? "type_desc" : "type";
+            ViewBag.CauseSortParm = sortOrder == "cause" && !keepOrder ? "cause_desc" : "cause";
             ViewBag.SearchString = searchString;
 
             var droppedPassports = (from dp in _context.DroppedPassports select dp);
@@ -38,51 +50,36 @@ namespace ArchivoDePasaportes.Controllers
                     (dp.Owner.FirstName + " " + dp.Owner.LastName).Contains(searchString) ||
                     dp.PassportType.Name.Contains(searchString) ||
                     dp.Source.Name.Contains(searchString) ||
-                    dp.DropCause.Name.Contains(searchString));
+                    dp.DropCause.Name.Contains(searchString)||
+                    dp.PassportType.Name.Contains(searchString));
 
-            switch (sortOrder)
+            droppedPassports = sortOrder switch
             {
-                case "passNo_desc":
-                    droppedPassports = droppedPassports.OrderByDescending(dp => dp.PassportNo);
-                    break;
-                case "ownerCI":
-                    droppedPassports = droppedPassports.OrderBy(dp => dp.Owner.CI);
-                    break;
-                case "ownerCI_desc":
-                    droppedPassports = droppedPassports.OrderByDescending(dp => dp.Owner.CI);
-                    break;
-                case "ownerName":
-                    droppedPassports = droppedPassports.OrderBy(dp => dp.Owner.LastName + ", " + dp.Owner.FirstName);
-                    break;
-                case "ownerName_desc":
-                    droppedPassports = droppedPassports.OrderByDescending(dp => dp.Owner.LastName + ", " + dp.Owner.FirstName);
-                    break;
-                case "expedition":
-                    droppedPassports = droppedPassports.OrderBy(dp => dp.ExpeditionDate);
-                    break;
-                case "expedition_desc":
-                    droppedPassports = droppedPassports.OrderByDescending(dp => dp.ExpeditionDate);
-                    break;
-                case "expiration":
-                    droppedPassports = droppedPassports.OrderBy(dp => dp.ExpirationDate);
-                    break;
-                case "expiration_desc":
-                    droppedPassports = droppedPassports.OrderByDescending(dp => dp.ExpirationDate);
-                    break;
-
-                default:
-                    droppedPassports = droppedPassports.OrderBy(dp => dp.PassportNo);
-                    break;
-            }
-
-            var pageSize = 5;
+                "passNo_desc" => droppedPassports.OrderByDescending(dp => dp.PassportNo),
+                "ownerCI" => droppedPassports.OrderBy(dp => dp.Owner.CI),
+                "ownerCI_desc" => droppedPassports.OrderByDescending(dp => dp.Owner.CI),
+                "ownerName" => droppedPassports.OrderBy(dp => dp.Owner.LastName + ", " + dp.Owner.FirstName),
+                "ownerName_desc" => droppedPassports.OrderByDescending(dp => dp.Owner.LastName + ", " + dp.Owner.FirstName),
+                "expedition" => droppedPassports.OrderBy(dp => dp.ExpeditionDate),
+                "expedition_desc" => droppedPassports.OrderByDescending(dp => dp.ExpeditionDate),
+                "expiration" => droppedPassports.OrderBy(dp => dp.ExpirationDate),
+                "expiration_desc" => droppedPassports.OrderByDescending(dp => dp.ExpirationDate),
+                "type" => droppedPassports.OrderBy(dp => dp.PassportType),
+                "type_desc" => droppedPassports.OrderByDescending(dp => dp.PassportType),
+                "cause" => droppedPassports.OrderBy(dp => dp.DropCause),
+                "cause_desc" => droppedPassports.OrderByDescending(dp => dp.DropCause),
+                _ => droppedPassports.OrderBy(dp => dp.PassportNo),
+            };
+            var pageSize = Utils.PageSize;
             int maxPageIndex = droppedPassports.Count() % pageSize == 0 && droppedPassports.Count() > 0 ? droppedPassports.Count() / pageSize : droppedPassports.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
             ViewBag.PageIndex = pageIndex;
             ViewBag.MaxPageIndex = maxPageIndex;
 
-            var droppedPassports_list = droppedPassports
+            var viewModel = new DropPassportViewModel();
+
+            viewModel.DroppedPassportsList = droppedPassports
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Include(dp => dp.Owner)
@@ -90,8 +87,9 @@ namespace ArchivoDePasaportes.Controllers
                 .Include(dp => dp.Source)
                 .Include(dp => dp.DropCause)
                 .ToList();
+            viewModel.UserIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
-            return View("ListDroppedPassports", droppedPassports_list);
+            return View("ListDroppedPassports", viewModel);
         }
 
         public IActionResult Details(long id)
@@ -106,7 +104,7 @@ namespace ArchivoDePasaportes.Controllers
             dpInDb.DropCause = _context.DropCauses.Single(s => s.Id == dpInDb.DropCauseId);
             return View(dpInDb);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(long id)
         {
             var dpInDb = _context.DroppedPassports.SingleOrDefault(dp => dp.Id == id);

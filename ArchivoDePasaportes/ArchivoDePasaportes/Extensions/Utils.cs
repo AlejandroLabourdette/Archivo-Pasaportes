@@ -12,6 +12,7 @@ namespace ArchivoDePasaportes.Extensions
 {
     public class Utils
     {
+        public static int PageSize = 10;
         public static bool IsCurrentUserAdmin(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             ApplicationDbContext _context = context;

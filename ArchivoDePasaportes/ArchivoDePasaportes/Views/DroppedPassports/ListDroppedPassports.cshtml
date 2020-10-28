@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DroppedPassport>
+﻿@model ArchivoDePasaportes.ViewModels.DropPassportViewModel
 @{
     ViewData["Title"] = "ListDroppedPassports";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -35,8 +35,20 @@
                     searchString = ViewBag.SearchString
                 })
             </th>
-            <th>Tipo</th>
-            <th>Causa de Desecho</th>
+            <th>
+                @Html.ActionLink("Tipo de Pasaporte", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.TypeSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Causa de Baja", "Index", "DroppedPassports", new
+                {
+                    sortOrder = ViewBag.CauseSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
             <th>
                 @Html.ActionLink("Expedición", "Index", "DroppedPassports", new
                 {
@@ -57,7 +69,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (DroppedPassport dp in Model)
+        @foreach (DroppedPassport dp in Model.DroppedPassportsList)
         {
             <tr>
                 <td>@Html.ActionLink(dp.PassportNo, "Details", new { id = dp.Id }) </td>
@@ -68,9 +80,12 @@
                 <td>@dp.ExpeditionDate.Value.Day/@dp.ExpeditionDate.Value.Month/@dp.ExpeditionDate.Value.Year</td>
                 <td>@dp.ExpirationDate.Value.Day/@dp.ExpirationDate.Value.Month/@dp.ExpirationDate.Value.Year</td>
 
-                <td>
-                    <button class="btn-danger btn btn-sm js-delete" data-passport-id=@dp.Id>Eliminar</button>
-                </td>
+                @if (Model.UserIsAdmin)
+                {
+                    <td>
+                        <button class="btn-danger btn btn-sm js-delete" data-passport-id=@dp.Id>Eliminar</button>
+                    </td>
+                }
             </tr>
         }
     </tbody>

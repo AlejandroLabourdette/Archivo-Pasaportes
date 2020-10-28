@@ -69,7 +69,7 @@ namespace ArchivoDePasaportes.Controllers
                 "archived_desc" => passports.OrderByDescending(p => p.IsPassportArchived),
                 _ => passports.OrderBy(p => p.PassportNo),
             };
-            var pageSize = 5;
+            var pageSize = Utils.PageSize;
             int maxPageIndex = passports.Count() % pageSize == 0 && passports.Count() > 0 ? passports.Count() / pageSize : passports.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;

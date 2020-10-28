@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
+using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +54,7 @@ namespace ArchivoDePasaportes.Controllers
 
             var officialTravelsSorted = SortOfficialTravels(officialTravels, sortOrder);
 
-            var pageSize = 5;
+            var pageSize = Utils.PageSize;
             int maxPageIndex = officialTravelsSorted.Count() % pageSize == 0 && officialTravelsSorted.Count() > 0 ? officialTravelsSorted.Count() / pageSize : officialTravelsSorted.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
@@ -113,46 +114,21 @@ namespace ArchivoDePasaportes.Controllers
         }
         private IOrderedQueryable<OfficialTravel> SortOfficialTravels(IQueryable<OfficialTravel> o, string sortOrder)
         {
-            IOrderedQueryable<OfficialTravel> orderedTravels;
-            switch (sortOrder)
+            IOrderedQueryable<OfficialTravel> orderedTravels = sortOrder switch
             {
-                case "passNo_desc":
-                    orderedTravels = o.OrderByDescending(o => o.Passport.PassportNo);
-                    break;
-                case "ci":
-                    orderedTravels = o.OrderBy(o => o.Passport.Owner.CI);
-                    break;
-                case "ci_desc":
-                    orderedTravels = o.OrderByDescending(o => o.Passport.Owner.CI);
-                    break;
-                case "departure":
-                    orderedTravels = o.OrderBy(o => o.Ticket.DepartureDate);
-                    break;
-                case "departure_desc":
-                    orderedTravels = o.OrderByDescending(o => o.Ticket.DepartureDate);
-                    break;
-                case "arrival":
-                    orderedTravels = o.OrderBy(o => o.ReturnDate);
-                    break;
-                case "arrival_desc":
-                    orderedTravels = o.OrderByDescending(o => o.ReturnDate);
-                    break;
-                case "origin":
-                    orderedTravels = o.OrderBy(o => o.Ticket.OriginCountry.Name);
-                    break;
-                case "origin_desc":
-                    orderedTravels = o.OrderByDescending(o => o.Ticket.OriginCountry.Name);
-                    break;
-                case "destiny":
-                    orderedTravels = o.OrderBy(o => o.Ticket.DestinyCountry.Name);
-                    break;
-                case "destiny_desc":
-                    orderedTravels = o.OrderByDescending(o => o.Ticket.DestinyCountry.Name);
-                    break;
-                default:
-                    orderedTravels = o.OrderBy(o => o.Passport.PassportNo);
-                    break;
-            }
+                "passNo_desc" => o.OrderByDescending(o => o.Passport.PassportNo),
+                "ci" => o.OrderBy(o => o.Passport.Owner.CI),
+                "ci_desc" => o.OrderByDescending(o => o.Passport.Owner.CI),
+                "departure" => o.OrderBy(o => o.Ticket.DepartureDate),
+                "departure_desc" => o.OrderByDescending(o => o.Ticket.DepartureDate),
+                "arrival" => o.OrderBy(o => o.ReturnDate),
+                "arrival_desc" => o.OrderByDescending(o => o.ReturnDate),
+                "origin" => o.OrderBy(o => o.Ticket.OriginCountry.Name),
+                "origin_desc" => o.OrderByDescending(o => o.Ticket.OriginCountry.Name),
+                "destiny" => o.OrderBy(o => o.Ticket.DestinyCountry.Name),
+                "destiny_desc" => o.OrderByDescending(o => o.Ticket.DestinyCountry.Name),
+                _ => o.OrderBy(o => o.Passport.PassportNo),
+            };
             return orderedTravels;
         }
 
@@ -185,7 +161,7 @@ namespace ArchivoDePasaportes.Controllers
 
             var permanentTravelsSorted = SortPermanentTravels(permanentTravels, sortOrder);
 
-            var pageSize = 5;
+            var pageSize = Utils.PageSize;
             int maxPageIndex = permanentTravelsSorted.Count() % pageSize == 0 && permanentTravelsSorted.Count() > 0 ? permanentTravelsSorted.Count() / pageSize : permanentTravelsSorted.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
             pageIndex = pageIndex > maxPageIndex ? maxPageIndex : pageIndex;
@@ -235,40 +211,19 @@ namespace ArchivoDePasaportes.Controllers
         }
         private IOrderedQueryable<PermanentTravel> SortPermanentTravels(IQueryable<PermanentTravel> p, string sortOrder)
         {
-            IOrderedQueryable<PermanentTravel> orderedTravels;
-            switch (sortOrder)
+            IOrderedQueryable<PermanentTravel> orderedTravels = sortOrder switch
             {
-                case "passNo_desc":
-                    orderedTravels = p.OrderByDescending(o => o.Passport.PassportNo);
-                    break;
-                case "ci":
-                    orderedTravels = p.OrderBy(o => o.Passport.Owner.CI);
-                    break;
-                case "ci_desc":
-                    orderedTravels = p.OrderByDescending(o => o.Passport.Owner.CI);
-                    break;
-                case "departure":
-                    orderedTravels = p.OrderBy(o => o.Ticket.DepartureDate);
-                    break;
-                case "departure_desc":
-                    orderedTravels = p.OrderByDescending(o => o.Ticket.DepartureDate);
-                    break;
-                case "origin":
-                    orderedTravels = p.OrderBy(o => o.Ticket.OriginCountry.Name);
-                    break;
-                case "origin_desc":
-                    orderedTravels = p.OrderByDescending(o => o.Ticket.OriginCountry.Name);
-                    break;
-                case "destiny":
-                    orderedTravels = p.OrderBy(o => o.Ticket.DestinyCountry.Name);
-                    break;
-                case "destiny_desc":
-                    orderedTravels = p.OrderByDescending(o => o.Ticket.DestinyCountry.Name);
-                    break;
-                default:
-                    orderedTravels = p.OrderBy(o => o.Passport.PassportNo);
-                    break;
-            }
+                "passNo_desc" => p.OrderByDescending(o => o.Passport.PassportNo),
+                "ci" => p.OrderBy(o => o.Passport.Owner.CI),
+                "ci_desc" => p.OrderByDescending(o => o.Passport.Owner.CI),
+                "departure" => p.OrderBy(o => o.Ticket.DepartureDate),
+                "departure_desc" => p.OrderByDescending(o => o.Ticket.DepartureDate),
+                "origin" => p.OrderBy(o => o.Ticket.OriginCountry.Name),
+                "origin_desc" => p.OrderByDescending(o => o.Ticket.OriginCountry.Name),
+                "destiny" => p.OrderBy(o => o.Ticket.DestinyCountry.Name),
+                "destiny_desc" => p.OrderByDescending(o => o.Ticket.DestinyCountry.Name),
+                _ => p.OrderBy(o => o.Passport.PassportNo),
+            };
             return orderedTravels;
         }
     
