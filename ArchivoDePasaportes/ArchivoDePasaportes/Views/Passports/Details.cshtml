@@ -1,4 +1,4 @@
-﻿@model Passport
+﻿@model ArchivoDePasaportes.ViewModels.DetailsPassportViewModel
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,15 +7,48 @@
 <h1>Detalles</h1>
 
 <p>
-    @Html.ActionLink("Editar", "Edit", "Passports", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Editar", "Edit", "Passports", new { id = Model.Passport.Id }, new { @class = "btn btn-primary" })
 </p>
 
 <ul>
-    <li>Número de Pasaporte: @Model.PassportNo</li>
-    <li>Tipo: @Model.PassportType.Name</li>
-    <li>Nombre del Propietario: @Model.Owner.FullName()</li>
-    <li>Carnet de Identidad: @Model.Owner.CI</li>
-    <li>Centro que tramitó el Pasaporte: @Model.Source.Name</li>
-    <li>Expedición: @Model.ExpeditionDate.Value.Day/@Model.ExpeditionDate.Value.Month/@Model.ExpeditionDate.Value.Year</li>
-    <li>Expiración: @Model.ExpirationDate.Value.Day/@Model.ExpirationDate.Value.Month/@Model.ExpirationDate.Value.Year</li>
+    <li>Número de Pasaporte: @Model.Passport.PassportNo</li>
+    <li>Tipo: @Model.Passport.PassportType.Name</li>
+    <li>Nombre del Propietario: @Model.Passport.Owner.FullName()</li>
+    <li>Carnet de Identidad: @Model.Passport.Owner.CI</li>
+    <li>Centro que tramitó el Pasaporte: @Model.Passport.Source.Name</li>
+    <li>Expedición: @Model.Passport.ExpeditionDate.Value.Day/@Model.Passport.ExpeditionDate.Value.Month/@Model.Passport.ExpeditionDate.Value.Year</li>
+    <li>Expiración: @Model.Passport.ExpirationDate.Value.Day/@Model.Passport.ExpirationDate.Value.Month/@Model.Passport.ExpirationDate.Value.Year</li>
+</ul>
+
+
+<h2>Extracciones</h2>
+<ul>
+    @for (int i = 0; i < Model.GivePassports.Count; i++)
+    {
+        <li><ul>
+        @if(i==0 && !Model.Passport.IsPassportArchived)
+        {
+            
+            <li>NO ENTREGADO</li>
+        }
+        @{ 
+            if(@Model.GivePassports[i].ExpectedReturn != null)
+            {
+                <li>@Model.GivePassports[i].GiveDate.Day/@Model.GivePassports[i].GiveDate.Month/@Model.GivePassports[i].GiveDate.Year => @Model.GivePassports[i].ExpectedReturn.Value.Day/@Model.GivePassports[i].ExpectedReturn.Value.Month/@Model.GivePassports[i].ExpectedReturn.Value.Year</li>
+            }
+            else
+            {
+                <li>@Model.GivePassports[i].GiveDate.Day/@Model.GivePassports[i].GiveDate.Month/@Model.GivePassports[i].GiveDate.Year => No Especificada</li>
+            }
+            if(@Model.GivePassports[i].Description != null)
+            {
+                <li>@Model.GivePassports[i].Description</li>
+            }
+            else
+            {
+                <li>No se agregó descripción</li>
+            }
+        }
+        </ul></li>
+    }
 </ul>
