@@ -34,6 +34,12 @@
     <Compile Remove="Data\Migrations\20200721031658_FirstMigration.Designer.cs" />
     <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.cs" />
     <Compile Remove="Data\Migrations\20200721032520_MyFirstMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201024104908_AddGivePassportsTable.cs" />
+    <Compile Remove="Data\Migrations\20201024104908_AddGivePassportsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201027203157_AddGivePassportsRecordTable.cs" />
+    <Compile Remove="Data\Migrations\20201027203157_AddGivePassportsRecordTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201027203620_a.cs" />
+    <Compile Remove="Data\Migrations\20201027203620_a.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

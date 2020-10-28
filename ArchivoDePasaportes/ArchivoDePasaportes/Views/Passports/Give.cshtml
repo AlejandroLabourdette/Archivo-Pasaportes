@@ -1,0 +1,29 @@
+﻿@model ArchivoDePasaportes.Dto.GivePassportDto
+@{
+    ViewData["Title"] = "Give";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Entregar Pasaporte @Model.PassportNo</h1>
+
+<form asp-action="Give">
+    <div class="form-group">
+        <label asp-for="GiveDate" class="control-label"></label>
+        <input asp-for="GiveDate" class="form-control" />
+        <span asp-validation-for="GiveDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExpectedReturn" class="control-label"></label>
+        <input asp-for="ExpectedReturn" class="form-control" />
+        <span asp-validation-for="ExpectedReturn" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    @Html.HiddenFor(m => m.PassportNo)
+
+
+    <button type="submit" class="btn btn-primary">Entregar Pasaporte</button>
+</form>

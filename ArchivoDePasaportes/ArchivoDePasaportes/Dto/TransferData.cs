@@ -52,6 +52,7 @@ namespace ArchivoDePasaportes.Dto
             destiny.SourceId = origin.SourceId;
         }
 
+
         public static void Transfer(DroppedPassportDto origin, DroppedPassport destiny, ApplicationDbContext context)
         {
             destiny.PassportNo = origin.PassportNo;
@@ -77,6 +78,29 @@ namespace ArchivoDePasaportes.Dto
 
         }
     
-        
+
+        public static void Transfer(GivePassportDto origin, GivePassport destiny, ApplicationDbContext context)
+        {
+            destiny.PassportId = context.Passports.SingleOrDefault(p => p.PassportNo == origin.PassportNo).Id;
+            destiny.GiveDate = origin.GiveDate;
+            destiny.ExpectedReturn = origin.ExpectedReturn;
+            destiny.Description = origin.Description;
+        }
+        public static void Transfer(GivePassport origin, GivePassportDto destiny, ApplicationDbContext context)
+        {
+            destiny.PassportNo = context.Passports.SingleOrDefault(p => p.Id == origin.PassportId).PassportNo;
+            destiny.GiveDate = origin.GiveDate;
+            destiny.ExpectedReturn = origin.ExpectedReturn;
+            destiny.Description = origin.Description;
+        }
+        public static void Transfer(List<GivePassport> origin, List<GivePassportDto> destiny, ApplicationDbContext context)
+        {
+            foreach (var givePass in origin)
+            {
+                var dto = new GivePassportDto();
+                Transfer(givePass, dto, context);
+                destiny.Add(dto);
+            }
+        }
     }
 }

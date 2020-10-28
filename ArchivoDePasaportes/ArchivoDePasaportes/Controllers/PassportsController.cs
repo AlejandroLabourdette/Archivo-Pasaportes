@@ -83,11 +83,19 @@ namespace ArchivoDePasaportes.Controllers
             var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
             if (passportInDb == null)
                 return NotFound();
-
             passportInDb.Owner = _context.People.Single(p => p.Id == passportInDb.OwnerId);
             passportInDb.Source = _context.Sources.Single(s => s.Id == passportInDb.SourceId);
             passportInDb.PassportType = _context.PassportTypes.Single(pt => pt.Id == passportInDb.PassportTypeId);
-            return View(passportInDb);
+            
+            var giveRecord = from gr in _context.GivePassports where gr.PassportId == passportInDb.Id orderby gr.Active select gr;
+
+            var viewModel = new DetailsPassportViewModel()
+            {
+                GivePassports = giveRecord.ToList(),
+                Passport = passportInDb
+            };
+
+            return View(viewModel);
         }
 
         [Authorize(Roles = "Admin")]
@@ -214,6 +222,43 @@ namespace ArchivoDePasaportes.Controllers
 
             _context.Passports.Remove(passportInDb);
             _context.DroppedPassports.Add(viewModel.DroppedPassport);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult Give(long id)
+        {
+            var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);
+            if (passportInDb == null)
+                return NotFound();
+            if (!passportInDb.IsPassportArchived)
+                return BadRequest();
+
+            var viewModel = new GivePassportDto()
+            {
+                PassportNo = passportInDb.PassportNo,
+                GiveDate = DateTime.Now
+            };
+            
+            return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult Give(GivePassportDto viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var passport = _context.Passports.SingleOrDefault(p => p.PassportNo == viewModel.PassportNo);
+            if (passport == null || !passport.IsPassportArchived)
+                return BadRequest();
+
+            var givePassport = new GivePassport();
+            TransferData.Transfer(viewModel, givePassport, _context);
+            passport.IsPassportArchived = false;
+            givePassport.Active = true;
+            _context.GivePassports.Add(givePassport);
             _context.SaveChanges();
 
             return RedirectToAction("Index");

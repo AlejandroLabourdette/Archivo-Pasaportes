@@ -1,8 +1,42 @@
-﻿@{
+﻿@model ArchivoDePasaportes.ViewModels.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Bienvenido</h1>
+
+
+        @{ 
+            if (Model.GivePassportsData.Count > 0)
+            {
+                <h3>Faltan menos de tres días para la entrega de los siguientes pasaportes</h3>
+                <table id="CriticalReturnDate" class="table">
+                    <thead>
+                        <tr>
+                            <th>Pasaporte</th>
+                            <th>Fecha de Entrega</th>
+                            <th>Fecha de Devolución</th>    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var giveData in Model.GivePassportsData)
+                        {
+                            <tr>
+                                <td>@giveData.PassportNo</td>
+                                <td>@giveData.GiveDate.Day/@giveData.GiveDate.Month/@giveData.GiveDate.Year</td>
+                                <td>@giveData.ExpectedReturn.Value.Day/@giveData.ExpectedReturn.Value.Month/@giveData.ExpectedReturn.Value.Year</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No existen pasaportes concedidos cerca de su fecha de entrega</h3>
+            }
+        }
+
+
+
+    </div>
