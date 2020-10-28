@@ -237,7 +237,8 @@ namespace ArchivoDePasaportes.Controllers
 
             var viewModel = new GivePassportDto()
             {
-                PassportNo = passportInDb.PassportNo
+                PassportNo = passportInDb.PassportNo,
+                GiveDate = DateTime.Now
             };
             
             return View(viewModel);
@@ -249,7 +250,7 @@ namespace ArchivoDePasaportes.Controllers
                 return View(viewModel);
 
             var passport = _context.Passports.SingleOrDefault(p => p.PassportNo == viewModel.PassportNo);
-            if (passport == null || passport.IsPassportArchived)
+            if (passport == null || !passport.IsPassportArchived)
                 return BadRequest();
 
             var givePassport = new GivePassport();

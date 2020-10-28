@@ -94,7 +94,9 @@
                     <button class="btn btn-success btn-sm js-archive"
                             data-passport-type="@passport.PassportType.Name"
                             data-passport-id="@passport.Id"
-                            data-passport-owner-id="@passport.Owner.CI"
+                            data-passport-no="@passport.PassportNo"
+                            data-passport-owner-id="@passport.Owner.Id"
+                            data-passport-owner-ci="@passport.Owner.CI"
                             data-passport-owner-name="@passport.Owner.NameWithComa()"
                             data-passport-expedition="@passport.ExpeditionDate.Value.Day/@passport.ExpeditionDate.Value.Month/@passport.ExpeditionDate.Value.Year"
                             data-passport-expiration="@passport.ExpirationDate.Value.Day/@passport.ExpirationDate.Value.Month/@passport.ExpirationDate.Value.Year">
@@ -163,15 +165,15 @@
                             method: "PUT",
                             success: function () {
                                 var row = '<tr>' +
-                                    '<td>Si</td>' +
-                                    '<td>' + button.attr("data-passport-type") + '</td>' +
-                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-id")+ '</a></td>' +
-                                    '<td><a href="/People/Details/' + button.attr("data-passport-owner-id") + '">' + button.attr("data-passport-owner-id") + '</a></td>' +
+                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-no")+ '</a></td>' +
+                                    '<td><a href="/People/Details/' + button.attr("data-passport-owner-id") + '">' + button.attr("data-passport-owner-ci") + '</a></td>' +
                                     '<td>' + button.attr("data-passport-owner-name") + '</td>' +
+                                    '<td>' + button.attr("data-passport-type") + '</td>' +
+                                    '<td>Si</td>' +
                                     '<td>' + button.attr("data-passport-expedition") + '</td>' +
                                     '<td>' + button.attr("data-passport-expiration") + '</td>' +
-                                    '<td></td>' +
-                                    '<td><a class="btn btn-secondary btn-sm" href="/Passports/Drop/' + button.attr("data-passport-id") + '">Retirar</a></td>' +
+                                    '<td>' + '<a class="btn btn-sm btn-warning" href="/Passports/Give/' + button.attr("data-passport-id") + '">Entregar</a></td>' +
+                                    '<td><a class="btn btn-secondary btn-sm" href="/Passports/Drop/' + button.attr("data-passport-id") + '">Deshechar</a></td>' +
                                     '<td><button class="btn-danger btn btn-sm js-delete" data-passport-id=' + button.attr("data-passport-id") + '>Eliminar</button></td>' +
                                     '</tr>'
                                 button.parents("tr").replaceWith(row);
