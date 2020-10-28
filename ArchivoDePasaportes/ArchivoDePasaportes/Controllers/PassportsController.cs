@@ -6,6 +6,7 @@ using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,8 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.OwnerNameSortParm = sortOrder == "ownerName" && !keepOrder ? "ownerName_desc" : "ownerName";
             ViewBag.ExpeditionSortParm = sortOrder == "expedition" && !keepOrder ? "expedition_desc" : "expedition";
             ViewBag.ExpirationSortParm = sortOrder == "expiration" && !keepOrder ? "expiration_desc" : "expiration";
+            ViewBag.TypeSortParm = sortOrder == "type" && !keepOrder ? "type_desc" : "type";
+            ViewBag.ArchivedSortParm = sortOrder == "archived" && !keepOrder ? "archived_desc" : "archived";
             ViewBag.SearchString = searchString;
 
             var passports = (from p in _context.Passports select p);
@@ -37,43 +40,26 @@ namespace ArchivoDePasaportes.Controllers
                 passports = passports.Where(p =>
                     p.PassportNo.Contains(searchString) ||
                     p.Owner.CI.Contains(searchString) ||
-                    (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString));
-            
-            switch (sortOrder)
-            {
-                case "passNo_desc":
-                    passports = passports.OrderByDescending(p => p.PassportNo);
-                    break;
-                case "ownerCI":
-                    passports = passports.OrderBy(p => p.Owner.CI);
-                    break;
-                case "ownerCI_desc":
-                    passports = passports.OrderByDescending(p => p.Owner.CI);
-                    break;
-                case "ownerName":
-                    passports = passports.OrderBy(p => p.Owner.LastName + ", " + p.Owner.FirstName);
-                    break;
-                case "ownerName_desc":
-                    passports = passports.OrderByDescending(p => p.Owner.LastName + ", " + p.Owner.FirstName);
-                    break;
-                case "expedition":
-                    passports = passports.OrderBy(p => p.ExpeditionDate);
-                    break;
-                case "expedition_desc":
-                    passports = passports.OrderByDescending(p => p.ExpeditionDate);
-                    break;
-                case "expiration":
-                    passports = passports.OrderBy(p => p.ExpirationDate);
-                    break;
-                case "expiration_desc":
-                    passports = passports.OrderByDescending(p => p.ExpirationDate);
-                    break;
+                    (p.Owner.FirstName + " " + p.Owner.LastName).Contains(searchString)||
+                    p.PassportType.Name.Contains(searchString));
 
-                default:
-                    passports = passports.OrderBy(p => p.PassportNo);
-                    break;
-            }
-            
+            passports = sortOrder switch
+            {
+                "passNo_desc" => passports.OrderByDescending(p => p.PassportNo),
+                "ownerCI" => passports.OrderBy(p => p.Owner.CI),
+                "ownerCI_desc" => passports.OrderByDescending(p => p.Owner.CI),
+                "ownerName" => passports.OrderBy(p => p.Owner.LastName + ", " + p.Owner.FirstName),
+                "ownerName_desc" => passports.OrderByDescending(p => p.Owner.LastName + ", " + p.Owner.FirstName),
+                "expedition" => passports.OrderBy(p => p.ExpeditionDate),
+                "expedition_desc" => passports.OrderByDescending(p => p.ExpeditionDate),
+                "expiration" => passports.OrderBy(p => p.ExpirationDate),
+                "expiration_desc" => passports.OrderByDescending(p => p.ExpirationDate),
+                "type" => passports.OrderBy(p => p.PassportType),
+                "type_desc" => passports.OrderByDescending(p => p.PassportType),
+                "archived" => passports.OrderBy(p => p.IsPassportArchived),
+                "archived_desc" => passports.OrderByDescending(p => p.IsPassportArchived),
+                _ => passports.OrderBy(p => p.PassportNo),
+            };
             var pageSize = 5;
             int maxPageIndex = passports.Count() % pageSize == 0 && passports.Count() > 0 ? passports.Count() / pageSize : passports.Count() / pageSize + 1;
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
@@ -104,12 +90,14 @@ namespace ArchivoDePasaportes.Controllers
             return View(passportInDb);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             var viewModel = new PassportFormViewModel()
             {
+                ValidDates = true,
                 PassportTypes = _context.PassportTypes.ToList(),
-                Sources = _context.Sources.ToList()
+                Sources = _context.Sources.ToList(),
             };
             return View("PassportForm", viewModel);
         }
@@ -122,6 +110,7 @@ namespace ArchivoDePasaportes.Controllers
 
             var viewModel = new PassportFormViewModel()
             {
+                ValidDates = true,
                 PassportTypes = _context.PassportTypes.ToList(),
                 Sources = _context.Sources.ToList(),
                 OldPassportNo = passportInDb.PassportNo,
@@ -139,6 +128,10 @@ namespace ArchivoDePasaportes.Controllers
                 viewModel.PassportTypes = _context.PassportTypes.ToList();
                 return View("PassportForm", viewModel);
             }
+
+            viewModel.ValidDates = viewModel.PassportDto.ExpeditionDate <= viewModel.PassportDto.ExpirationDate;
+            if (!viewModel.ValidDates)
+                return View("PassportForm", viewModel);
 
             var personInDb = _context.People.SingleOrDefault(p => p.CI == viewModel.PassportDto.OwnerCI);
             if (personInDb == null)

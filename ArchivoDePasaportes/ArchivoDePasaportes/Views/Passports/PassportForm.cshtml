@@ -65,6 +65,10 @@
             if (notExistThisPersonInDb) {
                 bootbox.alert("No existe una Persona en la base de datos con este Carnet de Identidad");
             }
+            var validDates = '@Model.ValidDates' === '@false'
+            if (validDates) {
+                bootbox.alert("Fechas no válidas");
+            }
         });
     </script>
 

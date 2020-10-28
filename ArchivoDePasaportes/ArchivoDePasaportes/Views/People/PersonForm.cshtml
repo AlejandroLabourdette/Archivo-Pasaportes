@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
         <label asp-for="PersonDto.BirthDay" class="control-label"></label>
-        <input asp-for="PersonDto.BirthDay" class="form-control" />
+        <input asp-for="PersonDto.BirthDay" class="form-control"/>
         <span asp-validation-for="PersonDto.BirthDay" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -56,10 +56,14 @@
 
 @section scripts{ 
     <script>
-        $(document).ready(function () {  
+        $(document).ready(function () {
             var existOtherInDb = '@Model.ExistOtherInDb' === '@true'
             if (existOtherInDb) {
                 bootbox.alert("Ya existe una persona en la base de datos con este Carnet de Identidad");
+            }
+            var ValidDate = '@Model.ValidDate' === '@false'
+            if (ValidDate) {
+                bootbox.alert("Fecha no válida");
             }
         });
     </script>

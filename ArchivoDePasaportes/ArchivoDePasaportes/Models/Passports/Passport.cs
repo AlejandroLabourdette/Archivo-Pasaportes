@@ -17,30 +17,30 @@ namespace ArchivoDePasaportes.Models
         public string PassportNo { get; set; }
 
 
-        [Required(ErrorMessage = "Por favor ingrese el propietario del pasaporte")]
+        [Required(ErrorMessage = "Por favor ingrese un propietario")]
         [Display(Name = "Carnet de Identidad del Propietario")]
         public long OwnerId { get; set; }
         public Person Owner { get; set; }
 
         
-        [Required(ErrorMessage = "Por favor seleccione el tipo de este pasaporte")]
+        [Required(ErrorMessage = "Por favor seleccione un tipo de pasaporte")]
         public byte PassportTypeId { get; set; }
         [Display(Name = "Tipo de Pasaporte")]
         public PassportType PassportType { get; set; }
 
-        
+        [Required(ErrorMessage = "Por favor seleccione un centro de trabajo")]
         public int? SourceId { get; set; }
         [Display(Name = "Centro Tramitador")]
         public Source Source { get; set; }
         
         
-        [Required(ErrorMessage = "Por favor ingrese una Fecha de Expedición")]
+        [Required(ErrorMessage = "Por favor ingrese la Fecha de Expedición")]
         [Display(Name = "Fecha de Expedición")]
         [DataType(DataType.Date)]
         public DateTime? ExpeditionDate { get; set; }
 
         
-        [Required(ErrorMessage = "Por favor ingrese una Fecha de Vencimiento")]
+        [Required(ErrorMessage = "Por favor ingrese la Fecha de Vencimiento")]
         [Display(Name = "Fecha de Vencimiento")]
         [DataType(DataType.Date)]
         public DateTime? ExpirationDate { get; set; }

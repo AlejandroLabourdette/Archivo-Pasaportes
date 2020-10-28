@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Person>
+﻿@model ArchivoDePasaportes.ViewModels.PersonFormViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,13 +7,13 @@
 <h1>Personas</h1>
 
 <p>
-    @Html.ActionLink("Nueva", "New", "People", null, new { @class ="btn btn-primary"})    
+    @Html.ActionLink("Nueva", "New", "People", null, new { @class = "btn btn-primary" })
 </p>
 
 <form asp-action="Index">
     <p>
         <div class="input-group">
-            @Html.TextBox("SearchString",null, new { @class = "form-control"})
+            @Html.TextBox("SearchString", null, new { @class = "form-control" })
             <div class="input-group-append">
                 <button type="submit" class="btn btn-secondary">Buscar</button>
             </div>
@@ -25,54 +25,74 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Carnet de Identidad", "Index", "People", new { 
-                    sortOrder = ViewBag.CISortParm, 
-                    searchString = ViewBag.SearchString })
+                @Html.ActionLink("Carnet de Identidad", "Index", "People", new
+                {
+                    sortOrder = ViewBag.CISortParm,
+                    searchString = ViewBag.SearchString
+                })
             </th>
             <th>
-                @Html.ActionLink("Nombre", "Index", "People", new { 
-                    sortOrder = ViewBag.NameSortParm, 
-                    searchString = ViewBag.SearchString })
+                @Html.ActionLink("Nombre", "Index", "People", new
+                {
+                    sortOrder = ViewBag.NameSortParm,
+                    searchString = ViewBag.SearchString
+                })
             </th>
             <th>
-                @Html.ActionLink("Dirección", "Index", "People", new { 
-                    sortOrder = ViewBag.AddressSortParm, 
-                    searchString = ViewBag.SearchString })
+                @Html.ActionLink("Dirección", "Index", "People", new
+                {
+                    sortOrder = ViewBag.AddressSortParm,
+                    searchString = ViewBag.SearchString
+                })
             </th>
-            <th>Procedencia</th>
+            <th>
+                @Html.ActionLink("Procedencia", "Index", "People", new
+                {
+                    sortOrder = ViewBag.SourceSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach(Person person in Model)
+        @foreach (Person person in Model.PeopleList)
         {
             <tr>
                 <td>@person.CI</td>
-                <td>@Html.ActionLink(person.NameWithComa(),"Details", new { id = person.Id })</td>
+                <td>@Html.ActionLink(person.NameWithComa(), "Details", new { id = person.Id })</td>
                 <td>@person.Address</td>
                 <td>@Html.ActionLink(person.Source.Name, "Details", "Sources", new { id = person.Source.Id })</td>
-                <td>
-                    <button class="btn btn-danger btn-sm js-delete" data-person-id=@person.Id>Eliminar</button>
-                </td>
+                @if (Model.IsAdmin)
+                {
+
+                    <td>
+                        <button class="btn btn-danger btn-sm js-delete" data-person-id=@person.Id>Eliminar</button>
+                    </td>
+                }
             </tr>
         }
     </tbody>
 </table>
 
 <p>
-    @Html.ActionLink("Anterior", "Index", new { 
-        sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = true, 
-        searchString = ViewBag.SearchString, 
-        pageIndex = ViewBag.PageIndex - 1 })
+    @Html.ActionLink("Anterior", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex - 1
+    })
     @(ViewBag.PageIndex) / @(ViewBag.MaxPageIndex)
-    @Html.ActionLink("Siguiente", "Index", new { 
-        sortOrder = ViewBag.ActualSortOrder, 
-        keepOrder = true, 
-        searchString = ViewBag.SearchString, 
-        pageIndex = ViewBag.PageIndex + 1 })
+    @Html.ActionLink("Siguiente", "Index", new
+    {
+        sortOrder = ViewBag.ActualSortOrder,
+        keepOrder = true,
+        searchString = ViewBag.SearchString,
+        pageIndex = ViewBag.PageIndex + 1
+    })
 </p>
-    
+
 
 @section scripts
 {

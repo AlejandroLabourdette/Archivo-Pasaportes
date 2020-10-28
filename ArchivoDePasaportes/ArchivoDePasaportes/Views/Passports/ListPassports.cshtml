@@ -46,8 +46,20 @@
                     searchString = ViewBag.SearchString
                 })
             </th>
-            <th>Tipo</th>
-            <th>Archivado</th>
+            <th>
+                @Html.ActionLink("Tipo de Pasaporte", "Index", "Passports", new
+                {
+                    sortOrder = ViewBag.TypeSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Archivado", "Index", "Passports", new
+                {
+                    sortOrder = ViewBag.ArchivedSortParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
             <th>
                 @Html.ActionLink("Expedición", "Index", "Passports", new
                 {
@@ -101,7 +113,7 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Retirar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
+                    @Html.ActionLink("Cancelar", "Drop", "Passports", new { id = passport.Id } , new { @class = "btn btn-sm btn-secondary" })
                 </td>
                 <td>
                     <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
