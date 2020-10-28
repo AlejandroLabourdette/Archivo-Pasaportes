@@ -182,6 +182,7 @@ namespace ArchivoDePasaportes.Controllers
             {
                 var newPassport = new Passport();
                 TransferData.Transfer(viewModel.PassportDto, newPassport, _context);
+                newPassport.IsPassportArchived = true;
                 _context.Passports.Add(newPassport);
             }
 
