@@ -93,5 +93,14 @@ namespace ArchivoDePasaportes.Dto
             destiny.ExpectedReturn = origin.ExpectedReturn;
             destiny.Description = origin.Description;
         }
+        public static void Transfer(List<GivePassport> origin, List<GivePassportDto> destiny, ApplicationDbContext context)
+        {
+            foreach (var givePass in origin)
+            {
+                var dto = new GivePassportDto();
+                Transfer(givePass, dto, context);
+                destiny.Add(dto);
+            }
+        }
     }
 }
