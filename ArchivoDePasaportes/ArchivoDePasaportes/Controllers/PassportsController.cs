@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize]
     public class PassportsController : Controller
     {
         private ApplicationDbContext _context;
@@ -67,15 +68,19 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.PageIndex = pageIndex;
             ViewBag.MaxPageIndex = maxPageIndex;
 
-            var passports_list = passports
+            var viewModel = new PassportFormViewModel()
+            {
+                PassportList = passports
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Include(p => p.Owner)
                 .Include(p => p.PassportType)
                 .Include(p => p.Source)
-                .ToList();
+                .ToList(),
+            };
 
-            return View("ListPassports", passports_list);
+
+            return View("ListPassports", viewModel);
         }
     
         public IActionResult Details(long id)
@@ -109,7 +114,8 @@ namespace ArchivoDePasaportes.Controllers
             };
             return View("PassportForm", viewModel);
         }
-
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(long id)
         {
             var passportInDb = _context.Passports.SingleOrDefault(p => p.Id == id);

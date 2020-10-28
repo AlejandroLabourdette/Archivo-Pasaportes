@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using ArchivoDePasaportes.Extensions;
 
 namespace ArchivoDePasaportes.Controllers
 {
@@ -74,9 +75,7 @@ namespace ArchivoDePasaportes.Controllers
                 .Include(p => p.Source)
                 .ToList();
 
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = _userManager.FindByIdAsync(userId).Result;
-            viewModel.IsAdmin = _userManager.IsInRoleAsync(currentUser, "Admin").Result;
+            viewModel.IsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
             return View("ListPeople", viewModel);
         }
