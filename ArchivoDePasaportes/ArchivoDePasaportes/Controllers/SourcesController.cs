@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize]
     public class SourcesController : Controller
     {
         private ApplicationDbContext _context;
@@ -16,6 +18,7 @@ namespace ArchivoDePasaportes.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             return View("SourceForm");
@@ -29,7 +32,7 @@ namespace ArchivoDePasaportes.Controllers
             return View(sourceInDb);
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var source = _context.Sources.SingleOrDefault(s => s.Id == id);

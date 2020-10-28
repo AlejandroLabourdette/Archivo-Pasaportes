@@ -6,11 +6,13 @@ using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private ApplicationDbContext _context;
@@ -77,6 +79,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("ListTickets", tickets_list);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             return View("New");

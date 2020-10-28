@@ -20,8 +20,8 @@ namespace ArchivoDePasaportes.Controllers
     [Authorize]
     public class PeopleController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public PeopleController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {

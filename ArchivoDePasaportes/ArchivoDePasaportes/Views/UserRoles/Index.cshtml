@@ -1,0 +1,83 @@
+﻿@using ArchivoDePasaportes.Dto;
+@model ArchivoDePasaportes.ViewModels.UserRoleViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Usuarios</h1>
+
+<form asp-action="Index">
+    <p>
+        <div class="input-group">
+            @Html.TextBox("SearchString", null, new { @class = "form-control" })
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+            </div>
+        </div>
+    </p>
+</form>
+
+<table id="users" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Nombre", "Index", "People", new
+                {
+                    sortOrder = ViewBag.NameParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Email", "Index", "People", new
+                {
+                    sortOrder = ViewBag.EmailParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th>
+                @Html.ActionLink("Ocupación", "Index", "People", new
+                {
+                    sortOrder = ViewBag.OccupationParm,
+                    searchString = ViewBag.SearchString
+                })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserRolesDto userRoles in Model.UserRolesList)
+        {
+        <tr>
+            <td>@Model.Names(userRoles)</td>
+            <td>@userRoles.Email</td>
+            <td>@userRoles.Occupation</td>
+            <td>
+                <button class="btn btn-danger btn-sm js-delete" data-user-id=@userRoles.Id>Eliminar</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+@section scripts
+{ 
+<script>
+        $(document).ready(function () {
+            $("#users").on("click", ".js-delete", function () {
+                var button = $(this)
+
+                bootbox.confirm("Esta seguro que desea eliminar a esta persona del registro", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/UserRoles/" + button.attr("data-user-id"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        })
+                    }
+                })
+            });
+        });
+</script>
+}
+
