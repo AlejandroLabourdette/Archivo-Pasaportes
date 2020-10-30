@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OfficialTravel>
+﻿@model ArchivoDePasaportes.ViewModels.OfficialTravelViewModel
 @{
     ViewData["Title"] = "ListOfficialTravels";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -148,7 +148,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(OfficialTravel travel in Model)
+        @foreach(OfficialTravel travel in Model.OfficialTravelsList)
         {
             <tr>
                 <td>@travel.Passport.PassportNo</td>
@@ -157,9 +157,13 @@
                 <td>@travel.Ticket.OriginCountry.Name</td>
                 <td>@travel.Ticket.DestinyCountry.Name</td>
                 <td>@travel.Passport.Owner.CI</td>
-                <td>
+
+                @if (Model.UserIsAdmin)
+                {
+                    <td>
                     @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType = "Official" }, new { @class = "btn btn-sm btn-primary" })
-                </td>
+                    </td>
+                }
             </tr>
         }
     </tbody>

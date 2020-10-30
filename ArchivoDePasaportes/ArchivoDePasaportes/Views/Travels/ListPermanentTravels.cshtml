@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PermanentTravel>
+﻿@model ArchivoDePasaportes.ViewModels.PermanentTravelViewModel;
 
 @{
     ViewData["Title"] = "ListPermanentTravels";
@@ -111,7 +111,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (PermanentTravel travel in Model)
+        @foreach (PermanentTravel travel in Model.PermanentTravelsList)
         {
             <tr>
                 <td>
@@ -123,9 +123,13 @@
                 <td>@travel.Ticket.OriginCountry.Name</td>
                 <td>@travel.Ticket.DestinyCountry.Name</td>
                 <td>@travel.Ticket.DepartureDate</td>
-                <td>
-                    @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType="Permanent" }, new { @class = "btn btn-sm btn-primary" })
-                </td>
+
+                @if (Model.UserIsAdmin)
+                {
+                    <td>
+                        @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType = "Permanent" }, new { @class = "btn btn-sm btn-primary" })
+                    </td>
+                }
             </tr>
         }
     </tbody>

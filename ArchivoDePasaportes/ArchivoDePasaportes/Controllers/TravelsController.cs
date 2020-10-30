@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArchivoDePasaportes.Areas.Identity.Data;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +19,16 @@ namespace ArchivoDePasaportes.Controllers
     [Authorize]
     public class TravelsController : Controller
     {
-        public ApplicationDbContext _context { get; set; }
-        public TravelsController(ApplicationDbContext context)
+        private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public TravelsController (ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
+
 
         public IActionResult Main()
         {
@@ -80,7 +88,15 @@ namespace ArchivoDePasaportes.Controllers
                     .ThenInclude(p => p.Owner)
                 .ToList();
 
-            return View("ListOfficialTravels", officialTravelsList);
+            bool userIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
+
+            OfficialTravelViewModel officialTravelViewModel = new OfficialTravelViewModel()
+            {
+                OfficialTravelsList = officialTravelsList,
+                UserIsAdmin = userIsAdmin
+            };
+
+            return View("ListOfficialTravels", officialTravelViewModel);
         }
         private IQueryable<OfficialTravel> FilterOfficialTravels(
             string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
@@ -186,8 +202,15 @@ namespace ArchivoDePasaportes.Controllers
                 .Include(p => p.Passport)
                     .ThenInclude(p => p.Owner)
                 .ToList();
+            bool userIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
-            return View("ListPermanentTravels", permanentTravelsList);
+            PermanentTravelViewModel permanentTravelViewModel = new PermanentTravelViewModel()
+            {
+                UserIsAdmin = userIsAdmin,
+                PermanentTravelsList = permanentTravelsList
+            };
+
+            return View("ListPermanentTravels", permanentTravelViewModel);
         }
         private IQueryable<PermanentTravel> FilterPermanentTravels(
            string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
