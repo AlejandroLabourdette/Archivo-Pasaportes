@@ -16,9 +16,6 @@
         <label asp-for="PassportDto.PassportTypeId" class="control-label"></label>
         <div class="input-group">
             @Html.DropDownListFor(m => m.PassportDto.PassportTypeId, new SelectList(Model.PassportTypes, "Id", "Name"), "Elija un tipo de pasaporte...", new { @class = "form-control" })
-            <div class="input-group-append">
-                @Html.ActionLink("Agregar Otro", "New", "PassportTypes", null, new { @class = "btn btn-success" })
-            </div>
         </div>
     </div>
     <div class="form-group">
@@ -31,7 +28,7 @@
         <div class="input-group">
             @Html.DropDownListFor(m => m.PassportDto.SourceId, new SelectList(Model.Sources, "Id", "Name"), "Elija un centro...", new { @class = "form-control" })
             <div class="input-group-append">
-                @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success" })
+                @Html.ActionLink("Agregar Otro", "Create", "Sources", null, new { @class = "btn btn-success" })
             </div>
         </div>
         <span asp-validation-for="PassportDto.SourceId" class="text-danger"></span>

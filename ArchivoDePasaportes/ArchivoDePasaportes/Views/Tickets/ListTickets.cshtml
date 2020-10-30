@@ -8,16 +8,16 @@
 
 <form asp-action="Index">
     <div class="row">
-        <div class="input-group ap-small-margin-right">
+        <div class="input-group col-3" style="width:auto">
             @Html.TextBox("SearchDay", null, new { @class = "form-control", placeholder = "Día" })
             @Html.TextBox("SearchMonth", null, new { @class = "form-control", placeholder = "Mes" })
             @Html.TextBox("SearchYear", null, new { @class = "form-control", placeholder = "Año" })
         </div>
-        <div class="input-group ap-small-margin-right">
+        <div class="input-group col-5" style="width:auto">
             @Html.TextBox("SearchOrigin", null, new { @class = "form-control", placeholder = "Origen" })
             @Html.TextBox("SearchDestiny", null, new { @class = "form-control", placeholder = "Destino" })
         </div>
-        <div>
+        <div class="col-2">
             <button type="submit" class="btn btn-secondary">Buscar</button>
         </div>
     </div>

@@ -56,8 +56,6 @@
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
-    <None Include="Views\Sources\Details.cshtml" />
-    <None Include="Views\Sources\SourceForm.cshtml" />
     <None Include="Views\Tickets\ListTickets.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />

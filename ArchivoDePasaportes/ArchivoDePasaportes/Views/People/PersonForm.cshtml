@@ -37,7 +37,7 @@
         <div class="input-group">
             @Html.DropDownListFor(m => m.PersonDto.SourceId, new SelectList(Model.Sources, "Id", "Name"),"Elija un centro...", new { @class = "form-control" })
             <div class="input-group-append">
-                @Html.ActionLink("Agregar Otro", "New", "Sources", null, new { @class = "btn btn-success"})
+                @Html.ActionLink("Agregar Otro", "Create", "Sources", null, new { @class = "btn btn-success"})
             </div>
         </div>
         <span asp-validation-for="PersonDto.SourceId" class="text-danger"></span>

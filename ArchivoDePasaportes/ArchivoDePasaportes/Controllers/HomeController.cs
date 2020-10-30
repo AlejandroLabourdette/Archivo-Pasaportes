@@ -33,6 +33,11 @@ namespace ArchivoDePasaportes.Controllers
             return View(viewModel);
         }
 
+        public IActionResult Utils()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
