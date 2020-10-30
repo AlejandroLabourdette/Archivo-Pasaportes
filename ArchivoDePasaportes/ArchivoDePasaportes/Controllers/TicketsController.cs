@@ -77,26 +77,12 @@ namespace ArchivoDePasaportes.Controllers
             return View("ListTickets", tickets_list);
         }
 
-        public IActionResult New()
-        {
-            return View("New");
-        }
-
-        [HttpPost]
-        public IActionResult Save(FlightFormViewModel viewModel)
-        {
-            return RedirectToAction("Index");
-        }
-
         public IActionResult CreateTravel()
         {
-            var passports = new List<PassInfoOfficialTravelDto>();
-            passports.Add(new PassInfoOfficialTravelDto() { OcupationId = 1, PassportNo = "1232154654" });
             var viewModel = new FlightFormViewModel()
             {
                 Countries = _context.Countries.ToList(),
-                Occupations = _context.Occupations.ToList(),
-                OfficialTravelsDto = passports
+                Occupations = _context.Occupations.ToList()
             };
             return View("FlightForm", viewModel);
         }

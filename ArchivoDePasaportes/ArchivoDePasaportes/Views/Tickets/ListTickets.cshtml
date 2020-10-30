@@ -73,7 +73,7 @@
                 <td>@ticket.DestinyCountry.Name</td>
 
                 <td>
-                    @Html.ActionLink("Editar", "Edit", "Tickets", null, new { @class = "btn btn-secondary btn-sm" })
+                    @Html.ActionLink("Editar", "EditFlight", "Travels",new { ticketid = @ticket.Id }, new { @class = "btn btn-secondary btn-sm" })
                     <button class="btn btn-danger btn-sm js-delete" data-ticket-id=@ticket.Id>Eliminar</button>
                 </td>
             </tr>
@@ -114,7 +114,7 @@
             $("#tickets").on("click", ".js-delete", function () {
                 var button = $(this)
 
-                bootbox.confirm("Esta seguro que desea eliminar a este Boleto del registro", function (result) {
+                bootbox.confirm("¿Está seguro que desea eliminar a este Boleto del registro?. Si lo elimina también serán eliminados todos los viajes asociados", function (result) {
                     if (result) {
                         $.ajax({
                             url: "/api/Tickets/" + button.attr("data-ticket-id"),

@@ -21,6 +21,7 @@
             <input asp-for="Ticket.DepartureDate" type="date" class="form-control" />
             <span asp-validation-for="Ticket.DepartureDate" class="text-danger"></span>
         </div>
+        @Html.HiddenFor(m=>m.OldTicketId)
     </div>
     
     <div class="ap-big-margin-top">

@@ -158,7 +158,7 @@
                 <td>@travel.Ticket.DestinyCountry.Name</td>
                 <td>@travel.Passport.Owner.CI</td>
                 <td>
-                    @Html.ActionLink("Detalles", "Details", "Travels", new { id = travel.Id }, new { @class = "btn btn-sm btn-primary" })
+                    @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType = "Official" }, new { @class = "btn btn-sm btn-primary" })
                 </td>
             </tr>
         }

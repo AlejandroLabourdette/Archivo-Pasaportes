@@ -233,33 +233,36 @@ namespace ArchivoDePasaportes.Controllers
         }
     
         
-        public IActionResult EditFlight(long id, string listType)
+        public IActionResult EditFlight(long id, string listType, long ticketId)
         {
-            long ticketId = 0;
-            if (listType == "Official")
-                ticketId = _context.OfficialTravels.SingleOrDefault(ot => ot.Id == id)?.TicketId ?? 0;
-            else if (listType == "Permanent")
-                ticketId = _context.PermanentTravels.SingleOrDefault(pt => pt.Id == id)?.TicketId ?? 0;
+            long _ticketId = ticketId;
+            if(_ticketId == 0)
+            {
+                if (listType == "Official")
+                    _ticketId = _context.OfficialTravels.SingleOrDefault(ot => ot.Id == id)?.TicketId ?? 0;
+                else if (listType == "Permanent")
+                    _ticketId = _context.PermanentTravels.SingleOrDefault(pt => pt.Id == id)?.TicketId ?? 0;
+            }
 
-            if (ticketId == 0)
+            if (_ticketId == 0)
                 return RedirectToAction("Main");
 
             var viewModel = new FlightFormViewModel();
-            viewModel.Ticket = _context.Tickets.SingleOrDefault(t => t.Id == ticketId);
+            viewModel.Ticket = _context.Tickets.SingleOrDefault(t => t.Id == _ticketId);
             viewModel.OldTicketId = viewModel.Ticket.Id;
             viewModel.Countries = _context.Countries.ToList();
             viewModel.Occupations = _context.Occupations.ToList();
             viewModel.PermanentTravelsDto = new List<PassInfoPermanentTravelDto>();
             viewModel.OfficialTravelsDto = new List<PassInfoOfficialTravelDto>();
 
-            var permanentTravels = (from pt in _context.PermanentTravels where pt.TicketId == ticketId select pt).ToList();
+            var permanentTravels = (from pt in _context.PermanentTravels where pt.TicketId == _ticketId select pt).ToList();
             foreach (var permanentTravel in permanentTravels)
             {
                 var permanentTravelDto = new PassInfoPermanentTravelDto();
                 TransferData.Transfer(permanentTravel, permanentTravelDto, _context);
                 viewModel.PermanentTravelsDto.Add(permanentTravelDto);
             }
-            var officialTravels = (from ot in _context.OfficialTravels where ot.TicketId == ticketId select ot).ToList();
+            var officialTravels = (from ot in _context.OfficialTravels where ot.TicketId == _ticketId select ot).ToList();
             foreach (var officialTravel in officialTravels)
             {
                 var officialTravelDto = new PassInfoOfficialTravelDto();
