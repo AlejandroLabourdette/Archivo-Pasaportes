@@ -233,6 +233,9 @@ namespace ArchivoDePasaportes.Controllers
             if (droppedPassportInDb != null)
                 return BadRequest();
 
+
+            _context.OfficialTravels.RemoveRange((from ot in _context.OfficialTravels where ot.PassportId == passportInDb.Id select ot).ToList());
+            _context.PermanentTravels.RemoveRange((from pt in _context.PermanentTravels where pt.PassportId == passportInDb.Id select pt).ToList());
             _context.Passports.Remove(passportInDb);
             _context.DroppedPassports.Add(viewModel.DroppedPassport);
             _context.SaveChanges();
