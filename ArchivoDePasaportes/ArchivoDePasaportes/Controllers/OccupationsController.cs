@@ -25,24 +25,6 @@ namespace ArchivoDePasaportes.Controllers
             return View(await _context.Occupations.ToListAsync());
         }
 
-        // GET: Occupations/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var occupation = await _context.Occupations
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (occupation == null)
-            {
-                return NotFound();
-            }
-
-            return View(occupation);
-        }
-
         // GET: Occupations/Create
         public IActionResult Create()
         {

@@ -11,8 +11,10 @@ namespace ArchivoDePasaportes.Models
         public int Id { get; set; }
         
         [Required]
+        [Display(Name = "Nombre")]
         public string Name { get; set; }
 
+        [Display(Name = "Descripción")]
         public string Description { get; set; }
     }
 }
