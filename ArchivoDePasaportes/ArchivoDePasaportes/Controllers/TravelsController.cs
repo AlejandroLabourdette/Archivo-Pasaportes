@@ -7,11 +7,13 @@ using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.Extensions;
 using ArchivoDePasaportes.Models;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize]
     public class TravelsController : Controller
     {
         public ApplicationDbContext _context { get; set; }
