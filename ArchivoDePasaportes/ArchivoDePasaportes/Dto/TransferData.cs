@@ -102,5 +102,31 @@ namespace ArchivoDePasaportes.Dto
                 destiny.Add(dto);
             }
         }
+    
+    
+        public static void Transfer(PassInfoOfficialTravelDto origin, OfficialTravel destiny, ApplicationDbContext context)
+        {
+            destiny.PassportId = context.Passports.Single(p => p.PassportNo == origin.PassportNo).Id;
+            destiny.OccupationId = origin.OcupationId;
+            destiny.ReturnDate = origin.ReturnDate;
+        }
+        public static void Transfer (OfficialTravel origin, PassInfoOfficialTravelDto destiny, ApplicationDbContext context)
+        {
+            destiny.PassportNo = context.Passports.Single(p => p.Id == origin.PassportId).PassportNo;
+            destiny.OcupationId = origin.OccupationId;
+            destiny.ReturnDate = origin.ReturnDate;
+        }
+
+
+        public static void Transfer(PassInfoPermanentTravelDto origin, PermanentTravel destiny, ApplicationDbContext context)
+        {
+            destiny.PassportId = context.Passports.Single(p => p.PassportNo == origin.PassportNo).Id;
+            destiny.OccupationId = origin.OcupationId;
+        }
+        public static void Transfer(PermanentTravel origin, PassInfoPermanentTravelDto destiny, ApplicationDbContext context)
+        {
+            destiny.PassportNo = context.Passports.Single(p => p.Id == origin.PassportId).PassportNo;
+            destiny.OcupationId = origin.OccupationId;
+        }
     }
 }

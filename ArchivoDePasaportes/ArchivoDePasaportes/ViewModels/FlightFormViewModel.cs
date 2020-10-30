@@ -22,6 +22,7 @@ namespace ArchivoDePasaportes.ViewModels
         public bool RepetedPassport { get; set; }
         public bool ExistOtherTicketInDb { get; set; }
         public bool ReturnDateIncorrect { get; set; }
+        public bool OcupationIncorrect { get; set; }
 
         public long OldTicketId { get; set; }
     }

@@ -110,6 +110,7 @@
             var repetedPassport = '@Model.RepetedPassport' === '@true';
             var existOtherTicketInDb = '@Model.ExistOtherTicketInDb' === '@true';
             var returnDateIncorrect = '@Model.ReturnDateIncorrect' === '@true';
+            var occupationIncorrect = '@Model.OcupationIncorrect' === '@true';
             if (missAnyPassport) {
                 bootbox.alert("Al menos uno de los pasaportes introducidos no existe en la Base de Datos.");
             }
@@ -121,6 +122,9 @@
             }
             if (returnDateIncorrect) {
                 bootbox.alert("La fecha de regreso de al menos uno de los viajes oficiales es incorrecta");
+            }
+            if (occupationIncorrect) {
+                bootbox.alert("Por favor elija una ocupacion para todos los viajes");
             }
 
             var occuapationOptions = htmlDecode('@optionsCS');

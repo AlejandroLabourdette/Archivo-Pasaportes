@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Main";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Página Inicial de Viajes</h1>
+<div>
+    <a class="btn btn-primary" asp-controller="Travels" asp-action="NewFlight">Crear Nuevo Viaje</a>
+</div>
+<div>
+    <a class="btn btn-secondary ap-small-margin-top" asp-controller="Travels" asp-action="ListOfficial">Listado de Viajes Oficiales</a>
+</div>
+<div>
+    <a class="btn btn-secondary ap-small-margin-top" asp-controller="Travels" asp-action="ListPermanent">Listado de Viajes Permanentes</a>
+</div>

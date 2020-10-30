@@ -22,7 +22,7 @@ namespace ArchivoDePasaportes.Models
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Fecha de Regreso")]
+        [Display(Name = "Fecha de Salida")]
         public DateTime DepartureDate { get; set; }
     }
 }

@@ -6,6 +6,9 @@
 }
 
 <h1>Pasaportes</h1>
+<p>
+    @Html.ActionLink("Ver pasaportes cancelados", "Index", "DroppedPassports", null, new { @class = "btn btn-link" })
+</p>
 
 <p>
     @Html.ActionLink("Nuevo", "New", "Passports", null, new { @class = "btn btn-primary" })
@@ -124,8 +127,8 @@
                         <button class="btn-danger btn btn-sm js-delete" data-passport-id=@passport.Id>Eliminar</button>
                     </td>
                 }
-                </tr>
-            }
+            </tr>
+        }
     </tbody>
 </table>
 

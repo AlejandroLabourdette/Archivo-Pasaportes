@@ -20,6 +20,11 @@ namespace ArchivoDePasaportes.Controllers
             _context = context;
         }
 
+        public IActionResult Main()
+        {
+            return View();
+        }
+
         public IActionResult ListOfficial(string sortOrder, bool keepOrder, int pageIndex,
             string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear, 
             string searchArrivalDay, string searchArrivalMonth, string searchArrivalYear, 
@@ -228,10 +233,42 @@ namespace ArchivoDePasaportes.Controllers
         }
     
         
-        //public IActionResult EditFlight(long id)
-        //{
-        //   
-        //}
+        public IActionResult EditFlight(long id, string listType)
+        {
+            long ticketId = 0;
+            if (listType == "Official")
+                ticketId = _context.OfficialTravels.SingleOrDefault(ot => ot.Id == id)?.TicketId ?? 0;
+            else if (listType == "Permanent")
+                ticketId = _context.PermanentTravels.SingleOrDefault(pt => pt.Id == id)?.TicketId ?? 0;
+
+            if (ticketId == 0)
+                return RedirectToAction("Main");
+
+            var viewModel = new FlightFormViewModel();
+            viewModel.Ticket = _context.Tickets.SingleOrDefault(t => t.Id == ticketId);
+            viewModel.OldTicketId = viewModel.Ticket.Id;
+            viewModel.Countries = _context.Countries.ToList();
+            viewModel.Occupations = _context.Occupations.ToList();
+            viewModel.PermanentTravelsDto = new List<PassInfoPermanentTravelDto>();
+            viewModel.OfficialTravelsDto = new List<PassInfoOfficialTravelDto>();
+
+            var permanentTravels = (from pt in _context.PermanentTravels where pt.TicketId == ticketId select pt).ToList();
+            foreach (var permanentTravel in permanentTravels)
+            {
+                var permanentTravelDto = new PassInfoPermanentTravelDto();
+                TransferData.Transfer(permanentTravel, permanentTravelDto, _context);
+                viewModel.PermanentTravelsDto.Add(permanentTravelDto);
+            }
+            var officialTravels = (from ot in _context.OfficialTravels where ot.TicketId == ticketId select ot).ToList();
+            foreach (var officialTravel in officialTravels)
+            {
+                var officialTravelDto = new PassInfoOfficialTravelDto();
+                TransferData.Transfer(officialTravel, officialTravelDto, _context);
+                viewModel.OfficialTravelsDto.Add(officialTravelDto);
+            }
+
+            return View("FlightForm", viewModel);
+        }
 
 
         public IActionResult NewFlight()
@@ -279,7 +316,10 @@ namespace ArchivoDePasaportes.Controllers
                 bool existOccupation = _context.Occupations.SingleOrDefault(o => o.Id == travelData.OcupationId) != null;
                 if (!existOccupation)
                 {
-                    return BadRequest();
+                    viewModel.OcupationIncorrect = true;
+                    viewModel.Occupations = _context.Occupations.ToList();
+                    viewModel.Countries = _context.Countries.ToList();
+                    return View("FlightForm", viewModel);
                 }
 
                 bool returnDateCorrect = travelData.ReturnDate > viewModel.Ticket.DepartureDate;
@@ -396,11 +436,9 @@ namespace ArchivoDePasaportes.Controllers
 
                     var officialTravel = new OfficialTravel()
                     {
-                        PassportId = _context.Passports.Single(p => p.PassportNo == officialtravelInfo.PassportNo).Id,
-                        OccupationId = officialtravelInfo.OcupationId,
                         TicketId = ticketId,
-                        ReturnDate = officialtravelInfo.ReturnDate
                     };
+                    TransferData.Transfer(officialtravelInfo, officialTravel, _context);
                     _context.OfficialTravels.Add(officialTravel);
                 }
             if (viewModel.PermanentTravelsDto != null)
@@ -411,10 +449,9 @@ namespace ArchivoDePasaportes.Controllers
 
                     var permanentTravel = new PermanentTravel()
                     {
-                        PassportId = _context.Passports.Single(p => p.PassportNo == permanentTravelInfo.PassportNo).Id,
-                        OccupationId = permanentTravelInfo.OcupationId,
                         TicketId = ticketId
                     };
+                    TransferData.Transfer(permanentTravelInfo, permanentTravel, _context);
                     _context.PermanentTravels.Add(permanentTravel);
                 }
         }
