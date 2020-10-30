@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class OccupationsController : Controller
     {
         private readonly ApplicationDbContext _context;

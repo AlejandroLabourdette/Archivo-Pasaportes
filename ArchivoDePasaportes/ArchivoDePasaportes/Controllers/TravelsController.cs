@@ -234,7 +234,7 @@ namespace ArchivoDePasaportes.Controllers
             return orderedTravels;
         }
     
-        
+        [Authorize(Roles = "Admin")]
         public IActionResult EditFlight(long id, string listType, long ticketId)
         {
             long _ticketId = ticketId;
@@ -275,7 +275,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("FlightForm", viewModel);
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult NewFlight()
         {
             var viewModel = new FlightFormViewModel()

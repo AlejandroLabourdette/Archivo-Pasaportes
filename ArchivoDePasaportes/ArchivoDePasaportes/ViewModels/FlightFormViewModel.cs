@@ -17,7 +17,6 @@ namespace ArchivoDePasaportes.ViewModels
 
         public IEnumerable<Country> Countries{ get; set; }
         public IEnumerable<Occupation> Occupations { get; set; }
-
         public bool MissAnyPassport { get; set; }
         public bool RepetedPassport { get; set; }
         public bool ExistOtherTicketInDb { get; set; }

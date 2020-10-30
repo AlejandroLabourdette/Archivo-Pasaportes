@@ -6,12 +6,14 @@ using ArchivoDePasaportes.Areas.Identity.Data;
 using ArchivoDePasaportes.Data;
 using ArchivoDePasaportes.Dto;
 using ArchivoDePasaportes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchivoDePasaportes.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,7 +32,6 @@ namespace ArchivoDePasaportes.Controllers
 
             foreach (var user in users)
             {
-
                 UserRolesDto userRoles = new UserRolesDto
                 {
                     Id = user.Id,

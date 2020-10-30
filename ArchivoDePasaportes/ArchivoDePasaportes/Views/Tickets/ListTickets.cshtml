@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ticket>
+﻿@model ArchivoDePasaportes.ViewModels.FlightViewModel;
 @{
     ViewData["Title"] = "ListTickets";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -65,18 +65,21 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticket in Model)
+        @foreach (var ticket in Model.TicketList)
         {
-            <tr>
-                <td>@ticket.DepartureDate.Day/@ticket.DepartureDate.Month/@ticket.DepartureDate.Year</td>
-                <td>@ticket.OriginCountry.Name</td>
-                <td>@ticket.DestinyCountry.Name</td>
+        <tr>
+            <td>@ticket.DepartureDate.Day/@ticket.DepartureDate.Month/@ticket.DepartureDate.Year</td>
+            <td>@ticket.OriginCountry.Name</td>
+            <td>@ticket.DestinyCountry.Name</td>
 
+            @if (Model.UserIsAdmin)
+            {
                 <td>
-                    @Html.ActionLink("Editar", "EditFlight", "Travels",new { ticketid = @ticket.Id }, new { @class = "btn btn-secondary btn-sm" })
+                    @Html.ActionLink("Editar", "EditFlight", "Travels", new { ticketid = @ticket.Id }, new { @class = "btn btn-secondary btn-sm" })
                     <button class="btn btn-danger btn-sm js-delete" data-ticket-id=@ticket.Id>Eliminar</button>
                 </td>
-            </tr>
+            }
+        </tr>
         }
     </tbody>
 </table>
