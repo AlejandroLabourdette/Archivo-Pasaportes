@@ -119,6 +119,10 @@
                                 Recibir
                             </button>
                         }
+                        @if (passport.IsPassportArchived)
+                        {
+                            @Html.ActionLink("Entrgar", "Give", "Passports", new { id = passport.Id},new { @class="btn btn-sm btn-warning"})
+                        }
                     </td>
                     <td>
                         @Html.ActionLink("Cancelar", "Drop", "Passports", new { id = passport.Id }, new { @class = "btn btn-sm btn-secondary" })
