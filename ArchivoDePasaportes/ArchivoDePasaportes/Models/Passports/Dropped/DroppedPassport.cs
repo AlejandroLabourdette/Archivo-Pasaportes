@@ -45,9 +45,9 @@ namespace ArchivoDePasaportes.Models
         public DateTime? ExpirationDate { get; set; }
 
 
-        [Required(ErrorMessage = "Por favor seleccione una Causa de Deshecho")]
+        [Required(ErrorMessage = "Por favor seleccione una Causa de Desecho")]
         public byte DropCauseId { get; set; }
-        [Display(Name = "Causa de Deshecho")]
+        [Display(Name = "Causa de Desecho")]
         public DropCause DropCause { get; set; }
 
 

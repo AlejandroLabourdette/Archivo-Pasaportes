@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class TravelsController : Controller
     {
         private ApplicationDbContext _context;
@@ -298,7 +298,7 @@ namespace ArchivoDePasaportes.Controllers
             return View("FlightForm", viewModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult NewFlight()
         {
             var viewModel = new FlightFormViewModel()

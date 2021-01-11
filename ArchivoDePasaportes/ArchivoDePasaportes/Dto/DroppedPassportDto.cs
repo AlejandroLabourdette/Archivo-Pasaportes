@@ -28,8 +28,8 @@ namespace ArchivoDePasaportes.Dto
         [Display(Name = "Fecha de Vencimiento")]
         [DataType(DataType.Date)]
         public DateTime? ExpirationDate { get; set; }
-        [Required(ErrorMessage = "Por favor seleccione una Causa de Deshecho")]
-        [Display(Name = "Causa de Deshecho")]
+        [Required(ErrorMessage = "Por favor seleccione una Causa de Desecho")]
+        [Display(Name = "Causa de Desecho")]
         public byte DropCauseId { get; set; }
         [Display(Name = "Detalles")]
         public string Details { get; set; }

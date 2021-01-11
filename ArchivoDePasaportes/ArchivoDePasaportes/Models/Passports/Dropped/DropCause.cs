@@ -10,8 +10,8 @@ namespace ArchivoDePasaportes.Models
     {
         public byte Id { get; set; }
 
-        [Required(ErrorMessage = "Ingrese el nombre de la causa de deshecho")]
-        [Display(Name = "Causa de deshecho")]
+        [Required(ErrorMessage = "Ingrese el nombre de la causa de desecho")]
+        [Display(Name = "Causa de desecho")]
         public string Name { get; set; }
     }
 }

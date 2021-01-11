@@ -8,6 +8,7 @@ namespace ArchivoDePasaportes.Data.Migrations
         {
             migrationBuilder.Sql("INSERT INTO PassportTypes (Id, Name) VALUES (1, 'Diplomático')");
             migrationBuilder.Sql("INSERT INTO PassportTypes (Id, Name) VALUES (2, 'Oficial')");
+            migrationBuilder.Sql("INSERT INTO PassportTypes (Id, Name) VALUES (3, 'Ordinario')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
