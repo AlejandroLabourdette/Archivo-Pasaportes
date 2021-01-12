@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -40,8 +40,6 @@
     <Compile Remove="Data\Migrations\20201027203157_AddGivePassportsRecordTable.Designer.cs" />
     <Compile Remove="Data\Migrations\20201027203620_a.cs" />
     <Compile Remove="Data\Migrations\20201027203620_a.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210112002226_ReturnDateInOfficialTravelNotRequired.cs" />
-    <Compile Remove="Data\Migrations\20210112002226_ReturnDateInOfficialTravelNotRequired.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace ArchivoDePasaportes.Data.Migrations
                     TicketId = table.Column<long>(nullable: false),
                     PassportId = table.Column<long>(nullable: false),
                     OccupationId = table.Column<int>(nullable: false),
-                    ReturnDate = table.Column<DateTime>(nullable: true)
+                    ReturnDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
