@@ -11,11 +11,6 @@ namespace ArchivoDePasaportes.Models
         public long Id { get; set; }
 
         [Required]
-        [Display(Name = "País Origen")]
-        public byte OriginCountryId { get; set; }
-        public Country OriginCountry { get; set; }
-
-        [Required]
         [Display(Name = "País Destino")]
         public byte DestinyCountryId { get; set; }
         public Country DestinyCountry { get; set; }

@@ -69,19 +69,6 @@
                 })
             </th> 
             <th>
-                @Html.ActionLink("Origen", "ListPermanent", "Travels", new
-                {
-                    sortOrder = ViewBag.OriginSortParm,
-                    searchDepartureDay = ViewBag.SearchDepartureDay,
-                    searchDepartureMonth = ViewBag.SearchDepartureMonth,
-                    searchDepartureYear = ViewBag.SearchDepartureYear,
-                    searchOrigin = ViewBag.SearchOrigin,
-                    searchDestiny = ViewBag.SearchDestiny,
-                    searchCI = ViewBag.SearchCI,
-                    searchPassportNo = ViewBag.SearchPassportNo
-                })
-            </th>
-            <th>
                 @Html.ActionLink("Destino", "ListPermanent", "Travels", new
                 {
                     sortOrder = ViewBag.DestinySortParm,
@@ -120,7 +107,6 @@
                 <td>
                     @Html.ActionLink(travel.Passport.Owner.CI, "Details", "People", new { id = travel.Passport.Owner.CI })
                 </td>
-                <td>@travel.Ticket.OriginCountry.Name</td>
                 <td>@travel.Ticket.DestinyCountry.Name</td>
                 <td>@travel.Ticket.DepartureDate</td>
 

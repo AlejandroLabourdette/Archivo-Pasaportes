@@ -39,17 +39,6 @@
                 })
             </th>
             <th>
-                @Html.ActionLink("Origen", "Index", "Tickets", new
-                {
-                    sortOrder = ViewBag.OriginSortParm,
-                    searchDay = ViewBag.SearchDay,
-                    searchMonth = ViewBag.SearchMonth,
-                    searchYear = ViewBag.SearchYear,
-                    searchOrigin = ViewBag.SearchOrigin,
-                    searchDestiny = ViewBag.SearchDestiny
-                })
-            </th>
-            <th>
                 @Html.ActionLink("Destino", "Index", "Tickets", new
                 {
                     sortOrder = ViewBag.DestinySortParm,
@@ -69,7 +58,6 @@
         {
         <tr>
             <td>@ticket.DepartureDate.Day/@ticket.DepartureDate.Month/@ticket.DepartureDate.Year</td>
-            <td>@ticket.OriginCountry.Name</td>
             <td>@ticket.DestinyCountry.Name</td>
 
             @if (Model.UserIsAdmin)

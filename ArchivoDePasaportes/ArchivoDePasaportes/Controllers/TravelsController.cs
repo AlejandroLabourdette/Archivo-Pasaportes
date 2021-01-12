@@ -81,8 +81,6 @@ namespace ArchivoDePasaportes.Controllers
                 .Take(pageSize)
                 .Include(o => o.Occupation)
                 .Include(o => o.Ticket)
-                    .ThenInclude(t=>t.OriginCountry)
-                .Include(o => o.Ticket)
                     .ThenInclude(t=>t.DestinyCountry)
                 .Include(o => o.Passport)
                     .ThenInclude(p => p.Owner)
@@ -124,8 +122,6 @@ namespace ArchivoDePasaportes.Controllers
             int arrivalYear;
             if (!String.IsNullOrEmpty(searchArrivalYear) && int.TryParse(searchArrivalYear, out arrivalYear))
                 officialTravels = officialTravels.Where(o => o.ReturnDate.Year == arrivalYear);
-            if (!String.IsNullOrEmpty(searchOrigin))
-                officialTravels = officialTravels.Where(o => o.Ticket.OriginCountry.Name == searchOrigin);
             if (!String.IsNullOrEmpty(searchDestiny))
                 officialTravels = officialTravels.Where(o => o.Ticket.DestinyCountry.Name == searchDestiny);
             if (!String.IsNullOrEmpty(searchCI))
@@ -146,8 +142,6 @@ namespace ArchivoDePasaportes.Controllers
                 "departure_desc" => o.OrderByDescending(o => o.Ticket.DepartureDate),
                 "arrival" => o.OrderBy(o => o.ReturnDate),
                 "arrival_desc" => o.OrderByDescending(o => o.ReturnDate),
-                "origin" => o.OrderBy(o => o.Ticket.OriginCountry.Name),
-                "origin_desc" => o.OrderByDescending(o => o.Ticket.OriginCountry.Name),
                 "destiny" => o.OrderBy(o => o.Ticket.DestinyCountry.Name),
                 "destiny_desc" => o.OrderByDescending(o => o.Ticket.DestinyCountry.Name),
                 _ => o.OrderBy(o => o.Passport.PassportNo),
@@ -196,8 +190,6 @@ namespace ArchivoDePasaportes.Controllers
                 .Take(pageSize)
                 .Include(p => p.Occupation)
                 .Include(p => p.Ticket)
-                    .ThenInclude(t => t.OriginCountry)
-                .Include(p => p.Ticket)
                     .ThenInclude(t => t.DestinyCountry)
                 .Include(p => p.Passport)
                     .ThenInclude(p => p.Owner)
@@ -228,8 +220,6 @@ namespace ArchivoDePasaportes.Controllers
             int departureYear;
             if (!String.IsNullOrEmpty(searchDepartureYear) && int.TryParse(searchDepartureYear, out departureYear))
                 permanentTravels = permanentTravels.Where(p => p.Ticket.DepartureDate.Year == departureYear);
-            if (!String.IsNullOrEmpty(searchOrigin))
-                permanentTravels = permanentTravels.Where(p => p.Ticket.OriginCountry.Name == searchOrigin);
             if (!String.IsNullOrEmpty(searchDestiny))
                 permanentTravels = permanentTravels.Where(p => p.Ticket.DestinyCountry.Name == searchDestiny);
             if (!String.IsNullOrEmpty(searchCI))
@@ -248,8 +238,6 @@ namespace ArchivoDePasaportes.Controllers
                 "ci_desc" => p.OrderByDescending(o => o.Passport.Owner.CI),
                 "departure" => p.OrderBy(o => o.Ticket.DepartureDate),
                 "departure_desc" => p.OrderByDescending(o => o.Ticket.DepartureDate),
-                "origin" => p.OrderBy(o => o.Ticket.OriginCountry.Name),
-                "origin_desc" => p.OrderByDescending(o => o.Ticket.OriginCountry.Name),
                 "destiny" => p.OrderBy(o => o.Ticket.DestinyCountry.Name),
                 "destiny_desc" => p.OrderByDescending(o => o.Ticket.DestinyCountry.Name),
                 _ => p.OrderBy(o => o.Passport.PassportNo),
@@ -408,7 +396,6 @@ namespace ArchivoDePasaportes.Controllers
 
             var ticketInDb = _context.Tickets.SingleOrDefault(t => t.Id == viewModel.OldTicketId);
             bool newTicketExists = _context.Tickets.SingleOrDefault(p =>
-                p.OriginCountryId == viewModel.Ticket.OriginCountryId &&
                 p.DestinyCountryId == viewModel.Ticket.DestinyCountryId &&
                 p.DepartureDate == viewModel.Ticket.DepartureDate) != null;
 
@@ -416,7 +403,6 @@ namespace ArchivoDePasaportes.Controllers
             {
                 bool isModifiedTicketInfo =
                     ticketInDb.DepartureDate != viewModel.Ticket.DepartureDate ||
-                    ticketInDb.OriginCountryId != viewModel.Ticket.OriginCountryId ||
                     ticketInDb.DestinyCountryId != viewModel.Ticket.DestinyCountryId;
                 if (isModifiedTicketInfo && newTicketExists)
                 {
@@ -432,7 +418,6 @@ namespace ArchivoDePasaportes.Controllers
                 _context.PermanentTravels.RemoveRange(permanentTravels.ToList());
                 _context.SaveChanges();
 
-                ticketInDb.OriginCountryId = viewModel.Ticket.OriginCountryId;
                 ticketInDb.DestinyCountryId = viewModel.Ticket.DestinyCountryId;
                 ticketInDb.DepartureDate = viewModel.Ticket.DepartureDate;
                 AddTravelsToDb(viewModel, ticketInDb.Id);

@@ -9,12 +9,8 @@
 <form asp-action="SaveFlight">
     <div class="row ap-margin-top">
         <div class="form-group">
-            <label asp-for="Ticket.OriginCountryId" class="control-label"></label>
-            @Html.DropDownListFor(m => m.Ticket.OriginCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control ap-margin-right" })
-        </div>
-        <div class="form-group">
             <label asp-for="Ticket.DestinyCountryId" class="control-label"></label>
-            @Html.DropDownListFor(m => m.Ticket.DestinyCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de origen", new { @class = "form-control ap-margin-right" })
+            @Html.DropDownListFor(m => m.Ticket.DestinyCountryId, new SelectList(Model.Countries, "Id", "Name"), "Elija país de destino", new { @class = "form-control ap-margin-right" })
         </div>
         <div class="form-group">
             <label asp-for="Ticket.DepartureDate" class="control-label"></label>

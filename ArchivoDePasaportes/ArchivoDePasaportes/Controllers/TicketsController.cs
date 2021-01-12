@@ -44,9 +44,6 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.SearchDestiny = searchDestiny;
 
             var tickets = from t in _context.Tickets select t;
-
-            if (!String.IsNullOrEmpty(searchOrigin))
-                tickets = tickets.Where(t => t.OriginCountry.Name == searchOrigin);
             if (!String.IsNullOrEmpty(searchDestiny))
                 tickets = tickets.Where(t => t.DestinyCountry.Name == searchDestiny);
             int day;
@@ -62,8 +59,6 @@ namespace ArchivoDePasaportes.Controllers
             tickets = sortOrder switch
             {
                 "date_desc" => tickets.OrderByDescending(t => t.DepartureDate),
-                "origin" => tickets.OrderBy(t => t.OriginCountry.Name),
-                "origin_desc" => tickets.OrderByDescending(t => t.OriginCountry.Name),
                 "destiny" => tickets.OrderBy(t => t.DestinyCountry.Name),
                 "destiny_desc" => tickets.OrderByDescending(t => t.DestinyCountry.Name),
                 _ => tickets.OrderBy(t => t.DepartureDate),
@@ -81,7 +76,6 @@ namespace ArchivoDePasaportes.Controllers
             var ticketsList = tickets
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
-                .Include(t=>t.OriginCountry)
                 .Include(t=>t.DestinyCountry)
                 .ToList();
 
