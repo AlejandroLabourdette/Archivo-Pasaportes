@@ -29,7 +29,10 @@ namespace ArchivoDePasaportes.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
+        public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex,
+            string searchNo, string searchType, string searchCI, string searchExpeditionDay, string searchExpeditionMonth,
+            string searchExpeditionYear, string searchExpirationDay, string searchExpirationMonth,
+            string searchExpirationYear, string searchSource, string searchCause)
         {
             ViewBag.ActualSortOrder = sortOrder;
             ViewBag.PassNoSortParm = sortOrder == "passNo" && !keepOrder ? "passNo_desc" : "passNo";
@@ -39,7 +42,19 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.ExpirationSortParm = sortOrder == "expiration" && !keepOrder ? "expiration_desc" : "expiration";
             ViewBag.TypeSortParm = sortOrder == "type" && !keepOrder ? "type_desc" : "type";
             ViewBag.CauseSortParm = sortOrder == "cause" && !keepOrder ? "cause_desc" : "cause";
-            ViewBag.SearchString = searchString;
+
+            //Filter
+            ViewBag.SearchNo = searchNo;
+            ViewBag.SearchType = searchType;
+            ViewBag.SearchCI = searchCI;
+            ViewBag.SearchExpeditionDay = searchExpeditionDay;
+            ViewBag.SearchExpeditionMonth = searchExpeditionMonth;
+            ViewBag.SearchExpeditionYear = searchExpeditionYear;
+            ViewBag.SearchExpirationDay = searchExpirationDay;
+            ViewBag.SearchExpirationMonth = searchExpirationMonth;
+            ViewBag.SearchExpirationYear = searchExpirationYear;
+            ViewBag.SearchSource = searchSource;
+            ViewBag.SearchCause = searchCause;
 
             var droppedPassports = (from dp in _context.DroppedPassports select dp);
 
@@ -90,6 +105,45 @@ namespace ArchivoDePasaportes.Controllers
             viewModel.UserIsAdmin = Utils.IsCurrentUserAdmin(_context, _userManager, _httpContextAccessor);
 
             return View("ListDroppedPassports", viewModel);
+        }
+
+        private IQueryable<DroppedPassport> FilterPassport(string searchNo, string searchType, string searchCI,
+            string searchExpeditionDay, string searchExpeditionMonth, string searchExpeditionYear,
+            string searchExpirationDay, string searchExpirationMonth, string searchExpirationYear,
+            string searchSource, string searchCause)
+        {
+            var passports = from dp in _context.DroppedPassports select dp;
+            if (!String.IsNullOrEmpty(searchNo))
+                passports = passports.Where(p => p.PassportNo.ToLower().Contains(searchNo.ToLower()));
+            if (!String.IsNullOrEmpty(searchType))
+                passports = passports.Where(p => p.PassportType.Name.ToLower().Contains(searchType.ToLower()));
+            if (!String.IsNullOrEmpty(searchCI))
+                passports = passports.Where(p => p.Owner.CI.ToLower().Contains(searchCI.ToLower()));
+            int expeditionDay;
+            if (!String.IsNullOrEmpty(searchExpeditionDay) && int.TryParse(searchExpeditionDay, out expeditionDay))
+                passports = passports.Where(p => p.ExpeditionDate.Value.Day == expeditionDay);
+            int expeditionMonth;
+            if (!String.IsNullOrEmpty(searchExpeditionMonth) && int.TryParse(searchExpeditionMonth, out expeditionMonth))
+                passports = passports.Where(p => p.ExpeditionDate.Value.Month == expeditionMonth);
+            int expeditionYear;
+            if (!String.IsNullOrEmpty(searchExpeditionYear) && int.TryParse(searchExpeditionYear, out expeditionYear))
+                passports = passports.Where(p => p.ExpeditionDate.Value.Year == expeditionYear);
+            int expirationDay;
+            if (!String.IsNullOrEmpty(searchExpirationDay) && int.TryParse(searchExpirationDay, out expirationDay))
+                passports = passports.Where(p => p.ExpirationDate.Value.Day == expirationDay);
+            int expirationMonth;
+            if (!String.IsNullOrEmpty(searchExpirationMonth) && int.TryParse(searchExpirationMonth, out expirationMonth))
+                passports = passports.Where(p => p.ExpirationDate.Value.Month == expirationMonth);
+            int expirationYear;
+            if (!String.IsNullOrEmpty(searchExpirationYear) && int.TryParse(searchExpirationYear, out expirationYear))
+                passports = passports.Where(p => p.ExpirationDate.Value.Year == expirationYear);
+            if (!String.IsNullOrEmpty(searchSource))
+                passports = passports.Where(p => p.Source.Name.ToLower().Contains(searchSource.ToLower()));
+            if (!String.IsNullOrEmpty(searchCause))
+                passports = passports.Where(p => p.DropCause.Name.ToLower().Contains(searchCause.ToLower()));
+
+
+            return passports;
         }
 
         public IActionResult Details(long id)

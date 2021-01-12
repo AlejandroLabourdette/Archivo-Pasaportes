@@ -7,18 +7,46 @@
 <h1>Pasaportes Cancelados</h1>
 
 <form asp-action="Index">
-    <p>
-        <div class="input-group">
-            @Html.TextBox("SearchString", null, new { @class = "form-control" })
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Buscar</button>
+    <div class="row ap-big-margin-top">
+        <div class="col-lg-3">
+            @Html.TextBox("SearchNo", null, new { @class = "form-control", placeholder = "Número de pasaporte" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchType", null, new { @class = "form-control", placeholder = "Tipo de pasaporte" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchCI", null, new { @class = "form-control", placeholder = "CI" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchSource", null, new { @class = "form-control", placeholder = "Centro tramitador" })
+        </div>
+        <div class="col-lg-3 ap-margin-top">
+            <h6>Fecha de expedición</h6>
+            <div class="input-group" style="width:auto">
+                @Html.TextBox("SearchExpeditionDay", null, new { @class = "form-control", placeholder = "Día" })
+                @Html.TextBox("SearchExpeditionMonth", null, new { @class = "form-control", placeholder = "Mes" })
+                @Html.TextBox("SearchExpeditionYear", null, new { @class = "form-control", placeholder = "Año" })
             </div>
         </div>
-    </p>
+        <div class="col-lg-3 ap-margin-top">
+            <h6>Fecha de expiración</h6>
+            <div class="input-group" style="width:auto">
+                @Html.TextBox("SearchExpirationDay", null, new { @class = "form-control", placeholder = "Día" })
+                @Html.TextBox("SearchExpirationMonth", null, new { @class = "form-control", placeholder = "Mes" })
+                @Html.TextBox("SearchExpirationYear", null, new { @class = "form-control", placeholder = "Año" })
+            </div>
+        </div>
+        <div class="col-lg-3 ap-big-margin-top">
+            @Html.TextBox("SearchCause", null, new { @class = "form-control", placeholder = "Causa de desecho" })
+        </div>
+        <div class="col-lg-3 ap-big-margin-top">
+            <button type="submit" class="btn btn-secondary">Buscar</button>
+        </div>
+    </div>
 </form>
 
 
-<table id="droppedPassports" class="table">
+<table id="droppedPassports" class="table ap-big-margin-top">
     <thead>
         <tr>
             <th>

@@ -152,8 +152,7 @@ namespace ArchivoDePasaportes.Controllers
 
         public IActionResult ListPermanent(string sortOrder, bool keepOrder, int pageIndex,
             string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
-            string searchOrigin, string searchDestiny,
-            string searchCI, string searchPassportNo)
+            string searchDestiny, string searchCI, string searchPassportNo)
         {
             //Sort
             ViewBag.ActualSortOrder = sortOrder;
@@ -167,14 +166,13 @@ namespace ArchivoDePasaportes.Controllers
             ViewBag.SearchDepartureDay = searchDepartureDay;
             ViewBag.SearchDepartureMonth = searchDepartureMonth;
             ViewBag.SearchDepartureYear = searchDepartureYear;
-            ViewBag.SearchOrigin = searchOrigin;
             ViewBag.SearchDestiny = searchDestiny;
             ViewBag.SearchCI = searchCI;
             ViewBag.SearchPassportNo = searchPassportNo;
 
             var permanentTravels = FilterPermanentTravels(
                 searchDepartureDay, searchDepartureMonth, searchDepartureYear,
-                searchOrigin, searchDestiny, searchCI, searchPassportNo);
+                searchDestiny, searchCI, searchPassportNo);
 
             var permanentTravelsSorted = SortPermanentTravels(permanentTravels, sortOrder);
 
@@ -206,7 +204,7 @@ namespace ArchivoDePasaportes.Controllers
         }
         private IQueryable<PermanentTravel> FilterPermanentTravels(
            string searchDepartureDay, string searchDepartureMonth, string searchDepartureYear,
-           string searchOrigin, string searchDestiny,
+           string searchDestiny,
            string searchCI, string searchPassportNo)
         {
             var permanentTravels = from p in _context.PermanentTravels select p;
