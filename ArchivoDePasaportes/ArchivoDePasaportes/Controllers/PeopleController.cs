@@ -30,24 +30,24 @@ namespace ArchivoDePasaportes.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
         
-        public IActionResult Index(string sortOrder, bool keepOrder, string searchString, int pageIndex)
-        {         
+        public IActionResult Index(string sortOrder, bool keepOrder, string searchCI,
+            string searchName, string searchAddress, string searchCenter, int pageIndex)
+        {    
+            //Sort
             ViewBag.ActualSortOrder = sortOrder;
             ViewBag.CISortParm = sortOrder == "ci" && !keepOrder ? "ci_desc" : "ci";
             ViewBag.NameSortParm = sortOrder == "name" && !keepOrder ? "name_desc" : "name";
             ViewBag.AddressSortParm = sortOrder == "address" && !keepOrder ? "address_desc" : "address";
             ViewBag.SourceSortParm = sortOrder == "source" && !keepOrder ? "source_desc" : "source";
-            ViewBag.SearchString = searchString;
-        
-            var people = from p in _context.People select p;
-        
-            if (!String.IsNullOrEmpty(searchString))
-                people = people.Where(p => 
-                    p.LastName.Contains(searchString)||
-                    p.FirstName.Contains(searchString)||
-                    p.CI.Contains(searchString)||
-                    p.Address.Contains(searchString)||
-                    p.Source.Name.Contains(searchString));
+            
+            //Filter
+            ViewBag.SearchCI = searchCI;
+            ViewBag.SearchName = searchName;
+            ViewBag.SearchAddress = searchAddress;
+            ViewBag.SearchCenter = searchCenter;
+
+
+            var people = FilterPeople(searchCI, searchName, searchAddress, searchCenter);
 
             people = sortOrder switch
             {
@@ -79,7 +79,23 @@ namespace ArchivoDePasaportes.Controllers
 
             return View("ListPeople", viewModel);
         }
-        
+
+        private IQueryable<Person> FilterPeople(string searchCI,
+            string searchName, string searchAddress, string searchCenter)
+        {
+            var people = from p in _context.People select p;
+            if (!String.IsNullOrEmpty(searchCI))
+                people = people.Where(p => p.CI.ToLower().Contains(searchCI.ToLower()));
+            if (!String.IsNullOrEmpty(searchName))
+                people = people.Where(p => (p.FirstName + " " + p.LastName).ToLower().Contains(searchName.ToLower()));
+            if (!String.IsNullOrEmpty(searchAddress))
+                people = people.Where(p => p.Address.ToLower().Contains(searchAddress.ToLower()));
+            if (!String.IsNullOrEmpty(searchCenter))
+                people = people.Where(p => p.Source.Name.ToLower() == searchCenter.ToLower());
+            return people;
+        }
+
+
         public IActionResult Details(long id)
         {
             var personInDb = _context.People.SingleOrDefault(p => p.Id == id);

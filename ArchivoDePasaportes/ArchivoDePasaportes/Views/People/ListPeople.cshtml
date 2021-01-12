@@ -11,17 +11,26 @@
 </p>
 
 <form asp-action="Index">
-    <p>
-        <div class="input-group">
-            @Html.TextBox("SearchString", null, new { @class = "form-control" })
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Buscar</button>
-            </div>
+    <div class="row ap-big-margin-top">
+        <div class="col-lg-3">
+            @Html.TextBox("SearchCI", null, new { @class = "form-control", placeholder = "CI" })
         </div>
-    </p>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchName", null, new { @class = "form-control", placeholder = "Nombre" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchAddress", null, new { @class = "form-control", placeholder = "Dirección" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("SearchCenter", null, new { @class = "form-control", placeholder = "Centro de trabajo" })
+        </div>
+        <div class="col-lg-3 ap-margin-top">
+            <button type="submit" class="btn btn-secondary">Buscar</button>
+        </div>
+    </div>
 </form>
 
-<table id="people" class="table">
+<table id="people" class="table ap-big-margin-top">
     <thead>
         <tr>
             <th>
