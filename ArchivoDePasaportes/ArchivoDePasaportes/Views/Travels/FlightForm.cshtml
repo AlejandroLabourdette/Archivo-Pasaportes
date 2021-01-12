@@ -135,7 +135,7 @@
 
             $(addPermanentPass).on('click', function () {
                 var passportNoInput = '<input class="form-control ap-small-margin-right ap-small-margin-top" type="text" id="PermanentTravelsDto_' + amountPermanentPass + '__PassportNo" name="PermanentTravelsDto[' + amountPermanentPass + '].PassportNo" value="" placeholder="Número de Pasaporte">';
-                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="The OcupationId field is required." id="PermanentTravelsDto_' + amountPermanentPass + '__OcupationId" name="PermanentTravelsDto[' + amountPermanentPass + '].OcupationId">';
+                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="La ocupación es requerida." id="PermanentTravelsDto_' + amountPermanentPass + '__OcupationId" name="PermanentTravelsDto[' + amountPermanentPass + '].OcupationId">';
                 var removeButton = '<button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="' + amountPermanentPass + '">Eliminar</button>';
                 var fieldHTML = '<div class="row">' + passportNoInput + selectHead + occuapationOptions + '</select>' + removeButton + '</div>';
                 amountPermanentPass++;
@@ -144,8 +144,8 @@
             
             $(addOfficialPass).on('click', function () {
                 var passportNoInput = '<input class="form-control ap-small-margin-right ap-small-margin-top" type="text" id="OfficialTravelsDto_' + amountOfficialPass + '__PassportNo" name="OfficialTravelsDto[' + amountOfficialPass + '].PassportNo" value="" placeholder="Número de Pasaporte">';
-                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="The OcupationId field is required." id="OfficialTravelsDto_' + amountOfficialPass + '__OcupationId" name="OfficialTravelsDto[' + amountOfficialPass + '].OcupationId">';
-                var returnDate = '<input class="form-control ap-small-margin-top ap-small-margin-right" type="date" data-val="true" data-val-required="The ReturnDate field is required." id="OfficialTravelsDto_' + amountOfficialPass + '__ReturnDate" name="OfficialTravelsDto[' + amountOfficialPass + '].ReturnDate" value="">'
+                var selectHead = '<select class="form-control ap-small-margin-top ap-small-margin-right" data-val="true" data-val-required="La ocupación es requerida." id="OfficialTravelsDto_' + amountOfficialPass + '__OcupationId" name="OfficialTravelsDto[' + amountOfficialPass + '].OcupationId">';
+                var returnDate = '<input class="form-control ap-small-margin-top ap-small-margin-right" type="date" id="OfficialTravelsDto_' + amountOfficialPass + '__ReturnDate" name="OfficialTravelsDto[' + amountOfficialPass + '].ReturnDate" value="">'
                 var removeButton = '<button type="button" class="btn btn-danger remove-passport ap-small-margin-top" list-index="' + amountOfficialPass + '">Eliminar</button>';
                 var fieldHTML = '<div class="row">' + passportNoInput + selectHead + occuapationOptions + '</select>' + returnDate + removeButton + '</div>';
                 amountOfficialPass++;

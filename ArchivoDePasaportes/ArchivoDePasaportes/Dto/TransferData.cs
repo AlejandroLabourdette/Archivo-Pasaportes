@@ -114,7 +114,7 @@ namespace ArchivoDePasaportes.Dto
         {
             destiny.PassportNo = context.Passports.Single(p => p.Id == origin.PassportId).PassportNo;
             destiny.OcupationId = origin.OccupationId;
-            destiny.ReturnDate = origin.ReturnDate;
+            destiny.ReturnDate = origin.ReturnDate == null ? new DateTime() : origin.ReturnDate.Value;
         }
 
 

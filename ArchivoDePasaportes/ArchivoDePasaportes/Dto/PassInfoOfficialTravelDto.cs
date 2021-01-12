@@ -9,7 +9,7 @@ namespace ArchivoDePasaportes.Dto
     {
         public string PassportNo { get; set; }
         public int OcupationId { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
 
     }
 }

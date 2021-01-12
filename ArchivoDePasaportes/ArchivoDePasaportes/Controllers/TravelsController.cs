@@ -115,13 +115,13 @@ namespace ArchivoDePasaportes.Controllers
                 officialTravels = officialTravels.Where(o => o.Ticket.DepartureDate.Year == departureYear);
             int arrivalDay;
             if (!String.IsNullOrEmpty(searchArrivalDay) && int.TryParse(searchArrivalDay, out arrivalDay))
-                officialTravels = officialTravels.Where(o => o.ReturnDate.Day == arrivalDay);
+                officialTravels = officialTravels.Where(o => o.ReturnDate == null ? false : o.ReturnDate.Value.Day == arrivalDay);
             int arrivalMonth;
             if (!String.IsNullOrEmpty(searchArrivalMonth) && int.TryParse(searchArrivalMonth, out arrivalMonth))
-                officialTravels = officialTravels.Where(o => o.ReturnDate.Month == arrivalMonth);
+                officialTravels = officialTravels.Where(o => o.ReturnDate == null ? false : o.ReturnDate.Value.Month == arrivalMonth);
             int arrivalYear;
             if (!String.IsNullOrEmpty(searchArrivalYear) && int.TryParse(searchArrivalYear, out arrivalYear))
-                officialTravels = officialTravels.Where(o => o.ReturnDate.Year == arrivalYear);
+                officialTravels = officialTravels.Where(o => o.ReturnDate == null ? false : o.ReturnDate.Value.Year == arrivalYear);
             if (!String.IsNullOrEmpty(searchDestiny))
                 officialTravels = officialTravels.Where(o => o.Ticket.DestinyCountry.Name == searchDestiny);
             if (!String.IsNullOrEmpty(searchCI))
@@ -338,7 +338,7 @@ namespace ArchivoDePasaportes.Controllers
                     return View("FlightForm", viewModel);
                 }
 
-                bool returnDateCorrect = travelData.ReturnDate > viewModel.Ticket.DepartureDate;
+                bool returnDateCorrect = travelData.ReturnDate == null ? true : travelData.ReturnDate > viewModel.Ticket.DepartureDate;
                 if (!returnDateCorrect)
                 {
                     viewModel.ReturnDateIncorrect = true;

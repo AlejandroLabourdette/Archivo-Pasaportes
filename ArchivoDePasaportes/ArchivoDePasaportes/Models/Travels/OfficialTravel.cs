@@ -22,7 +22,7 @@ namespace ArchivoDePasaportes.Models
         public int OccupationId { get; set; }
         public Occupation Occupation { get; set; }
 
-        [Required]
-        public DateTime ReturnDate { get; set; }
+
+        public DateTime? ReturnDate { get; set; }
     }
 }
