@@ -100,7 +100,7 @@ namespace ArchivoDePasaportes.Areas.Identity.Pages.Account
                 {
                     _userManager.Options.SignIn.RequireConfirmedAccount = false;
                     
-                    var assignRole = await _userManager.AddToRoleAsync(user, "User");
+                    var assignRole = await _userManager.AddToRoleAsync(user, "Admin");
                     if (!assignRole.Succeeded)
                         throw new Exception("Role not assigned");
 

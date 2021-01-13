@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArchivoDePasaportes.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class TravelsController : Controller
     {
         private ApplicationDbContext _context;

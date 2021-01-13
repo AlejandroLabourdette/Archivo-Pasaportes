@@ -117,11 +117,12 @@ namespace ArchivoDePasaportes.Controllers.Seed
             {
                 PassportTypeId = 2,
                 PassportNo = "A879546",
-                OwnerId = _context.People.Single(p=>p.CI=="85071623648").Id,
+                OwnerId = _context.People.Single(p => p.CI == "85071623648").Id,
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2018, 8, 5),
-                ExpirationDate = new DateTime(2025, 4, 14)
-            });
+                ExpirationDate = new DateTime(2025, 4, 14),
+                IsPassportArchived = true
+            }) ;
             AddPassport(new Passport()
             {
                 PassportTypeId = 1,
@@ -129,7 +130,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "79081937689").Id,
                 SourceId = 2,
                 ExpeditionDate = new DateTime(1992, 7, 27),
-                ExpirationDate = new DateTime(2004, 6, 15)
+                ExpirationDate = new DateTime(2004, 6, 15),
+                IsPassportArchived = true
             });
             AddPassport(new Passport()
             {
@@ -138,7 +140,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "79081937689").Id,
                 SourceId = 2,
                 ExpeditionDate = new DateTime(2005, 1, 17),
-                ExpirationDate = new DateTime(2013, 9, 15)
+                ExpirationDate = new DateTime(2013, 9, 15),
+                IsPassportArchived = true
             });
             AddPassport(new Passport()
             {
@@ -147,7 +150,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "79081937689").Id,
                 SourceId = 2,
                 ExpeditionDate = new DateTime(2015, 7, 1),
-                ExpirationDate = new DateTime(2022, 2, 14)
+                ExpirationDate = new DateTime(2022, 2, 14),
+                IsPassportArchived = true
             });
             AddPassport(new Passport()
             {
@@ -156,7 +160,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "01012487672").Id,
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2017, 4, 4),
-                ExpirationDate = new DateTime(2025, 9, 3)
+                ExpirationDate = new DateTime(2025, 9, 3),
+                IsPassportArchived = true
             });
             AddPassport(new Passport()
             {
@@ -165,7 +170,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "76091928768").Id,
                 SourceId = 1,
                 ExpeditionDate = new DateTime(1999, 2, 28),
-                ExpirationDate = new DateTime(2007, 6, 8)
+                ExpirationDate = new DateTime(2007, 6, 8),
+                IsPassportArchived = true
             });
             AddPassport(new Passport()
             {
@@ -174,7 +180,8 @@ namespace ArchivoDePasaportes.Controllers.Seed
                 OwnerId = _context.People.Single(p => p.CI == "76091928768").Id,
                 SourceId = 1,
                 ExpeditionDate = new DateTime(2009, 12, 10),
-                ExpirationDate = new DateTime(2007, 11, 8)
+                ExpirationDate = new DateTime(2007, 11, 8),
+                IsPassportArchived = true
             });
             _context.SaveChanges();
         }

@@ -211,19 +211,7 @@
                             url: "/api/Passports/" + button.attr("data-passport-id"),
                             method: "PUT",
                             success: function () {
-                                var row = '<tr>' +
-                                    '<td>Si</td>' +
-                                    '<td>' + button.attr("data-passport-type") + '</td>' +
-                                    '<td><a href="/Passports/Details/' + button.attr("data-passport-id") + '">' + button.attr("data-passport-id") + '</a></td>' +
-                                    '<td><a href="/People/Details/' + button.attr("data-passport-owner-id") + '">' + button.attr("data-passport-owner-id") + '</a></td>' +
-                                    '<td>' + button.attr("data-passport-owner-name") + '</td>' +
-                                    '<td>' + button.attr("data-passport-expedition") + '</td>' +
-                                    '<td>' + button.attr("data-passport-expiration") + '</td>' +
-                                    '<td></td>' +
-                                    '<td><a class="btn btn-secondary btn-sm" href="/Passports/Drop/' + button.attr("data-passport-id") + '">Retirar</a></td>' +
-                                    '<td><button class="btn-danger btn btn-sm js-delete" data-passport-id=' + button.attr("data-passport-id") + '>Eliminar</button></td>' +
-                                    '</tr>'
-                                button.parents("tr").replaceWith(row);
+                                location.reload();
                             }
                         })
                     }
