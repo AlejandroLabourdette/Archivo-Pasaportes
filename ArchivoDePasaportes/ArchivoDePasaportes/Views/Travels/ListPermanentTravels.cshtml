@@ -100,23 +100,24 @@
     <tbody>
         @foreach (PermanentTravel travel in Model.PermanentTravelsList)
         {
-            <tr>
-                <td>
-                    @Html.ActionLink(travel.Passport.PassportNo,"Details","Passports",new { id = travel.PassportId})
-                </td>
-                <td>
-                    @Html.ActionLink(travel.Passport.Owner.CI, "Details", "People", new { id = travel.Passport.Owner.CI })
-                </td>
-                <td>@travel.Ticket.DestinyCountry.Name</td>
-                <td>@travel.Ticket.DepartureDate</td>
+        <tr>
+            <td>
+                @Html.ActionLink(travel.Passport.PassportNo, "Details", "Passports", new { id = travel.PassportId })
+            </td>
+            <td>
+                @Html.ActionLink(travel.Passport.Owner.CI, "Details", "People", new { id = travel.Passport.Owner.CI })
+            </td>
+            <td>@travel.Ticket.DestinyCountry.Name</td>
+            <td>@travel.Ticket.DepartureDate</td>
+            <td>@travel.Passport.Owner.CI</td>
 
-                @if (Model.UserIsAdmin)
-                {
-                    <td>
-                        @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType = "Permanent" }, new { @class = "btn btn-sm btn-primary" })
-                    </td>
-                }
-            </tr>
+            @if (Model.UserIsAdmin)
+            {
+                <td>
+                    @Html.ActionLink("Editar", "EditFlight", "Travels", new { id = travel.Id, listType = "Permanent" }, new { @class = "btn btn-sm btn-primary" })
+                </td>
+            }
+        </tr>
         }
     </tbody>
 </table>
